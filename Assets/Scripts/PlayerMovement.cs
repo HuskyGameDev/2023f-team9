@@ -8,7 +8,8 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement")]
     [SerializeField] private float movementSpeed; // horizontal movement speed
     [SerializeField] private int jumpHeight; // number of blocks the player can jump
-    private float movementDirection; // 0 for stationary, -1 for left, 1 for right (float so it will work with joystick)
+    private float movementDirection = 0; // 0 for stationary, -1 for left, 1 for right (float so it will work with joystick)
+    private bool canJump = true; // checks if the user can jump or not
     private const float MAX_VELOCITY = 5f; // the maximum horizontal velocity the player can have
     private const float SLOWDOWN_SPEED = 0.99f; // how fast to slow the player down if they pass the max velocity (smaller is faster but less smooth)
 
@@ -31,6 +32,9 @@ public class PlayerMovement : MonoBehaviour
         {
             rigidbody.AddForce(new Vector2(movementDirection, 0));
         }
+        if(rigidbody.velocity.y == 0) {
+            canJump = true;
+        }
     }
 
     // Movement Controls
@@ -41,7 +45,11 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnJump()
     {
-        float targetVelocity = Mathf.Sqrt((jumpHeight * 10 + 1) * 2 * rigidbody.gravityScale);
-        rigidbody.velocity = new Vector2(rigidbody.velocity.x, targetVelocity);
+        if (canJump)
+        {
+            float targetVelocity = Mathf.Sqrt((jumpHeight * 10 + 1) * 2 * rigidbody.gravityScale);
+            rigidbody.velocity = new Vector2(rigidbody.velocity.x, targetVelocity);
+            canJump = false;
+        }
     }
 }
