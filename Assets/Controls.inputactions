@@ -9,7 +9,7 @@
                     "name": "Move",
                     "type": "Value",
                     "id": "d42b03be-8cd8-40d2-87c5-0478229a49a1",
-                    "expectedControlType": "Vector2",
+                    "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -27,8 +27,8 @@
             "bindings": [
                 {
                     "name": "Arrow Keys",
-                    "id": "e7ca6e8a-5c8e-4aa3-8190-3d69d8e4a746",
-                    "path": "2DVector",
+                    "id": "66ddc7e6-4163-46e1-ac2e-457cbd596783",
+                    "path": "1DAxis",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -37,8 +37,8 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "left",
-                    "id": "bd52f483-680a-4444-a594-e6c65794c874",
+                    "name": "negative",
+                    "id": "7a68272a-617a-4a08-ac40-39293f5186d4",
                     "path": "<Keyboard>/leftArrow",
                     "interactions": "",
                     "processors": "",
@@ -48,8 +48,8 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "right",
-                    "id": "5af5e3a2-475d-4421-a5ff-ba62f16b16b1",
+                    "name": "positive",
+                    "id": "90524f70-cbd0-4cb0-8aae-9fcc1e7a78e4",
                     "path": "<Keyboard>/rightArrow",
                     "interactions": "",
                     "processors": "",
@@ -60,7 +60,7 @@
                 },
                 {
                     "name": "",
-                    "id": "68500dff-f20e-4fe5-b57f-19eb91061390",
+                    "id": "4a92a976-6783-484a-8820-25f81a50c4d3",
                     "path": "<Keyboard>/upArrow",
                     "interactions": "",
                     "processors": "",
