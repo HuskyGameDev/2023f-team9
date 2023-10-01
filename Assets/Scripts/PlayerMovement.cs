@@ -25,14 +25,16 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Mathf.Abs(rigidbody.velocity.x) > MAX_VELOCITY)
+        if (Mathf.Abs(rigidbody.velocity.x) > MAX_VELOCITY)
         {
             rigidbody.velocity *= new Vector2(SLOWDOWN_SPEED, 1);
-        } else if(movementDirection != 0)
+        }
+        else if (movementDirection != 0)
         {
             rigidbody.AddForce(new Vector2(movementDirection, 0));
         }
-        if(rigidbody.velocity.y == 0) {
+        if (rigidbody.velocity.y == 0)
+        {
             canJump = true;
         }
     }
