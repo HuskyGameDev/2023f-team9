@@ -109,7 +109,7 @@ public class RunnerTests : InputTestFixture
         yield return new WaitForSeconds(0.5f);
 
         PressAndRelease(keyboard.upArrowKey);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.25f);
 
         PressAndRelease(keyboard.upArrowKey);
         yield return new WaitForSeconds(0.25f);
