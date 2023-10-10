@@ -6,7 +6,7 @@
             "id": "461e2fc1-67e0-49ad-a5fa-fb6e4a3819e5",
             "actions": [
                 {
-                    "name": "Move",
+                    "name": "Runner Move",
                     "type": "Value",
                     "id": "d42b03be-8cd8-40d2-87c5-0478229a49a1",
                     "expectedControlType": "Axis",
@@ -15,7 +15,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Jump",
+                    "name": "Runner Jump",
                     "type": "Button",
                     "id": "a4cc3f12-131c-45d5-9a1c-08a910efc1fc",
                     "expectedControlType": "Button",
@@ -32,7 +32,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "Runner Move",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -42,8 +42,8 @@
                     "path": "<Keyboard>/leftArrow",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "Move",
+                    "groups": "Keyboard",
+                    "action": "Runner Move",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -53,8 +53,8 @@
                     "path": "<Keyboard>/rightArrow",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "Move",
+                    "groups": "Keyboard",
+                    "action": "Runner Move",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -64,13 +64,142 @@
                     "path": "<Keyboard>/upArrow",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "Jump",
+                    "groups": "Keyboard",
+                    "action": "Runner Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Dropper",
+            "id": "359ac562-9fc8-48fc-b770-cb25fb71a096",
+            "actions": [
+                {
+                    "name": "Block Move",
+                    "type": "Button",
+                    "id": "0a731a0d-18a8-41c9-9fa8-ad77f1f96f00",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Block Down",
+                    "type": "Button",
+                    "id": "8d15cd50-3cae-4a16-9e7e-e985ff1379c9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Block Rotate",
+                    "type": "Button",
+                    "id": "1543f846-f40e-4809-9e47-e7651360e7b0",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "AD",
+                    "id": "d89eb922-0a42-4c5c-aaad-5da751d40983",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Block Move",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "4c388fc0-d91e-4c57-af33-b5f6c67a443d",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Block Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "aebc1cf5-0f20-4c0c-95f7-c14d26303b2e",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Block Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "f6ed1f57-6f17-4551-b1f6-391ea1d040fa",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Block Down",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "QE",
+                    "id": "60c54e95-e2eb-499c-a6ec-eef565ed4d21",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Block Rotate",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "9beee115-07c7-478a-ba6c-e35cf14e00e7",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Block Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "9446ca06-c37c-41c9-9038-5b81ccc8acd7",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Block Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                }
+            ]
         }
     ],
-    "controlSchemes": []
+    "controlSchemes": [
+        {
+            "name": "Keyboard",
+            "bindingGroup": "Keyboard",
+            "devices": [
+                {
+                    "devicePath": "<Keyboard>",
+                    "isOptional": false,
+                    "isOR": false
+                },
+                {
+                    "devicePath": "<Mouse>",
+                    "isOptional": true,
+                    "isOR": false
+                }
+            ]
+        }
+    ]
 }

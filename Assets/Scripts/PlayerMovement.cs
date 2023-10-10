@@ -40,12 +40,12 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // Movement Controls
-    public void OnMove(InputValue value)
+    public void OnRunnerMove(InputValue value)
     {
         movementDirection = value.Get<float>();
     }
 
-    public void OnJump()
+    public void OnRunnerJump()
     {
         if (canJump)
         {
