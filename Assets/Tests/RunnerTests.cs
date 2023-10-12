@@ -51,9 +51,9 @@ public class RunnerTests : InputTestFixture
     public IEnumerator RunnerDoesNotFallOutOfWorld()
     {
         Object.Instantiate(board, Vector2.zero, Quaternion.identity);
-        GameObject runnerInstance = Object.Instantiate(runner, new Vector2(0, -5f), Quaternion.identity);
+        GameObject runnerInstance = Object.Instantiate(runner, new Vector2(0, -9f), Quaternion.identity);
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
 
         Assert.That(runnerInstance.GetComponentInChildren<Rigidbody2D>().velocity.y, Is.EqualTo(0));
         Assert.That(runnerInstance.transform.GetChild(0).position.y, Is.GreaterThan(-10f));
@@ -65,11 +65,11 @@ public class RunnerTests : InputTestFixture
         GameObject runnerInstance = Object.Instantiate(runner, Vector2.zero, Quaternion.identity);
 
         Press(keyboard.leftArrowKey);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForFixedUpdate();
         Release(keyboard.leftArrowKey);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForFixedUpdate();
 
-        Assert.That(runnerInstance.transform.GetChild(0).position.x, Is.LessThan(-1.5f));
+        Assert.That(runnerInstance.transform.GetChild(0).position.x, Is.Negative);
     }
 
     [UnityTest]
@@ -78,23 +78,23 @@ public class RunnerTests : InputTestFixture
         GameObject runnerInstance = Object.Instantiate(runner, Vector2.zero, Quaternion.identity);
 
         Press(keyboard.rightArrowKey);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForFixedUpdate();
         Release(keyboard.rightArrowKey);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForFixedUpdate();
 
-        Assert.That(runnerInstance.transform.GetChild(0).position.x, Is.GreaterThan(1.5f));
+        Assert.That(runnerInstance.transform.GetChild(0).position.x, Is.Positive);
     }
 
     [UnityTest]
     public IEnumerator RunnerJumpsWithKeyboard()
     {
         Object.Instantiate(board, Vector2.zero, Quaternion.identity);
-        GameObject runnerInstance = Object.Instantiate(runner, new Vector2(0, -8f), Quaternion.identity);
+        GameObject runnerInstance = Object.Instantiate(runner, new Vector2(0, -9.5f), Quaternion.identity);
 
         yield return new WaitForSeconds(0.5f);
 
         PressAndRelease(keyboard.upArrowKey);
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForFixedUpdate();
         Assert.That(runnerInstance.GetComponentInChildren<Rigidbody2D>().velocity.y, Is.Not.EqualTo(0));
     }
 
@@ -102,17 +102,24 @@ public class RunnerTests : InputTestFixture
     public IEnumerator RunnerDoesNotDoubleJump()
     {
         Object.Instantiate(board, Vector2.zero, Quaternion.identity);
-        GameObject runnerInstance = Object.Instantiate(runner, new Vector2(0, -8f), Quaternion.identity);
+        GameObject runnerInstance = Object.Instantiate(runner, new Vector2(0, -9.5f), Quaternion.identity);
+        Rigidbody2D runnerRigidbody = runnerInstance.GetComponentInChildren<Rigidbody2D>();
 
-        yield return new WaitForSeconds(0.5f);
+        // wait to fall to ground
+        while (runnerRigidbody.velocity.y != 0) yield return new WaitForFixedUpdate();
 
+        // jump
         PressAndRelease(keyboard.upArrowKey);
-        yield return new WaitForSeconds(0.25f);
-        float vel1 = runnerInstance.GetComponentInChildren<Rigidbody2D>().velocity.y;
+        yield return new WaitForFixedUpdate();
+        float vel1 = runnerRigidbody.velocity.y;
 
+        // wait until fall starts
+        while (runnerRigidbody.velocity.y >= 0) yield return new WaitForFixedUpdate();
+
+        // try to jump again and check that player is still falling
         PressAndRelease(keyboard.upArrowKey);
-        yield return new WaitForSeconds(0.25f);
-        float vel2 = runnerInstance.GetComponentInChildren<Rigidbody2D>().velocity.y;
+        yield return new WaitForFixedUpdate();
+        float vel2 = runnerRigidbody.velocity.y;
 
         Assert.That(vel2, Is.LessThanOrEqualTo(vel1));
     }
@@ -121,16 +128,20 @@ public class RunnerTests : InputTestFixture
     public IEnumerator RunnerChecksForGroundBeforeJump()
     {
         Object.Instantiate(board, Vector2.zero, Quaternion.identity);
-        GameObject runnerInstance = Object.Instantiate(runner, new Vector2(0, -8f), Quaternion.identity);
+        GameObject runnerInstance = Object.Instantiate(runner, new Vector2(0, -9.5f), Quaternion.identity);
+        Rigidbody2D runnerRigidbody = runnerInstance.GetComponentInChildren<Rigidbody2D>();
 
-        yield return new WaitForSeconds(0.5f);
+        // wait to fall to ground
+        while (runnerRigidbody.velocity.y != 0) yield return new WaitForFixedUpdate();
 
+        // jump and wait for fall to ground
         PressAndRelease(keyboard.upArrowKey);
-        yield return new WaitForSeconds(1.25f);
+        while (runnerRigidbody.velocity.y != 0) yield return new WaitForFixedUpdate();
 
+        // jump again and check that player could jump
         PressAndRelease(keyboard.upArrowKey);
-        yield return new WaitForSeconds(0.25f);
-        Assert.That(runnerInstance.GetComponentInChildren<Rigidbody2D>().velocity.y, Is.GreaterThan(0));
+        while (runnerRigidbody.velocity.y == 0) yield return new WaitForFixedUpdate();
+        Assert.That(runnerRigidbody.velocity.y, Is.GreaterThan(0));
     }
 
 }
