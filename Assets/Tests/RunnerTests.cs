@@ -8,10 +8,20 @@ using UnityEngine.SceneManagement;
 
 public class RunnerTests : InputTestFixture
 {
-    GameObject runner = Resources.Load<GameObject>("Prefabs/Player");
-    GameObject board = Resources.Load<GameObject>("Prefabs/Board");
+    GameObject runner;
+    GameObject board;
     Keyboard keyboard;
 
+    [OneTimeSetUp]
+    public void OneTimeSetup()
+    {
+        runner = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Player.prefab");
+        Assert.That(runner, !Is.Null);
+        board = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Board.prefab");
+        Assert.That(board, !Is.Null);
+    }
+
+    [SetUp]
     public override void Setup()
     {
         SceneManager.LoadScene("Scenes/AutomatedTesting");
