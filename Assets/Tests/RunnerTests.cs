@@ -33,6 +33,13 @@ public class RunnerTests : InputTestFixture
         Release(mouse.rightButton);
     }
 
+    [TearDown]
+    public override void TearDown()
+    {
+        base.TearDown();
+        keyboard = null;
+    }
+
     [Test]
     public void RunnerInstantiation()
     {
