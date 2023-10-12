@@ -6,7 +6,7 @@
             "id": "461e2fc1-67e0-49ad-a5fa-fb6e4a3819e5",
             "actions": [
                 {
-                    "name": "Move",
+                    "name": "RunnerMove",
                     "type": "Value",
                     "id": "d42b03be-8cd8-40d2-87c5-0478229a49a1",
                     "expectedControlType": "Axis",
@@ -15,7 +15,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Jump",
+                    "name": "RunnerJump",
                     "type": "Button",
                     "id": "a4cc3f12-131c-45d5-9a1c-08a910efc1fc",
                     "expectedControlType": "Button",
@@ -32,7 +32,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "RunnerMove",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -43,7 +43,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "RunnerMove",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -54,7 +54,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "RunnerMove",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -65,7 +65,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Jump",
+                    "action": "RunnerJump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
