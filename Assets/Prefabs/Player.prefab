@@ -253,7 +253,7 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: a4cc3f12-131c-45d5-9a1c-08a910efc1fc
     m_ActionName: Runner/Jump[/Keyboard/upArrow]
-  m_NeverAutoSwitchControlSchemes: 0
+  m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: 
   m_DefaultActionMap: Runner
   m_SplitScreenIndex: -1
