@@ -74,7 +74,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 748ae8b33df036b46a86e0387f1602cf, type: 3}
   m_Color: {r: 0.9811321, g: 0.124955505, b: 0.124955505, a: 1}
   m_FlipX: 0
@@ -119,7 +119,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.95, y: 0.95}
   m_Direction: 0
 --- !u!50 &6858422455251849473
 Rigidbody2D:
@@ -253,8 +253,8 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: a4cc3f12-131c-45d5-9a1c-08a910efc1fc
     m_ActionName: Runner/Jump[/Keyboard/upArrow]
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Runner
+  m_NeverAutoSwitchControlSchemes: 1
+  m_DefaultControlScheme: Keyboard
+  m_DefaultActionMap: 461e2fc1-67e0-49ad-a5fa-fb6e4a3819e5
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}

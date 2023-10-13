@@ -20,6 +20,9 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rigidbody = this.GetComponentInChildren<Rigidbody2D>();
+        PlayerInput playerInput = this.GetComponent<PlayerInput>();
+        playerInput.actions.FindAction("RunnerMove").Enable();
+        playerInput.actions.FindAction("RunnerJump").Enable();
     }
 
     // Update is called once per frame

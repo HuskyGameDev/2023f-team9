@@ -2,8 +2,7 @@
     "name": "RunnerMovement",
     "rootNamespace": "",
     "references": [
-        "GUID:75469ad4d38634e559750d17036d5f7c",
-        "GUID:481a03232ccf04b09b6170dedf74f05b"
+        "GUID:75469ad4d38634e559750d17036d5f7c"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
