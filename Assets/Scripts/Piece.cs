@@ -29,10 +29,11 @@ public class Piece : MonoBehaviour
         this.stepTime = Time.time + this.stepDelay;
         this.lockTime = 0f;
 
-        if (this.cells == null)
-        {
-            this.cells = new Vector3Int[data.cells.Length];
-        }
+        moveAction = GameManager.Instance.inputActions.Dropper.Move;
+        rotateAction = GameManager.Instance.inputActions.Dropper.Rotate;
+        downAction = GameManager.Instance.inputActions.Dropper.Down;
+
+        this.cells ??= new Vector3Int[data.cells.Length];
 
         for (int i = 0; i < data.cells.Length; i++)
         {
@@ -56,13 +57,27 @@ public class Piece : MonoBehaviour
         //Rotation controls
         if (rotateAction.triggered)
         {
-            Rotate(rotateAction.ReadValue<float>() > 0 ? 1 : -1);
+            if (rotateAction.ReadValue<float>() > 0)
+            {
+                Rotate(1);
+            }
+            else
+            {
+                Rotate(-1);
+            }
         }
 
         //Left and Right controls
         if (moveAction.triggered)
         {
-            Move(moveAction.ReadValue<float>() > 0 ? Vector2Int.right : Vector2Int.left);
+            if (moveAction.ReadValue<float>() > 0)
+            {
+                Move(Vector2Int.right);
+            }
+            else
+            {
+                Move(Vector2Int.left);
+            }
         }
 
         //Move down (testing stuff)
