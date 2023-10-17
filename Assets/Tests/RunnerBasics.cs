@@ -48,6 +48,8 @@ public class RunnerBasics : InputTestFixture
 
         Assert.That(InputSystem.GetDevice<Mouse>(), !Is.Null);
         PressAndRelease(mouse.rightButton);
+        Assert.That(InputSystem.GetDevice<Mouse>(), !Is.Null);
+        PressAndRelease(mouse.rightButton);
     }
 
     [TearDown]

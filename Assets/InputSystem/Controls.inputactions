@@ -178,8 +178,6 @@
                     "processors": "",
                     "groups": "Keyboard",
                     "action": "Down",
-                    "isComposite": false,
-                    "isPartOfComposite": false
                 }
             ]
         }
