@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Piece : MonoBehaviour
 {
@@ -15,6 +16,10 @@ public class Piece : MonoBehaviour
     //GO OVER WITH TEAM!!!
     private float lockTime;
 
+    private InputAction moveAction;
+    private InputAction rotateAction;
+    private InputAction downAction;
+
     public void Initialize(Board board, Vector3Int position, TetrominoData data)
     {
         this.board = board;
@@ -24,12 +29,15 @@ public class Piece : MonoBehaviour
         this.stepTime = Time.time + this.stepDelay;
         this.lockTime = 0f;
 
-        if (this.cells == null){
-            this.cells = new Vector3Int[data.cells.Length];
-        }
+        moveAction = GameManager.Instance.inputActions.Dropper.Move;
+        rotateAction = GameManager.Instance.inputActions.Dropper.Rotate;
+        downAction = GameManager.Instance.inputActions.Dropper.Down;
 
-        for (int i = 0; i < data.cells.Length; i++) {
-            this.cells[i] = (Vector3Int) data.cells[i];
+        this.cells ??= new Vector3Int[data.cells.Length];
+
+        for (int i = 0; i < data.cells.Length; i++)
+        {
+            this.cells[i] = (Vector3Int)data.cells[i];
         }
     }
 
@@ -41,25 +49,19 @@ public class Piece : MonoBehaviour
         this.lockTime += Time.deltaTime;
 
         //Rotation controls
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (rotateAction.triggered)
         {
-            Rotate(-1);
-        } else if (Input.GetKeyDown(KeyCode.E))
-        {
-            Rotate(1);
+            Rotate(moveAction.ReadValue<float>() > 0 ? 1 : -1);
         }
 
         //Left and Right controls
-        if (Input.GetKeyDown(KeyCode.A)){
-
-            Move(Vector2Int.left);
-
-        } else if (Input.GetKeyDown(KeyCode.D)){
-           Move(Vector2Int.right);
+        if (moveAction.triggered)
+        {
+            Move(moveAction.ReadValue<float>() > 0 ? Vector2Int.right : Vector2Int.left);
         }
 
         //Move down (testing stuff)
-        if (Input.GetKeyDown(KeyCode.S))
+        if (downAction.triggered)
         {
             Move(Vector2Int.down);
         }
@@ -90,7 +92,7 @@ public class Piece : MonoBehaviour
         this.board.ClearLines();
         this.board.SpawnPiece();
     }
-    
+
     private bool Move(Vector2Int translation)
     {
         Vector3Int newPosition = this.position;
@@ -109,7 +111,7 @@ public class Piece : MonoBehaviour
         return valid;
     }
 
-   private void Rotate(int direction)
+    private void Rotate(int direction)
     {
         int originalRotation = this.rotationIndex;
         this.rotationIndex = Wrap(this.rotationIndex + direction, 0, 4);
@@ -185,7 +187,8 @@ public class Piece : MonoBehaviour
         if (input < min)
         {
             return max - (min - input) % (max - min);
-        } else
+        }
+        else
         {
             return min + (input - min) % (max - min);
         }

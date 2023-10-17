@@ -8,21 +8,21 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement")]
     [SerializeField] private float movementSpeed; // horizontal movement speed
     [SerializeField] private int jumpHeight; // number of blocks the player can jump
-    private float movementDirection = 0; // 0 for stationary, -1 for left, 1 for right (float so it will work with joystick)
     private bool canJump = true; // checks if the user can jump or not
     private const float MAX_VELOCITY = 5f; // the maximum horizontal velocity the player can have
     private const float SLOWDOWN_SPEED = 0.99f; // how fast to slow the player down if they pass the max velocity (smaller is faster but less smooth)
 
     // Components
     private new Rigidbody2D rigidbody;
+    private InputAction moveAction;
+    private InputAction jumpAction;
 
     // Start is called before the first frame update
     void Start()
     {
         rigidbody = this.GetComponentInChildren<Rigidbody2D>();
-        PlayerInput playerInput = this.GetComponent<PlayerInput>();
-        playerInput.actions.FindAction("RunnerMove").Enable();
-        playerInput.actions.FindAction("RunnerJump").Enable();
+        moveAction = GameManager.Instance.inputActions.Runner.Move;
+        jumpAction = GameManager.Instance.inputActions.Runner.Jump;
     }
 
     // Update is called once per frame
@@ -32,29 +32,19 @@ public class PlayerMovement : MonoBehaviour
         {
             rigidbody.velocity *= new Vector2(SLOWDOWN_SPEED, 1);
         }
-        else if (movementDirection != 0)
+        else if (moveAction.inProgress)
         {
-            rigidbody.AddForce(new Vector2(movementDirection, 0));
+            rigidbody.AddForce(new Vector2(moveAction.ReadValue<float>(), 0));
         }
-        if (rigidbody.velocity.y == 0)
-        {
-            canJump = true;
-        }
-    }
-
-    // Movement Controls
-    public void OnRunnerMove(InputValue value)
-    {
-        movementDirection = value.Get<float>();
-    }
-
-    public void OnRunnerJump()
-    {
-        if (canJump)
+        if (canJump && jumpAction.triggered)
         {
             float targetVelocity = Mathf.Sqrt((jumpHeight * 10 + 1) * 2 * rigidbody.gravityScale);
             rigidbody.velocity = new Vector2(rigidbody.velocity.x, targetVelocity);
             canJump = false;
+        }
+        else if (rigidbody.velocity.y == 0)
+        {
+            canJump = true;
         }
     }
 }

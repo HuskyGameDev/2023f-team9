@@ -1,13 +1,12 @@
-using System.Collections;
+﻿using System.Collections;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
-public class RunnerKeyboardMovement : InputTestFixture
+public class DropperKeyboardMovement : InputTestFixture
 {
-    GameObject runner;
     GameObject board;
     Keyboard keyboard;
     Mouse mouse;
@@ -16,8 +15,6 @@ public class RunnerKeyboardMovement : InputTestFixture
     public void OneTimeSetUp()
     {
         // get prefabs
-        runner = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Player.prefab");
-        Assert.That(runner, !Is.Null);
         board = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Board.prefab");
         Assert.That(board, !Is.Null);
 
@@ -67,41 +64,32 @@ public class RunnerKeyboardMovement : InputTestFixture
     }
 
     [UnityTest]
-    public IEnumerator RunnerMovesLeftWithKeyboard()
+    public IEnumerator BlockMovesLeftWithKeyboard()
     {
-        GameObject runnerInstance = Object.Instantiate(runner, Vector2.zero, Quaternion.identity);
+        GameObject boardInstance = Object.Instantiate(board, Vector2.zero, Quaternion.identity);
+        Board boardScript = boardInstance.GetComponentInChildren<Board>();
 
-        Press(keyboard.leftArrowKey);
-        yield return new WaitForSeconds(0.25f);
-        Release(keyboard.leftArrowKey);
+        int originalPosition = boardScript.activePiece.position.x;
+
+        PressAndRelease(keyboard.aKey);
         yield return new WaitForFixedUpdate();
 
-        Assert.That(runnerInstance.GetComponentInChildren<Rigidbody2D>().velocity.x, Is.Negative);
+        Assert.That(originalPosition, Is.GreaterThan(boardScript.activePiece.position.x));
     }
 
     [UnityTest]
-    public IEnumerator RunnerMovesRightWithKeyboard()
+    public IEnumerator BlockMovesRightWithKeyboard()
     {
-        GameObject runnerInstance = Object.Instantiate(runner, Vector2.zero, Quaternion.identity);
+        GameObject boardInstance = Object.Instantiate(board, Vector2.zero, Quaternion.identity);
+        Board boardScript = boardInstance.GetComponentInChildren<Board>();
 
-        Press(keyboard.rightArrowKey);
-        yield return new WaitForSeconds(0.25f);
-        Release(keyboard.rightArrowKey);
+        int originalPosition = boardScript.activePiece.position.x;
+
+        PressAndRelease(keyboard.dKey);
         yield return new WaitForFixedUpdate();
 
-        Assert.That(runnerInstance.GetComponentInChildren<Rigidbody2D>().velocity.x, Is.Positive);
+        Assert.That(originalPosition, Is.LessThan(boardScript.activePiece.position.x));
     }
 
-    [UnityTest]
-    public IEnumerator RunnerJumpsWithKeyboard()
-    {
-        Object.Instantiate(board, Vector2.zero, Quaternion.identity);
-        GameObject runnerInstance = Object.Instantiate(runner, new Vector2(0, -9.5f), Quaternion.identity);
 
-        yield return new WaitForSeconds(0.5f);
-
-        PressAndRelease(keyboard.upArrowKey);
-        yield return new WaitForFixedUpdate();
-        Assert.That(runnerInstance.GetComponentInChildren<Rigidbody2D>().velocity.y, Is.Not.EqualTo(0));
-    }
 }
