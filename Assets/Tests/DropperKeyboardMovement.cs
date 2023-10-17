@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class DropperKeyboardMovement : InputTestFixture
 {
+    readonly ArrayList initialDevices = new();
+
     GameObject board;
     Keyboard keyboard;
     Mouse mouse;
@@ -21,14 +23,18 @@ public class DropperKeyboardMovement : InputTestFixture
         // setup devices
         foreach (InputDevice device in InputSystem.devices)
         {
-            if (device != null) InputSystem.RemoveDevice(device);
+            if (device != null)
+            {
+                initialDevices.Add(device);
+                InputSystem.RemoveDevice(device);
+            }
         }
-        Assert.That(InputSystem.devices.Count, Is.EqualTo(0));
+        Assert.That(InputSystem.devices.Count, Is.EqualTo(0), "not all initial devices disconnected");
         keyboard = InputSystem.AddDevice<Keyboard>();
         Assert.That(InputSystem.GetDevice<Keyboard>(), !Is.Null);
         mouse = InputSystem.AddDevice<Mouse>();
         Assert.That(InputSystem.GetDevice<Mouse>(), !Is.Null);
-        Assert.That(InputSystem.devices.Count, Is.EqualTo(2));
+        Assert.That(InputSystem.devices.Count, Is.EqualTo(2), "could not add devices");
     }
 
     [SetUp]
@@ -61,6 +67,15 @@ public class DropperKeyboardMovement : InputTestFixture
             returnString += ")";
             return returnString;
         });
+
+        foreach (InputDevice device in initialDevices)
+        {
+            if (device != null)
+            {
+                InputSystem.AddDevice(device);
+            }
+        }
+        initialDevices.Clear();
     }
 
     [UnityTest]
@@ -69,12 +84,18 @@ public class DropperKeyboardMovement : InputTestFixture
         GameObject boardInstance = Object.Instantiate(board, Vector2.zero, Quaternion.identity);
         Board boardScript = boardInstance.GetComponentInChildren<Board>();
 
+        yield return new WaitForFixedUpdate();
         int originalPosition = boardScript.activePiece.position.x;
 
-        PressAndRelease(keyboard.aKey);
+        Press(keyboard.aKey);
         yield return new WaitForFixedUpdate();
+        yield return new WaitForFixedUpdate();
+        Release(keyboard.aKey);
+        while (boardScript.activePiece.position.x == originalPosition) yield return new WaitForFixedUpdate();
 
-        Assert.That(originalPosition, Is.GreaterThan(boardScript.activePiece.position.x));
+        int finalPosition = boardScript.activePiece.position.x;
+
+        Assert.That(finalPosition, Is.LessThan(originalPosition));
     }
 
     [UnityTest]
@@ -83,12 +104,18 @@ public class DropperKeyboardMovement : InputTestFixture
         GameObject boardInstance = Object.Instantiate(board, Vector2.zero, Quaternion.identity);
         Board boardScript = boardInstance.GetComponentInChildren<Board>();
 
+        yield return new WaitForFixedUpdate();
         int originalPosition = boardScript.activePiece.position.x;
 
-        PressAndRelease(keyboard.dKey);
+        Press(keyboard.dKey);
         yield return new WaitForFixedUpdate();
+        yield return new WaitForFixedUpdate();
+        Release(keyboard.dKey);
+        while (boardScript.activePiece.position.x == originalPosition) yield return new WaitForFixedUpdate();
 
-        Assert.That(originalPosition, Is.LessThan(boardScript.activePiece.position.x));
+        int finalPosition = boardScript.activePiece.position.x;
+
+        Assert.That(finalPosition, Is.GreaterThan(originalPosition));
     }
 
 

@@ -51,13 +51,27 @@ public class Piece : MonoBehaviour
         //Rotation controls
         if (rotateAction.triggered)
         {
-            Rotate(moveAction.ReadValue<float>() > 0 ? 1 : -1);
+            if (rotateAction.ReadValue<float>() > 0)
+            {
+                Rotate(1);
+            }
+            else
+            {
+                Rotate(-1);
+            }
         }
 
         //Left and Right controls
         if (moveAction.triggered)
         {
-            Move(moveAction.ReadValue<float>() > 0 ? Vector2Int.right : Vector2Int.left);
+            if (moveAction.ReadValue<float>() > 0)
+            {
+                Move(Vector2Int.right);
+            }
+            else
+            {
+                Move(Vector2Int.left);
+            }
         }
 
         //Move down (testing stuff)

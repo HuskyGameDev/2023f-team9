@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class RunnerKeyboardMovement : InputTestFixture
 {
+    readonly ArrayList initialDevices = new();
+
     GameObject runner;
     GameObject board;
     Keyboard keyboard;
@@ -24,14 +26,18 @@ public class RunnerKeyboardMovement : InputTestFixture
         // setup devices
         foreach (InputDevice device in InputSystem.devices)
         {
-            if (device != null) InputSystem.RemoveDevice(device);
+            if (device != null)
+            {
+                initialDevices.Add(device);
+                InputSystem.RemoveDevice(device);
+            }
         }
-        Assert.That(InputSystem.devices.Count, Is.EqualTo(0));
+        Assert.That(InputSystem.devices.Count, Is.EqualTo(0), "not all initial devices disconnected");
         keyboard = InputSystem.AddDevice<Keyboard>();
         Assert.That(InputSystem.GetDevice<Keyboard>(), !Is.Null);
         mouse = InputSystem.AddDevice<Mouse>();
         Assert.That(InputSystem.GetDevice<Mouse>(), !Is.Null);
-        Assert.That(InputSystem.devices.Count, Is.EqualTo(2));
+        Assert.That(InputSystem.devices.Count, Is.EqualTo(2), "could not add devices");
     }
 
     [SetUp]
@@ -64,6 +70,15 @@ public class RunnerKeyboardMovement : InputTestFixture
             returnString += ")";
             return returnString;
         });
+
+        foreach (InputDevice device in initialDevices)
+        {
+            if (device != null)
+            {
+                InputSystem.AddDevice(device);
+            }
+        }
+        initialDevices.Clear();
     }
 
     [UnityTest]

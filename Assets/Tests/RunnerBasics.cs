@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 
 public class RunnerBasics : InputTestFixture
 {
+    readonly ArrayList initialDevices = new();
+
     GameObject runner;
     GameObject board;
     Keyboard keyboard;
@@ -25,14 +27,18 @@ public class RunnerBasics : InputTestFixture
         // setup devices
         foreach (InputDevice device in InputSystem.devices)
         {
-            if (device != null) InputSystem.RemoveDevice(device);
+            if (device != null)
+            {
+                initialDevices.Add(device);
+                InputSystem.RemoveDevice(device);
+            }
         }
-        Assert.That(InputSystem.devices.Count, Is.EqualTo(0));
+        Assert.That(InputSystem.devices.Count, Is.EqualTo(0), "not all initial devices disconnected");
         keyboard = InputSystem.AddDevice<Keyboard>();
         Assert.That(InputSystem.GetDevice<Keyboard>(), !Is.Null);
         mouse = InputSystem.AddDevice<Mouse>();
         Assert.That(InputSystem.GetDevice<Mouse>(), !Is.Null);
-        Assert.That(InputSystem.devices.Count, Is.EqualTo(2));
+        Assert.That(InputSystem.devices.Count, Is.EqualTo(2), "could not add devices");
     }
 
     [SetUp]
@@ -65,6 +71,15 @@ public class RunnerBasics : InputTestFixture
             returnString += ")";
             return returnString;
         });
+
+        foreach (InputDevice device in initialDevices)
+        {
+            if (device != null)
+            {
+                InputSystem.AddDevice(device);
+            }
+        }
+        initialDevices.Clear();
     }
 
     [Test]
@@ -102,7 +117,7 @@ public class RunnerBasics : InputTestFixture
         float vel1 = runnerRigidbody.velocity.y;
 
         // wait until fall starts
-        yield return new WaitForSeconds(0.5f);
+        while (runnerRigidbody.velocity.y > 0) yield return new WaitForFixedUpdate();
 
         // try to jump again and check that player is still falling
         PressAndRelease(keyboard.upArrowKey);
