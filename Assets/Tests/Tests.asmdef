@@ -6,7 +6,7 @@
         "UnityEditor.TestRunner",
         "Unity.InputSystem",
         "Unity.InputSystem.TestFramework",
-        "RunnerMovement"
+        "Scripts"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
