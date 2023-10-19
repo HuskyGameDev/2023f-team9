@@ -118,5 +118,62 @@ public class DropperKeyboardMovement : InputTestFixture
         Assert.That(finalPosition, Is.GreaterThan(originalPosition));
     }
 
+    [UnityTest]
+    public IEnumerator BlockMovesDownWithKeyboard()
+    {
+        GameObject boardInstance = Object.Instantiate(board, Vector2.zero, Quaternion.identity);
+        Board boardScript = boardInstance.GetComponentInChildren<Board>();
 
+        yield return new WaitForFixedUpdate();
+        int originalPosition = boardScript.activePiece.position.y;
+
+        for (int i = 0; i < 8; i++)
+        {
+            Press(keyboard.sKey);
+            yield return new WaitForFixedUpdate();
+            yield return new WaitForFixedUpdate();
+            Release(keyboard.sKey);
+        }
+        yield return new WaitForFixedUpdate();
+
+        int finalPosition = boardScript.activePiece.position.y;
+
+        Assert.That(finalPosition, Is.LessThan(originalPosition - 2));
+    }
+
+    [UnityTest]
+    public IEnumerator BlockRotatesLeftWithKeyboard()
+    {
+        GameObject boardInstance = Object.Instantiate(board, Vector2.zero, Quaternion.identity);
+        Board boardScript = boardInstance.GetComponentInChildren<Board>();
+
+        yield return new WaitForFixedUpdate();
+        Assert.That(boardScript.activePiece.rotationIndex, Is.EqualTo(0));
+
+        Press(keyboard.qKey);
+        yield return new WaitForFixedUpdate();
+        yield return new WaitForFixedUpdate();
+        Release(keyboard.qKey);
+        while (boardScript.activePiece.rotationIndex == 0) yield return new WaitForFixedUpdate();
+
+        Assert.That(boardScript.activePiece.rotationIndex, Is.EqualTo(3));
+    }
+
+    [UnityTest]
+    public IEnumerator BlockRotatesRightWithKeyboard()
+    {
+        GameObject boardInstance = Object.Instantiate(board, Vector2.zero, Quaternion.identity);
+        Board boardScript = boardInstance.GetComponentInChildren<Board>();
+
+        yield return new WaitForFixedUpdate();
+        Assert.That(boardScript.activePiece.rotationIndex, Is.EqualTo(0));
+
+        Press(keyboard.eKey);
+        yield return new WaitForFixedUpdate();
+        yield return new WaitForFixedUpdate();
+        Release(keyboard.eKey);
+        while (boardScript.activePiece.rotationIndex == 0) yield return new WaitForFixedUpdate();
+
+        Assert.That(boardScript.activePiece.rotationIndex, Is.EqualTo(1));
+    }
 }

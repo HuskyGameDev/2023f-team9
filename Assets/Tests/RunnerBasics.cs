@@ -133,21 +133,24 @@ public class RunnerBasics : InputTestFixture
     public IEnumerator RunnerChecksForGroundBeforeJump()
     {
         Object.Instantiate(board, Vector2.zero, Quaternion.identity);
-        GameObject runnerInstance = Object.Instantiate(runner, new Vector2(0, -9.5f), Quaternion.identity);
+        GameObject runnerInstance = Object.Instantiate(runner, new Vector2(0, -8f), Quaternion.identity);
         Rigidbody2D runnerRigidbody = runnerInstance.GetComponentInChildren<Rigidbody2D>();
+
+        // check jump doesn't work
+        yield return new WaitForFixedUpdate();
+        PressAndRelease(keyboard.upArrowKey);
+        yield return new WaitForFixedUpdate();
+        Assert.That(runnerRigidbody.velocity.y, Is.Negative);
 
         // wait to fall to ground
         while (runnerRigidbody.velocity.y != 0) yield return new WaitForFixedUpdate();
 
-        // jump and wait for fall to ground
+        // check jump does work
         PressAndRelease(keyboard.upArrowKey);
-        while (runnerRigidbody.velocity.y != 0) yield return new WaitForFixedUpdate();
+        yield return new WaitForFixedUpdate();
+        yield return new WaitForFixedUpdate();
 
-        // jump again and check that player could jump
-        PressAndRelease(keyboard.upArrowKey);
-        yield return new WaitForFixedUpdate();
-        yield return new WaitForFixedUpdate();
-        Assert.That(runnerRigidbody.velocity.y, Is.GreaterThan(0));
+        Assert.That(runnerRigidbody.velocity.y, Is.Positive);
     }
 
 }
