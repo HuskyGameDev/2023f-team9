@@ -7,8 +7,6 @@ using UnityEngine.SceneManagement;
 
 public class RunnerKeyboardMovement : InputTestFixture
 {
-    readonly ArrayList initialDevices = new();
-
     GameObject runner;
     GameObject board;
     Keyboard keyboard;
@@ -23,21 +21,7 @@ public class RunnerKeyboardMovement : InputTestFixture
         board = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Board.prefab");
         Assert.That(board, !Is.Null);
 
-        // setup devices
-        foreach (InputDevice device in InputSystem.devices)
-        {
-            if (device != null)
-            {
-                initialDevices.Add(device);
-                InputSystem.RemoveDevice(device);
-            }
-        }
-        Assert.That(InputSystem.devices.Count, Is.EqualTo(0), "not all initial devices disconnected");
-        keyboard = InputSystem.AddDevice<Keyboard>();
-        Assert.That(InputSystem.GetDevice<Keyboard>(), !Is.Null);
-        mouse = InputSystem.AddDevice<Mouse>();
-        Assert.That(InputSystem.GetDevice<Mouse>(), !Is.Null);
-        Assert.That(InputSystem.devices.Count, Is.EqualTo(2), "could not add devices");
+        (keyboard, mouse) = SetupInput.SetupKeyboard();
     }
 
     [SetUp]
@@ -58,27 +42,7 @@ public class RunnerKeyboardMovement : InputTestFixture
     [OneTimeTearDown]
     public void OneTimeTearDown()
     {
-        // remove devices
-        InputSystem.RemoveDevice(mouse);
-        InputSystem.RemoveDevice(keyboard);
-
-        Assert.That(InputSystem.devices.Count, Is.EqualTo(0), () =>
-        {
-            string returnString = "not all devices disconnected (";
-            foreach (InputDevice device in InputSystem.devices)
-                returnString += device + ", ";
-            returnString += ")";
-            return returnString;
-        });
-
-        foreach (InputDevice device in initialDevices)
-        {
-            if (device != null)
-            {
-                InputSystem.AddDevice(device);
-            }
-        }
-        initialDevices.Clear();
+        SetupInput.TeardownKeyboard();
     }
 
     [UnityTest]
