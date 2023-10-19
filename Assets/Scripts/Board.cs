@@ -9,6 +9,8 @@ public class Board : MonoBehaviour
     public Vector3Int spawnPosition;
     public Vector2Int boardSize = new Vector2Int(10, 20);
 
+    public bool LostGame { get; private set; }
+
     public RectInt Bounds
     {
         get
@@ -22,7 +24,8 @@ public class Board : MonoBehaviour
     {
         this.tilemap = GetComponentInChildren<Tilemap>();
         this.activePiece = GetComponentInChildren<Piece>();
-        for (int i = 0; i < this.tetrominoes.Length; i++){
+        for (int i = 0; i < this.tetrominoes.Length; i++)
+        {
             this.tetrominoes[i].Initialize();
         }
     }
@@ -39,9 +42,11 @@ public class Board : MonoBehaviour
 
         this.activePiece.Initialize(this, this.spawnPosition, data);
 
-        if (IsValidPosition(this.activePiece, this.spawnPosition)){
+        if (IsValidPosition(this.activePiece, this.spawnPosition))
+        {
             Set(this.activePiece);
-        } else
+        }
+        else
         {
             GameOver();
         }
@@ -53,13 +58,14 @@ public class Board : MonoBehaviour
 
     private void GameOver()
     {
+        this.LostGame = true;
         this.tilemap.ClearAllTiles();
         //Add gameover stuff here
     }
 
     public void Set(Piece piece)
     {
-        for (int i = 0; i <piece.cells.Length; i++)
+        for (int i = 0; i < piece.cells.Length; i++)
         {
             Vector3Int tilePosition = piece.cells[i] + piece.position;
             this.tilemap.SetTile(tilePosition, piece.data.tile);
@@ -81,7 +87,7 @@ public class Board : MonoBehaviour
         {
             RectInt bounds = this.Bounds;
             Vector3Int tilePosition = piece.cells[i] + position;
-            if (!bounds.Contains((Vector2Int) tilePosition))
+            if (!bounds.Contains((Vector2Int)tilePosition))
             {
                 return false;
             }
@@ -98,12 +104,14 @@ public class Board : MonoBehaviour
         RectInt bounds = this.Bounds;
         int row = bounds.yMin;
 
-        while(row < bounds.yMax)
+        while (row < bounds.yMax)
         {
             if (IsLineFull(row))
             {
                 LineClear(row);
-            } else {
+            }
+            else
+            {
                 row++;
             }
         }
@@ -139,7 +147,7 @@ public class Board : MonoBehaviour
         {
             for (int col = bounds.xMin; col < bounds.xMax; col++)
             {
-                Vector3Int position = new Vector3Int(col, row+1, 0);
+                Vector3Int position = new Vector3Int(col, row + 1, 0);
                 TileBase above = this.tilemap.GetTile(position);
 
                 position = new Vector3Int(col, row, 0);
