@@ -56,9 +56,15 @@ public class PlayerMovement : MonoBehaviour
         }
         if (canJump && jumpAction.triggered)
         {
-            canJump = false;
-            float targetVelocity = Mathf.Sqrt((jumpHeight * 10 + 1) * 2 * rigidbody.gravityScale);
-            rigidbody.velocity = new Vector2(rigidbody.velocity.x, targetVelocity);
+            StartCoroutine(Jump());
         }
+    }
+
+    IEnumerator Jump()
+    {
+        float targetVelocity = Mathf.Sqrt((jumpHeight * 10 + 1) * 2 * rigidbody.gravityScale);
+        rigidbody.velocity = new Vector2(rigidbody.velocity.x, targetVelocity);
+        yield return new WaitForFixedUpdate(); // prevents accidental double jump
+        canJump = false;
     }
 }
