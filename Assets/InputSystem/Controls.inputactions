@@ -3,21 +3,21 @@
     "maps": [
         {
             "name": "Runner",
-            "id": "461e2fc1-67e0-49ad-a5fa-fb6e4a3819e5",
+            "id": "926af9bb-59d8-455a-bce0-5560517e6003",
             "actions": [
                 {
                     "name": "Move",
-                    "type": "Value",
-                    "id": "d42b03be-8cd8-40d2-87c5-0478229a49a1",
-                    "expectedControlType": "Axis",
+                    "type": "Button",
+                    "id": "a9da3bde-2ef9-4ebf-a2e2-992ba1641b44",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Jump",
                     "type": "Button",
-                    "id": "a4cc3f12-131c-45d5-9a1c-08a910efc1fc",
+                    "id": "49a94b62-ec53-41fd-9f19-3e2e3535412b",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -26,8 +26,8 @@
             ],
             "bindings": [
                 {
-                    "name": "Arrow Keys",
-                    "id": "66ddc7e6-4163-46e1-ac2e-457cbd596783",
+                    "name": "1D Axis",
+                    "id": "3426c538-efe4-4ed3-a41e-ce10321bd733",
                     "path": "1DAxis",
                     "interactions": "",
                     "processors": "",
@@ -38,7 +38,7 @@
                 },
                 {
                     "name": "negative",
-                    "id": "7a68272a-617a-4a08-ac40-39293f5186d4",
+                    "id": "e543d214-7f19-4732-a909-e33cc063270c",
                     "path": "<Keyboard>/leftArrow",
                     "interactions": "",
                     "processors": "",
@@ -49,7 +49,7 @@
                 },
                 {
                     "name": "positive",
-                    "id": "90524f70-cbd0-4cb0-8aae-9fcc1e7a78e4",
+                    "id": "2e73848e-8b19-43ac-b1ab-bd8a587b67a6",
                     "path": "<Keyboard>/rightArrow",
                     "interactions": "",
                     "processors": "",
@@ -60,7 +60,7 @@
                 },
                 {
                     "name": "",
-                    "id": "4a92a976-6783-484a-8820-25f81a50c4d3",
+                    "id": "0a1a5519-95c6-4eca-8e74-2c1bd9203d37",
                     "path": "<Keyboard>/upArrow",
                     "interactions": "",
                     "processors": "",
@@ -73,12 +73,12 @@
         },
         {
             "name": "Dropper",
-            "id": "8e933ef0-7884-4237-a5c2-8bef3fd982c6",
+            "id": "5675cc18-bb08-4232-b1f2-866f925ab405",
             "actions": [
                 {
                     "name": "Move",
                     "type": "Button",
-                    "id": "7c6ea766-6006-4eb9-860d-8d96e0ffe782",
+                    "id": "b1d3ca11-f405-40e7-a108-d551f50dda03",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -87,7 +87,7 @@
                 {
                     "name": "Rotate",
                     "type": "Button",
-                    "id": "faa100f6-1b41-4fad-8f40-8806c42de6c1",
+                    "id": "740c3178-7bbb-4b5a-8e16-556a114689e2",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -96,7 +96,7 @@
                 {
                     "name": "Down",
                     "type": "Button",
-                    "id": "3756eedf-3ee1-4b97-8eba-97c5a00e4b66",
+                    "id": "0effcbae-5c97-4a89-a538-f90e954c3ac6",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -106,7 +106,7 @@
             "bindings": [
                 {
                     "name": "1D Axis",
-                    "id": "b7fd3606-5b63-464b-9c2d-afe106ecbda4",
+                    "id": "3c9d86fd-9243-4ba7-938f-ae6b019ee170",
                     "path": "1DAxis",
                     "interactions": "",
                     "processors": "",
@@ -117,7 +117,7 @@
                 },
                 {
                     "name": "negative",
-                    "id": "84f91969-1500-45be-8d1e-8bb85d6271a5",
+                    "id": "f32dcbe6-732c-47af-9762-ba1fbcd30551",
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
@@ -128,7 +128,7 @@
                 },
                 {
                     "name": "positive",
-                    "id": "c9d99cbb-a4fb-4aa7-9e8a-aa6cf3e6a2cb",
+                    "id": "de28aeee-aa90-48cd-896a-2d2bb380d6c1",
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
@@ -139,7 +139,7 @@
                 },
                 {
                     "name": "1D Axis",
-                    "id": "33bb9ad3-f0a3-4f2a-9873-ef13c881b587",
+                    "id": "eb424891-d3f8-4af4-80d1-991a98d49680",
                     "path": "1DAxis",
                     "interactions": "",
                     "processors": "",
@@ -150,7 +150,7 @@
                 },
                 {
                     "name": "negative",
-                    "id": "d1fe4b99-2952-4c95-a2f8-5d3836cc4f40",
+                    "id": "1bae2689-382c-4314-8ee3-f711d4ca15d9",
                     "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
@@ -161,7 +161,7 @@
                 },
                 {
                     "name": "positive",
-                    "id": "119df0d0-aa6f-46c3-a498-da47b9587fd9",
+                    "id": "165d48eb-bcb9-4d76-bd23-44c098ed7da3",
                     "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
@@ -172,12 +172,14 @@
                 },
                 {
                     "name": "",
-                    "id": "6656eeca-b3f4-4f25-ad43-90522b60b2ec",
+                    "id": "20642c9a-ef4c-4f23-8838-b437ee781ed8",
                     "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
                     "action": "Down",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

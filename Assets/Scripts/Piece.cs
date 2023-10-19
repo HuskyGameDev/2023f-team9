@@ -41,10 +41,9 @@ public class Piece : MonoBehaviour
         }
 
         //Setup actions
-        PlayerInput playerInput = GetComponent<PlayerInput>();
-        this.moveAction = playerInput.actions.FindAction("Block Move");
-        this.downAction = playerInput.actions.FindAction("Block Down");
-        this.rotateAction = playerInput.actions.FindAction("Block Rotate");
+        moveAction = GameManager.Instance.inputActions.Dropper.Move;
+        rotateAction = GameManager.Instance.inputActions.Dropper.Rotate;
+        downAction = GameManager.Instance.inputActions.Dropper.Down;
     }
 
     private void Update()
