@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 public class DropperBasics : InputTestFixture
 {
@@ -40,6 +41,40 @@ public class DropperBasics : InputTestFixture
     public void OneTimeTearDown()
     {
         SetupInput.TeardownKeyboard();
+    }
+
+    private IEnumerator MoveToPosition(int targetX, int targetRot, Board boardScript)
+    {
+        boardScript.activePiece.stepDelay = 0.25f;
+        yield return new WaitForSeconds(boardScript.activePiece.lockDelay);
+        yield return new WaitForSeconds(boardScript.activePiece.stepDelay);
+        while (boardScript.activePiece.rotationIndex != targetRot)
+        {
+            PressAndRelease(keyboard.eKey);
+            yield return new WaitForFixedUpdate();
+        }
+        // line up with tower
+        while (boardScript.activePiece.position.x != targetX)
+        {
+            if (boardScript.activePiece.position.x > targetX)
+            {
+                // move left
+                Press(keyboard.aKey);
+                yield return new WaitForFixedUpdate();
+                yield return new WaitForFixedUpdate();
+                Release(keyboard.aKey);
+            }
+            else
+            {
+                // move right
+                Press(keyboard.dKey);
+                yield return new WaitForFixedUpdate();
+                yield return new WaitForFixedUpdate();
+                Release(keyboard.dKey);
+            }
+        }
+        boardScript.activePiece.stepDelay = 0.01f;
+        yield return TestUtil.WaitForReachBottom(boardScript.activePiece);
     }
 
     [UnityTest]
@@ -165,39 +200,47 @@ public class DropperBasics : InputTestFixture
         Board boardScript = boardInstance.GetComponentInChildren<Board>();
         TestUtil.OnlySpawnIBlocks(boardScript);
 
-        for (int i = 0; i < 4; i++)
+        var TargetPositions = new (int targetX, int targetRot)[] {
+            ( 0, 1 ),
+            ( 0, 1 ),
+            ( 0, 1 ),
+            ( 0, 1 ),
+            ( 0, 0 ),
+            ( 0, 0 ),
+            ( 0, 0 ),
+        };
+
+        foreach (var (targetX, targetRot) in TargetPositions)
         {
-            boardScript.activePiece.stepDelay = 0.25f;
-            yield return new WaitForSeconds(boardScript.activePiece.lockDelay);
-            yield return new WaitForSeconds(boardScript.activePiece.stepDelay);
-            PressAndRelease(keyboard.eKey);
-            yield return new WaitForFixedUpdate();
-            // line up with tower
-            while (boardScript.activePiece.position.x != 0)
-            {
-                if (boardScript.activePiece.position.x > 0)
-                {
-                    // move left
-                    Press(keyboard.aKey);
-                    yield return new WaitForFixedUpdate();
-                    yield return new WaitForFixedUpdate();
-                    Release(keyboard.aKey);
-                }
-                else
-                {
-                    // move right
-                    Press(keyboard.dKey);
-                    yield return new WaitForFixedUpdate();
-                    yield return new WaitForFixedUpdate();
-                    Release(keyboard.dKey);
-                }
-            }
-            boardScript.activePiece.stepDelay = 0.01f;
-            yield return TestUtil.WaitForReachBottom(boardScript.activePiece);
+            yield return MoveToPosition(targetX, targetRot, boardScript);
         }
 
         while (!boardScript.LostGame) yield return new WaitForFixedUpdate();
 
         Assert.That(boardScript.LostGame, Is.True);
+    }
+
+    [UnityTest]
+    public IEnumerator DetectRowFull()
+    {
+        GameObject boardInstance = Object.Instantiate(board, Vector2.zero, Quaternion.identity);
+        Board boardScript = boardInstance.GetComponentInChildren<Board>();
+        TestUtil.OnlySpawnIBlocks(boardScript);
+
+        var TargetPositions = new (int targetX, int targetRot)[] {
+            ( -6, 1 ),
+            ( -3, 0 ),
+            ( 1, 0 ),
+            ( 3, 1 ),
+        };
+
+        foreach (var (targetX, targetRot) in TargetPositions)
+        {
+            yield return MoveToPosition(targetX, targetRot, boardScript);
+        }
+
+        yield return new WaitForSeconds(boardScript.activePiece.lockDelay);
+
+        Assert.That(boardScript.tilemap.HasTile(new Vector3Int(-4, -10, 0)), Is.False);
     }
 }
