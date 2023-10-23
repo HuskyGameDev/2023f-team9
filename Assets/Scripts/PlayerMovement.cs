@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
@@ -10,8 +9,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float movementSpeed; // horizontal movement speed
     [SerializeField] private int jumpHeight; // number of blocks the player can jump
     private bool canJump = false; // checks if the user can jump or not
-    private const float MAX_VELOCITY = 5f; // the maximum horizontal velocity the player can have
-    private const float SLOWDOWN_SPEED = 0.99f; // how fast to slow the player down if they pass the max velocity (smaller is faster but less smooth)
+    private const float AIR_DRAG = 0.9f; // how much slower the player is while in the air (0.9 is 90% speed)
 
     // Components
     private TilemapCollider2D tilemapCollider; // the board's tilemap collider
@@ -41,13 +39,23 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Mathf.Abs(rigidbody.velocity.x) > MAX_VELOCITY)
+        if (moveAction.inProgress)
         {
-            rigidbody.velocity *= new Vector2(SLOWDOWN_SPEED, 1);
+            float direction = moveAction.ReadValue<float>();
+            if (canJump)
+            {
+                // speed on ground
+                rigidbody.velocity = new Vector2(direction * movementSpeed, rigidbody.velocity.y);
+            }
+            else
+            {
+                // speed in air
+                rigidbody.velocity = new Vector2(direction * movementSpeed * AIR_DRAG, rigidbody.velocity.y);
+            }
         }
-        else if (moveAction.inProgress)
+        else
         {
-            rigidbody.AddForce(new Vector2(moveAction.ReadValue<float>(), 0));
+            rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
         }
 
         if (tilemapCollider && bottomEdgeCollider.IsTouching(tilemapCollider))
@@ -60,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    IEnumerator Jump()
+    private IEnumerator Jump()
     {
         float targetVelocity = Mathf.Sqrt((jumpHeight * 10 + 1) * 2 * rigidbody.gravityScale);
         rigidbody.velocity = new Vector2(rigidbody.velocity.x, targetVelocity);
