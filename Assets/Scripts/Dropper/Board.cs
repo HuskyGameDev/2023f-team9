@@ -61,6 +61,7 @@ public class Board : MonoBehaviour
         this.LostGame = true;
         this.tilemap.ClearAllTiles();
         //Add gameover stuff here
+        GameManager.Instance.GameOver(true);
     }
 
     public void Set(Piece piece)

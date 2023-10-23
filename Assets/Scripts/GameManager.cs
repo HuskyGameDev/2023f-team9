@@ -27,10 +27,10 @@ public class GameManager
     }
 
     // Add game mananger members here
-    /* example:
-     * public void Pause(bool paused)
-     * {
-     * ...
-     * }
-     */
+    public void GameOver(bool runnerWon)
+    {
+        Debug.Log(runnerWon ? "The runner wins!" : "The dropper wins!");
+        LevelLoaderScript levelLoaderScript = UnityEngine.Object.FindObjectOfType<LevelLoaderScript>();
+        levelLoaderScript.loadEndScreen();
+    }
 }
