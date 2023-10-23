@@ -28,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
 
         try
         {
-            tilemapCollider = GameObject.FindGameObjectWithTag("Board").GetComponentInChildren<TilemapCollider2D>();
+            tilemapCollider = FindAnyObjectByType<TilemapCollider2D>();
         }
         catch
         {
@@ -53,8 +53,9 @@ public class PlayerMovement : MonoBehaviour
                 rigidbody.velocity = new Vector2(direction * movementSpeed * AIR_DRAG, rigidbody.velocity.y);
             }
         }
-        else
+        else if (canJump)
         {
+            // no ice effect when on ground
             rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
         }
 
