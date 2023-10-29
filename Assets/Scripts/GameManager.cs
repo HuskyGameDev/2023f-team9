@@ -30,7 +30,16 @@ public class GameManager
     public void GameOver(bool runnerWon)
     {
         Debug.Log(runnerWon ? "The runner wins!" : "The dropper wins!");
-        LevelLoaderScript levelLoaderScript = UnityEngine.Object.FindObjectOfType<LevelLoaderScript>();
-        levelLoaderScript.loadEndScreen();
+
+        try
+        {
+            LevelLoaderScript levelLoaderScript = UnityEngine.Object.FindObjectOfType<LevelLoaderScript>();
+            levelLoaderScript.loadEndScreen();
+        }
+        catch
+        {
+            Debug.Log("Could not load end screen");
+        }
+
     }
 }

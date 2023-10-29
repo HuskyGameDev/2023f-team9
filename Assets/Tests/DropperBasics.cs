@@ -11,6 +11,7 @@ public class DropperBasics : InputTestFixture
     GameObject board;
     Keyboard keyboard;
     Mouse mouse;
+    MovementUtil movementUtil;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
@@ -20,6 +21,8 @@ public class DropperBasics : InputTestFixture
         Assert.That(board, !Is.Null);
 
         (keyboard, mouse) = SetupInput.SetupKeyboard();
+
+        movementUtil = new MovementUtil(keyboard);
     }
 
     [SetUp]
@@ -41,40 +44,6 @@ public class DropperBasics : InputTestFixture
     public void OneTimeTearDown()
     {
         SetupInput.TeardownKeyboard();
-    }
-
-    private IEnumerator MoveToPosition(int targetX, int targetRot, Board boardScript)
-    {
-        boardScript.activePiece.stepDelay = 0.25f;
-        yield return new WaitForSeconds(boardScript.activePiece.lockDelay);
-        yield return new WaitForSeconds(boardScript.activePiece.stepDelay);
-        while (boardScript.activePiece.rotationIndex != targetRot)
-        {
-            PressAndRelease(keyboard.eKey);
-            yield return new WaitForFixedUpdate();
-        }
-        // line up with tower
-        while (boardScript.activePiece.position.x != targetX)
-        {
-            if (boardScript.activePiece.position.x > targetX)
-            {
-                // move left
-                Press(keyboard.aKey);
-                yield return new WaitForFixedUpdate();
-                yield return new WaitForFixedUpdate();
-                Release(keyboard.aKey);
-            }
-            else
-            {
-                // move right
-                Press(keyboard.dKey);
-                yield return new WaitForFixedUpdate();
-                yield return new WaitForFixedUpdate();
-                Release(keyboard.dKey);
-            }
-        }
-        boardScript.activePiece.stepDelay = 0.01f;
-        yield return TestUtil.WaitForReachBottom(boardScript.activePiece);
     }
 
     [UnityTest]
@@ -212,7 +181,7 @@ public class DropperBasics : InputTestFixture
 
         foreach (var (targetX, targetRot) in TargetPositions)
         {
-            yield return MoveToPosition(targetX, targetRot, boardScript);
+            yield return movementUtil.MoveBlockToPosition(targetX, targetRot, boardScript);
         }
 
         while (!boardScript.LostGame) yield return new WaitForFixedUpdate();
@@ -236,7 +205,7 @@ public class DropperBasics : InputTestFixture
 
         foreach (var (targetX, targetRot) in TargetPositions)
         {
-            yield return MoveToPosition(targetX, targetRot, boardScript);
+            yield return movementUtil.MoveBlockToPosition(targetX, targetRot, boardScript);
         }
 
         yield return new WaitForSeconds(boardScript.activePiece.lockDelay);

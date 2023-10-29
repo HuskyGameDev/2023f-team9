@@ -33,6 +33,7 @@ public class PlayerMovement : MonoBehaviour
         catch
         {
             // do nothing, it doesn't matter if there is no tilemap for now
+            Debug.LogError("PlayerMovement could not find board tilemap");
         }
     }
 

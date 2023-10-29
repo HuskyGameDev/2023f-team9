@@ -29,9 +29,9 @@ public class Piece : MonoBehaviour
         this.stepTime = Time.time + this.stepDelay;
         this.lockTime = 0f;
 
-        moveAction = GameManager.Instance.inputActions.Dropper.Move;
-        rotateAction = GameManager.Instance.inputActions.Dropper.Rotate;
-        downAction = GameManager.Instance.inputActions.Dropper.Down;
+        this.moveAction = GameManager.Instance.inputActions.Dropper.Move;
+        this.rotateAction = GameManager.Instance.inputActions.Dropper.Rotate;
+        this.downAction = GameManager.Instance.inputActions.Dropper.Down;
 
         this.cells ??= new Vector3Int[data.cells.Length];
 
