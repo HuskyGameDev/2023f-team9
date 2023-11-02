@@ -6,13 +6,23 @@ using UnityEngine.Tilemaps;
 public class NewBoard : MonoBehaviour
 {
     public Tilemap tilemap { get; private set; }
+    // Probably won't need this variable too much longer but rn, its being used to get the Tiles
     public TetrominoData[] tetrominoes;
-    public Vector3Int spawnPosition;
-    public Vector2Int boardSize = new Vector2Int(10, 20);
+    // The x coordinate in which the piece will be spawned at
+    public int SpawnX = 0;
+    // The board size for easy reference
+    private Vector2Int boardSize = new Vector2Int(10, 20);
 
+    public int shiftSpeed = 5;
+    // The downward velocity of the next piece that is spawned
+    public int velocityY = -5;
+    // The prefab of the J_Block
     public GameObject J_Block;
+
+    // The piece being controlled
     private GameObject activePiece;
-    public bool LostGame { get; private set; }
+
+
 
     public RectInt Bounds
     {
@@ -39,26 +49,27 @@ public class NewBoard : MonoBehaviour
         SpawnPiece();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
-    //
+    // As of right now, only spawns a J block but does keep track of lost condition for dropper
     public void SpawnPiece()
     {
-        activePiece = Instantiate(J_Block, new Vector3(-4, 9, 0), Quaternion.identity);
+        if (tilemap.HasTile(new Vector3Int(SpawnX, 9, 0)))
+        {
+            GameOver();
+        }
+        activePiece = Instantiate(J_Block, new Vector3(SpawnX, 9, 0), Quaternion.identity);
         
     }
 
+    // This is called my the piece when the piece is ready to be "set down" or has collided with a tile, meaning its ready to be replaced with tiles
+    // This is where we might tell the UI that a new piece is going to be queued up
     public void spawnTiles()
     {
         Transform curChild;
         for (int i = 0; i < activePiece.transform.childCount; i++)
         {
             curChild = activePiece.transform.GetChild(i).transform;
-            Debug.Log(curChild.name + ": \n POSITION: " + curChild.position + "\nSIZE: " + curChild.GetComponent<SpriteRenderer>().size);
+            //Debug.Log(curChild.name + ": \n POSITION: " + curChild.position + "\nSIZE: " + curChild.GetComponent<SpriteRenderer>().size);
             int x;
             int y;
             if (curChild.position.x > 0)
@@ -87,7 +98,7 @@ public class NewBoard : MonoBehaviour
             int width = (int) curChild.GetComponent<SpriteRenderer>().size.x;
             int height = (int)curChild.GetComponent<SpriteRenderer>().size.y;
 
-            Debug.Log("X: " + x + " Y: " + y);
+            //Debug.Log("X: " + x + " Y: " + y);
 
             if (width % 2 != 0)
             {
@@ -151,6 +162,14 @@ public class NewBoard : MonoBehaviour
                 this.tilemap.SetTile(position, above);
             }
             row++;
+        }
+    }
+
+    private void GameOver()
+    {
+        for (int i = 0; i < 20; i++)
+        {
+            LineClear(-9);
         }
     }
 }

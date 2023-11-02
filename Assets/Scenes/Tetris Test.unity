@@ -331,8 +331,8 @@ MonoBehaviour:
     tile: {fileID: 11400000, guid: 2e21662a00ec308449a660d4192a9a62, type: 2}
   - tetromino: 6
     tile: {fileID: 11400000, guid: 50c02258950378d4dbb96a3b207ef1a4, type: 2}
-  spawnPosition: {x: 0, y: 0, z: 0}
-  boardSize: {x: 10, y: 20}
+  SpawnX: 0
+  velocity: -5
   J_Block: {fileID: 2316458947750214938, guid: 30fa0ea64198dae4eb1e835357d9ddee, type: 3}
 --- !u!1001 &7684014988993394436
 PrefabInstance:
@@ -342,6 +342,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 225664168373005378, guid: 4b30420f76fef4fcf97ca1ddfb33856f, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1682286953971598144, guid: 4b30420f76fef4fcf97ca1ddfb33856f, type: 3}
       propertyPath: m_Tiles.Array.size
       value: 52
