@@ -332,7 +332,8 @@ MonoBehaviour:
   - tetromino: 6
     tile: {fileID: 11400000, guid: 50c02258950378d4dbb96a3b207ef1a4, type: 2}
   SpawnX: 0
-  velocity: -5
+  shiftSpeed: 10
+  velocityY: -5
   J_Block: {fileID: 2316458947750214938, guid: 30fa0ea64198dae4eb1e835357d9ddee, type: 3}
 --- !u!1001 &7684014988993394436
 PrefabInstance:
