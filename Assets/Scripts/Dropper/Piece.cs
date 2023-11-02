@@ -13,7 +13,7 @@ public class Piece : MonoBehaviour
     public float lockDelay = 0.5f;
 
     private float stepTime;
-    //GO OVER WITH TEAM!!!
+    
     private float lockTime;
 
     private InputAction moveAction;
@@ -33,7 +33,7 @@ public class Piece : MonoBehaviour
         this.rotateAction = GameManager.Instance.inputActions.Dropper.Rotate;
         this.downAction = GameManager.Instance.inputActions.Dropper.Down;
 
-        this.cells ??= new Vector3Int[data.cells.Length];
+        this.cells = new Vector3Int[data.cells.Length];
 
         for (int i = 0; i < data.cells.Length; i++)
         {
