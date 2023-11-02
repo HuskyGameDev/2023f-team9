@@ -39,44 +39,51 @@ public class NewPiece : MonoBehaviour
     {
         if (!hasCollided)
         {
+            
             if (Mathf.Round(transform.position.x) == xCount)
             {
-                velocityX = 0;
-                transform.position = new Vector3(xCount, transform.position.y, 0);
-            }
-            myRigidBody.velocity = new Vector2(velocityX, velocityY);
-        }
-        else {
+                if (velocityX != 0)
+                {
+                    velocityX = 0;
+                    transform.position = new Vector3(xCount, transform.position.y, 0);
 
-            // Prevents piece from accidently being placed on a corner
-            if (velocityX != 0)
-            {
-                transform.position = new Vector3(xCount, transform.position.y, 0);
+                }
             }
             
-            newBoard.spawnTiles();
+            
+            myRigidBody.velocity = new Vector2(velocityX, velocityY);
+        
+        }
+        else
+        {
+                
+             newBoard.spawnTiles();
+                    
         }
 
-
-        // Controls for left and right
-        // Also note that xCount is for keeping track of where the piece is
-        // This is a temporary solution to keeping at least the J_Block in bounds
+            // Controls for left and right
+            // Also note that xCount is for keeping track of where the piece is
+            // This is a temporary solution to keeping at least the J_Block in bounds    
         if (Input.GetKeyDown(KeyCode.A) && xCount - 1 != -5)
         {
+                
             xCount--;
             velocityX = -shiftSpeed;
-            Debug.Log("A PRESSED. POSX: " + transform.position.x + " xCount: " + xCount);
+            Debug.Log("A PRESSED. POSX: " + transform.position.x + " xCount: " + xCount);    
         }
-        else if (Input.GetKeyDown(KeyCode.D) && xCount + 1 != 5)
+            
+        else if (Input.GetKeyDown(KeyCode.D) && xCount + 1 != 5)    
         {
             xCount++;
             velocityX = shiftSpeed;
-            Debug.Log("D PRESSED. POSX: " + transform.position.x + " xCount: " + xCount);
-        }
+            //Debug.Log("D PRESSED. POSX: " + transform.position.x + " xCount: " + xCount);
+            }
+        
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        Debug.Log("COLLIDED");
         if (collision.gameObject.tag == "Tilemap"){
             foreach(ContactPoint2D hitPos in collision.contacts)
             {
@@ -90,17 +97,22 @@ public class NewPiece : MonoBehaviour
                 {
                     xCount++;
                     velocityX = 0;
-                    transform.position = new Vector3(Mathf.Round(transform.position.x), transform.position.y, 0);
+                    transform.position = new Vector3(xCount, transform.position.y, 0);
                     break;
                 } else if (hitPos.normal.x < 0)
                 {
                     velocityX = 0;
                     xCount--;
-                    transform.position = new Vector3(Mathf.Round(transform.position.x), transform.position.y, 0);
+                    transform.position = new Vector3(xCount, transform.position.y, 0);
                     break;
                 }
             }
             
         }
+    }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        Debug.Log("EXIT");
+        hasCollided = false;
     }
 }
