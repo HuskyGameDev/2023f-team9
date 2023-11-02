@@ -42,11 +42,13 @@ public class NewPiece : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Tilemap"){
+            Debug.Log("RAR");
             foreach(ContactPoint2D hitPos in collision.contacts)
             {
                 if (hitPos.normal.y > 0)
                 {
                     hasCollided = true;
+                    break;
                 }
             }
             
