@@ -47,6 +47,8 @@ public class NewPiece : MonoBehaviour
             myRigidBody.velocity = new Vector2(velocityX, velocityY);
         }
         else {
+
+            // Prevents piece from accidently being placed on a corner
             if (velocityX != 0)
             {
                 transform.position = new Vector3(xCount, transform.position.y, 0);
