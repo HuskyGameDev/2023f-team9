@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8389410438778828516}
   - component: {fileID: 6578791088061807677}
   - component: {fileID: 7097409563085660249}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: J-block
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -85,7 +85,7 @@ GameObject:
   - component: {fileID: 6441415120149915158}
   - component: {fileID: 3439291892136953153}
   - component: {fileID: 624550071200756462}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Square (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -215,7 +215,7 @@ GameObject:
   - component: {fileID: 7807705900514021980}
   - component: {fileID: 2807657172770707928}
   - component: {fileID: 732106549635341036}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}

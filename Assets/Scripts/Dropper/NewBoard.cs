@@ -57,9 +57,15 @@ public class NewBoard : MonoBehaviour
         {
             GameOver();
         }
-        activePiece = Instantiate(J_Block, new Vector3(SpawnX, 9, 0), Quaternion.identity);
+        else
+        {
+            activePiece = Instantiate(J_Block, new Vector3(SpawnX, 9, 0), Quaternion.identity);
+        }
+        
         
     }
+
+    
 
     // This is called my the piece when the piece is ready to be "set down" or has collided with a tile, meaning its ready to be replaced with tiles
     // This is where we might tell the UI that a new piece is going to be queued up
@@ -171,5 +177,6 @@ public class NewBoard : MonoBehaviour
         {
             LineClear(-9);
         }
+        SpawnPiece();
     }
 }
