@@ -13,6 +13,7 @@ public class NewBoard : MonoBehaviour
     // The board size for easy reference
     private Vector2Int boardSize = new Vector2Int(10, 20);
 
+    // How fast the piece will shift left and right
     public int shiftSpeed = 5;
     // The downward velocity of the next piece that is spawned
     public int velocityY = -5;
@@ -21,6 +22,10 @@ public class NewBoard : MonoBehaviour
 
     // The piece being controlled
     private GameObject activePiece;
+
+    // The amount of space the piece is allowed to "clip" through in order to fit tinier places a little bit easier
+    // and give the illusion of smoothness
+    public float wiggleRoom = 0.3f;
 
 
 

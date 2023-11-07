@@ -6,8 +6,7 @@ using UnityEngine.Tilemaps;
 public class NewPiece : MonoBehaviour
 {
 
-    bool hasCollided = false;
-    TetrominoData data;
+    
     private NewBoard newBoard;
 
     private int velocityX = 0;
@@ -22,25 +21,31 @@ public class NewPiece : MonoBehaviour
     private int leftTileY;
     private int rightTileY;
     private int bottomTileY;
+    
 
-    bool leftTileDetected;
-    bool rightTileDetected;
-    bool bottomTileDetected;
+    private bool leftTileDetected;
+    private bool rightTileDetected;
+    private bool bottomTileDetected;
+
+    private bool leftShiftClear;
+    private bool rightShiftClear;
 
 
-    Rigidbody2D myRigidBody;
-    int xCount;
-    float nextY;
-    float offSetY;
+    private Rigidbody2D myRigidBody;
+    private float nextY;
+    private float offSetY;
+    private float bottomOfPiece;
 
-    Tilemap tilemap;
+    private Tilemap tilemap;
 
+    private float wiggleRoom;
     public void Start()
     {
         newBoard = GameObject.Find("Board").GetComponent<NewBoard>();
         velocityY = newBoard.velocityY;
         shiftSpeed = newBoard.shiftSpeed;
         tilemap = newBoard.tilemap;
+        wiggleRoom = newBoard.wiggleRoom;
 
         myRigidBody = GetComponent<Rigidbody2D>();
 
@@ -61,8 +66,6 @@ public class NewPiece : MonoBehaviour
 
         getDimensions();
         nextY = 12 - offSetY;
-        Debug.Log("OFFSET: " + offSetY);
-        xCount = 0;
 
         leftTileDetected = false;
         rightTileDetected = false;
@@ -196,10 +199,10 @@ public class NewPiece : MonoBehaviour
             //Debug.Log("No tile detected at position " + right[i] + " on the RIGHT (" + i + ")");
             if (tilemap.HasTile((Vector3Int)right[i]))
             {
-
+                Debug.Log("DETECTED: Position " + right[i] + " on the RIGHT has a tile (" + i + ")");
                 rightTileDetected = true;
-                //Debug.Log("Position " + right[i] + " on the RIGHT has a tile (" + i + ")");
                 rightTileY = right[i].y;
+                
                 break;
             }
             rightTileDetected = false;
@@ -208,18 +211,21 @@ public class NewPiece : MonoBehaviour
 
     private void checkLeft()
     {
-        //Debug.Log("------------------");
+        Debug.Log("------------------");
         for (int i = 0; i < left.Count; i++)
         {
-            //Debug.Log("No tile detected at position " + left[i] + " on the LEFT//// Parent PosY: " + transform.position.y +  " (" + i + ")");
+            Debug.Log("Checking position " + left[i] + " on the LEFT//// Parent PosY: " + transform.position.y +  " (" + i + ")");
             if (tilemap.HasTile((Vector3Int)left[i]))
             {
-                //Debug.Log("Position " + left[i] + " on the LEFT has a tile (" + i + ")");
-                leftTileDetected = true;
+                Debug.Log("DETECTED: Position " + left[i] + " on the LEFT has a tile (" + i + ")");
                 leftTileY = left[i].y;
+                leftTileDetected = true;
+                
                 break;
+                
             }
             leftTileDetected = false;
+            
         }
     }
     private void checkBottom()
@@ -251,25 +257,20 @@ public class NewPiece : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        bottomOfPiece = transform.position.y - offSetY;
         
-        if ( (transform.position.y - offSetY) <= nextY - 0.5f)
+        if ( (bottomOfPiece) <= nextY - 0.5f)
         {
             //Debug.Log(transform.position.y + " - " + offSetY + " = " + (transform.position.y -  offSetY) + " compared to " + (nextY-0.5f));
             updateY(-1);
             checkAll();
             if (bottomTileDetected)
             {
-                Debug.Log(bottomTileY + ", " + (transform.position.y - offSetY));
                 if (bottomTileY >= transform.position.y - offSetY)
                 {
-                    Debug.Log("-------LANDED------- ");
                     newBoard.spawnTiles();
                 }
             }
-            
-
-            
-
             nextY--;
             
         }
@@ -279,19 +280,35 @@ public class NewPiece : MonoBehaviour
             
             
         myRigidBody.velocity = new Vector2(velocityX, velocityY);
-        
-        
 
-            // Controls for left and right
-            // Also note that xCount is for keeping track of where the piece is
-            // This is a temporary solution to keeping at least the J_Block in bounds    
+        if (leftShiftClear)
+        {
+            if (bottomOfPiece <= nextY - 0.5f + wiggleRoom)
+            {
+                
+                leftTileDetected = false;
+            }
+
+        }
+
+        if (rightShiftClear)
+        {
+            if (bottomOfPiece <= nextY - 0.5f + wiggleRoom)
+            {
+                rightTileDetected = false;
+            }
+
+        }
+
+        // Controls for left and right
+        // Also note that xCount is for keeping track of where the piece is
+        // This is a temporary solution to keeping at least the J_Block in bounds    
         if (Input.GetKeyDown(KeyCode.A) && !leftTileDetected)
         {
             // If can move left
             updateX(-1);
             checkAll();
-            Debug.Log(transform.position.y + offSetY);
-            xCount--;
+            
             transform.position = new Vector3(transform.position.x - 1, transform.position.y, 0);
             //Debug.Log("A PRESSED. POSX: " + transform.position.x + " xCount: " + xCount);    
         }
@@ -300,7 +317,6 @@ public class NewPiece : MonoBehaviour
         {
             updateX(1);
             checkAll();
-            xCount++;
             transform.position = new Vector3(transform.position.x + 1, transform.position.y, 0);
             //velocityX = shiftSpeed;
             //Debug.Log("D PRESSED. POSX: " + transform.position.x + " xCount: " + xCount);
