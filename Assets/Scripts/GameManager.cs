@@ -8,6 +8,7 @@ public class GameManager
     private static GameManager instance;
 
     public Controls inputActions;
+    public float runnerWinHeight;
 
     private GameManager()
     {
@@ -15,6 +16,8 @@ public class GameManager
         inputActions = new Controls();
         inputActions.Runner.Enable();
         inputActions.Dropper.Enable();
+
+        runnerWinHeight = 8f;
     }
 
     public static GameManager Instance
