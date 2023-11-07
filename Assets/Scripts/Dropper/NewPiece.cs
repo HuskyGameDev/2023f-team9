@@ -30,7 +30,7 @@ public class NewPiece : MonoBehaviour
 
     Rigidbody2D myRigidBody;
     int xCount;
-    int nextY;
+    float nextY;
     float offSetY;
 
     Tilemap tilemap;
@@ -46,7 +46,7 @@ public class NewPiece : MonoBehaviour
 
         rightTileY = 99;
         leftTileY = 99;
-        bottomTileY = 99;
+        bottomTileY = -99;
 
 
     }
@@ -56,12 +56,11 @@ public class NewPiece : MonoBehaviour
         right = new List<Vector2Int>();
         left = new List<Vector2Int>();
         bottom = new List<Vector2Int>();
-        top = new List<Vector2Int>();
 
         
 
         getDimensions();
-        nextY = (int)(9 - offSetY);
+        nextY = 12 - offSetY;
         Debug.Log("OFFSET: " + offSetY);
         xCount = 0;
 
@@ -97,7 +96,7 @@ public class NewPiece : MonoBehaviour
             scaleY = (int) curChild.GetComponent<SpriteRenderer>().size.y;
 
             posX = posX - (scaleX / 2);
-            posY = posY - (scaleY / 2);
+            posY = posY - ((scaleY+ 1) / 2);
             if (scaleY/2 > offSetY)
             {
                 offSetY = (float) scaleY/2;
@@ -109,14 +108,12 @@ public class NewPiece : MonoBehaviour
             //Debug.Log(curChild.name);
             for (int j = 0; j < scaleX; j++)
             {
-                bottom.Add(new Vector2Int(j + posX, posY-1));
-
-                top.Add(new Vector2Int(j + posX, posY + 1));
+                bottom.Add(new Vector2Int(j + posX, posY));
             }
 
             
             
-            for (int j = 0; j < scaleY; j++)
+            for (int j = 0; j < scaleY + 1; j++)
             {
                 left.Add(new Vector2Int(posX-1, j + posY));
                 right.Add(new Vector2Int(posX + 1, j + posY));
@@ -128,30 +125,25 @@ public class NewPiece : MonoBehaviour
 
     private void updateX(int x)
     {
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 8; i++)
         {
             if (i < left.Count)
             {
-                left[i] = new Vector2Int(x + left[i].x, left[i].y);
+                left[i] = new Vector2Int(left[i].x + x, left[i].y);
                 //Debug.Log("LEFT: " + left[i]);
                 
             }
 
             if (i < right.Count)
             {
-                right[i] = new Vector2Int(x + right[i].x, right[i].y);
+                right[i] = new Vector2Int(right[i].x + x, right[i].y);
                 //Debug.Log("RIGHT: " + right[i]);
             }
 
             if (i < bottom.Count)
             {
-                bottom[i] = new Vector2Int(x + bottom[i].x, bottom[i].y);
+                bottom[i] = new Vector2Int(bottom[i].x + x, bottom[i].y);
                 //Debug.Log("BOTTOM: " + bottom[i]);
-            }
-
-            if (i < top.Count)
-            {
-                top[i] = new Vector2Int(x + top[i].x, top[i].y);
             }
 
             
@@ -165,12 +157,14 @@ public class NewPiece : MonoBehaviour
 
     private void updateY(int y)
     {
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 8; i++)
         {
+            
             if (i < left.Count)
             {
+               
                 left[i] = new Vector2Int(left[i].x, left[i].y + y);
-                //Debug.Log("LEFT: " + left[i]);
+                
 
             }
 
@@ -186,11 +180,6 @@ public class NewPiece : MonoBehaviour
                 //Debug.Log("BOTTOM: " + bottom[i]);
             }
 
-            if (i < top.Count)
-            {
-                top[i] = new Vector2Int(top[i].x, top[i].y + y);
-            }
-
 
             if (i >= left.Count && i >= right.Count && i >= bottom.Count)
             {
@@ -200,84 +189,93 @@ public class NewPiece : MonoBehaviour
         }
     }
 
-    private void checkTiles()
+    private void checkRight()
     {
         for (int i = 0; i < right.Count; i++)
         {
             //Debug.Log("No tile detected at position " + right[i] + " on the RIGHT (" + i + ")");
-            if (tilemap.HasTile((Vector3Int) right[i]))
+            if (tilemap.HasTile((Vector3Int)right[i]))
             {
-                
+
                 rightTileDetected = true;
                 //Debug.Log("Position " + right[i] + " on the RIGHT has a tile (" + i + ")");
-                rightTileY = (int) (right[i].y - 1.5);
+                rightTileY = right[i].y;
                 break;
             }
             rightTileDetected = false;
         }
+    }
 
+    private void checkLeft()
+    {
+        //Debug.Log("------------------");
         for (int i = 0; i < left.Count; i++)
         {
-            //Debug.Log("No tile detected at position " + left[i] + " on the LEFT (" + i + ")");
+            //Debug.Log("No tile detected at position " + left[i] + " on the LEFT//// Parent PosY: " + transform.position.y +  " (" + i + ")");
             if (tilemap.HasTile((Vector3Int)left[i]))
             {
                 //Debug.Log("Position " + left[i] + " on the LEFT has a tile (" + i + ")");
                 leftTileDetected = true;
-                leftTileY = (int) (left[i].y - 1.5);
+                leftTileY = left[i].y;
                 break;
             }
             leftTileDetected = false;
         }
-
+    }
+    private void checkBottom()
+    {
+        //Debug.Log("------------------");
         for (int i = 0; i < bottom.Count; i++)
         {
-            //Debug.Log("No tile detected at position " + bottom[i] + " on the BOTTOM (" + i + ")");
+            //Debug.Log("No tile detected at position " + bottom[i] + " on the BOTTOM//// Parent PosY: " + transform.position.y + " (" + i + ")");
             if (tilemap.HasTile((Vector3Int)bottom[i]))
             {
-                //Debug.Log("Position " + bottom[i] + " on the BOTTOM has a tile (" + i + ")");
+                //Debug.Log("DETECTED Position " + bottom[i] + " on the BOTTOM//// Parent PosY: " + transform.position.y + " (" + i + ")");
                 bottomTileDetected = true;
+                bottomTileY = bottom[i].y + 1;
+                
                 break;
             }
             bottomTileDetected = false;
         }
     }
 
-
+    private void checkAll()
+    {
+        checkLeft();
+        checkRight();
+        checkBottom();
+    }
     
 
     // Update is called once per frame
     void Update()
     {
         
-        if ( (int) (transform.position.y - offSetY) == nextY)
+        if ( (transform.position.y - offSetY) <= nextY - 0.5f)
         {
-            //Debug.Log(transform.position.y + " - " + offSetY + " compared to " + nextY);
+            //Debug.Log(transform.position.y + " - " + offSetY + " = " + (transform.position.y -  offSetY) + " compared to " + (nextY-0.5f));
             updateY(-1);
-            checkTiles();
-
-            if (leftTileY < nextY)
+            checkAll();
+            if (bottomTileDetected)
             {
-                leftTileDetected = true;
+                Debug.Log(bottomTileY + ", " + (transform.position.y - offSetY));
+                if (bottomTileY >= transform.position.y - offSetY)
+                {
+                    Debug.Log("-------LANDED------- ");
+                    newBoard.spawnTiles();
+                }
             }
+            
 
-            if (rightTileY < nextY)
-            {
-                rightTileDetected = true;
-            }
+            
+
             nextY--;
             
         }
 
             
-        if (Mathf.Round(transform.position.x) == xCount)
-        {
-            if (velocityX != 0)
-            {
-                velocityX = 0;
-                transform.position = new Vector3(xCount, transform.position.y, 0);
-
-            }
-        }
+        
             
             
         myRigidBody.velocity = new Vector2(velocityX, velocityY);
@@ -291,7 +289,7 @@ public class NewPiece : MonoBehaviour
         {
             // If can move left
             updateX(-1);
-            checkTiles();
+            checkAll();
             Debug.Log(transform.position.y + offSetY);
             xCount--;
             transform.position = new Vector3(transform.position.x - 1, transform.position.y, 0);
@@ -301,7 +299,7 @@ public class NewPiece : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.D) && !rightTileDetected)    
         {
             updateX(1);
-            checkTiles();
+            checkAll();
             xCount++;
             transform.position = new Vector3(transform.position.x + 1, transform.position.y, 0);
             //velocityX = shiftSpeed;

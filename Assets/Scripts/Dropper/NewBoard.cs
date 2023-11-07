@@ -46,6 +46,7 @@ public class NewBoard : MonoBehaviour
 
     private void Start()
     {
+        
         SpawnPiece();
     }
 
@@ -59,7 +60,7 @@ public class NewBoard : MonoBehaviour
         }
         else
         {
-            activePiece = Instantiate(J_Block, new Vector3(SpawnX, 9, 0), Quaternion.identity);
+            activePiece = Instantiate(J_Block, new Vector3(SpawnX, 12, 0), Quaternion.identity);
         }
         
         
