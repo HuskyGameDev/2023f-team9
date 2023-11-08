@@ -59,13 +59,13 @@ public class NewBoard : MonoBehaviour
     // As of right now, only spawns a J block but does keep track of lost condition for dropper
     public void SpawnPiece()
     {
-        if (tilemap.HasTile(new Vector3Int(SpawnX, 9, 0)))
+        if (tilemap.HasTile(new Vector3Int( SpawnX, 9, 0)))
         {
             GameOver();
         }
         else
         {
-            activePiece = Instantiate(J_Block, new Vector3(SpawnX, 12, 0), Quaternion.identity);
+            activePiece = Instantiate(J_Block, new Vector3(SpawnX + 0.5f, 12, 0), Quaternion.identity);
         }
         
         

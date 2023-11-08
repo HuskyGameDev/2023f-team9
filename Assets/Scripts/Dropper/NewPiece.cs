@@ -32,6 +32,7 @@ public class NewPiece : MonoBehaviour
 
 
     private Rigidbody2D myRigidBody;
+    private float nextX;
     private float nextY;
     private float offSetY;
     private float bottomOfPiece;
@@ -65,6 +66,7 @@ public class NewPiece : MonoBehaviour
 
 
         getDimensions();
+        nextX = transform.position.x;
         nextY = 12 - offSetY;
 
         leftTileDetected = false;
@@ -75,23 +77,16 @@ public class NewPiece : MonoBehaviour
     public void getDimensions()
     {
         Transform curChild;
-        int scaleX;
-        int scaleY;
-        int posX;
-        int posY;
+        float scaleX;
+        float scaleY;
+        float posX;
+        float posY;
 
         for (int i = 0; i < transform.childCount; i++)
         {
             curChild = transform.GetChild(i);
-            if (curChild.position.x > 0)
-            {
-                posX = (int)curChild.position.x;
-            }
-            else
-            {
-                posX = (int)curChild.position.x - 1;
-            }
 
+<<<<<<< Updated upstream
 
             posY = (int)curChild.position.y;
 
@@ -106,14 +101,23 @@ public class NewPiece : MonoBehaviour
             }
 
             //Debug.Log(posX + " " + posY);
+=======
+            posX = curChild.position.x;
+            posY = curChild.position.y;
+            scaleX = (int) curChild.GetComponent<SpriteRenderer>().size.x;
+            scaleY = (int) curChild.GetComponent<SpriteRenderer>().size.y;
+
+            posX = posX - scaleX / 2;
+            posY = posY - scaleY / 2;
+>>>>>>> Stashed changes
 
 
-            //Debug.Log(curChild.name);
             for (int j = 0; j < scaleX; j++)
             {
-                bottom.Add(new Vector2Int(j + posX, posY));
+                bottom.Add(new Vector2Int((int) posX + j, (int)posY -1));
             }
 
+<<<<<<< Updated upstream
 
 
             for (int j = 0; j < scaleY + 1; j++)
@@ -123,6 +127,14 @@ public class NewPiece : MonoBehaviour
             }
 
 
+=======
+            for (int j = 0; j < (scaleY + 1); j++)
+            {
+                left.Add(new Vector2Int((int)posX - 1, (int) posY +j));
+                
+                right.Add(new Vector2Int((int)posX + 1, (int)posY + j));
+            }
+>>>>>>> Stashed changes
         }
     }
 
@@ -194,6 +206,7 @@ public class NewPiece : MonoBehaviour
 
     private void checkRight()
     {
+        rightShiftClear = false;
         for (int i = 0; i < right.Count; i++)
         {
             //Debug.Log("No tile detected at position " + right[i] + " on the RIGHT (" + i + ")");
@@ -203,6 +216,32 @@ public class NewPiece : MonoBehaviour
                 rightTileDetected = true;
                 rightTileY = right[i].y;
 
+<<<<<<< Updated upstream
+=======
+                if (i < right.Count - 1)
+                {
+
+                    if (right[i].x != right[i + 1].x)
+                    {
+                        rightShiftClear = true;
+                        continue;
+                    }
+                    else
+                    {
+                        rightShiftClear = false;
+                        break;
+                    }
+                }
+                else if (i == right.Count - 1)
+                {
+                    rightShiftClear = true;
+                }
+                else
+                {
+                    break;
+                }
+
+>>>>>>> Stashed changes
                 break;
             }
             rightTileDetected = false;
@@ -211,6 +250,10 @@ public class NewPiece : MonoBehaviour
 
     private void checkLeft()
     {
+<<<<<<< Updated upstream
+=======
+        leftShiftClear = false;
+>>>>>>> Stashed changes
         //Debug.Log("------------------");
         for (int i = 0; i < left.Count; i++)
         {
@@ -221,8 +264,35 @@ public class NewPiece : MonoBehaviour
                 leftTileY = left[i].y;
                 leftTileDetected = true;
 
+<<<<<<< Updated upstream
                 break;
 
+=======
+                if (i < left.Count - 1)
+                {
+
+                    if (left[i].x != left[i + 1].x)
+                    {
+                        //Debug.Log("CHECKING FOR SHIFT: " + left[i]);
+                        leftShiftClear = true;
+                        continue;
+                    }
+                    else
+                    {
+                        leftShiftClear = false;
+                        break;
+                    }
+                }
+                else if (i == left.Count - 1)
+                {
+                    leftShiftClear = true;
+                }
+                else
+                {
+                    break;
+                }
+                
+>>>>>>> Stashed changes
             }
             leftTileDetected = false;
 
@@ -263,14 +333,14 @@ public class NewPiece : MonoBehaviour
         {
             //Debug.Log(transform.position.y + " - " + offSetY + " = " + (transform.position.y -  offSetY) + " compared to " + (nextY-0.5f));
             updateY(-1);
-            checkAll();
+            
             if (bottomTileDetected)
             {
-                if (bottomTileY >= transform.position.y - offSetY)
-                {
-                    newBoard.spawnTiles();
-                }
+                
+                newBoard.spawnTiles();
+                
             }
+            checkAll();
             nextY--;
 
         }
@@ -280,6 +350,23 @@ public class NewPiece : MonoBehaviour
 
 
         myRigidBody.velocity = new Vector2(velocityX, velocityY);
+
+        if (velocityX < 0)
+        {
+            if (transform.position.x < nextX + .9)
+            {
+                velocityX = 0;
+                transform.position = new Vector3(nextX, transform.position.y, 0);
+            }
+        }
+        if (velocityX > 0)
+        {
+            if (transform.position.x > nextX - .9)
+            {
+                velocityX = 0;
+                transform.position = new Vector3(nextX, transform.position.y, 0);
+            }
+        }
 
         if (leftShiftClear)
         {
@@ -308,20 +395,42 @@ public class NewPiece : MonoBehaviour
             // If can move left
             updateX(-1);
             checkAll();
+<<<<<<< Updated upstream
 
             transform.position = new Vector3(transform.position.x - 1, transform.position.y, 0);
             //Debug.Log("A PRESSED. POSX: " + transform.position.x + " xCount: " + xCount);    
+=======
+            
+            if (transform.position.x == nextX)
+            {
+
+                nextX--;
+            }
+            //transform.position = new Vector3(transform.position.x - 1, transform.position.y, 0);
+            //Debug.Log("A PRESSED. POSX: " + transform.position.x + " xCount: " + xCount);
+            velocityX = -shiftSpeed;
+>>>>>>> Stashed changes
         }
 
         else if (Input.GetKeyDown(KeyCode.D) && !rightTileDetected)
         {
             updateX(1);
             checkAll();
-            transform.position = new Vector3(transform.position.x + 1, transform.position.y, 0);
+            if (transform.position.x == nextX)
+            {
+                nextX++;
+            }
+            //transform.position = new Vector3(transform.position.x + 1, transform.position.y, 0);
             //velocityX = shiftSpeed;
             //Debug.Log("D PRESSED. POSX: " + transform.position.x + " xCount: " + xCount);
+<<<<<<< Updated upstream
         }
 
+=======
+            velocityX = shiftSpeed;
+        }
+        
+>>>>>>> Stashed changes
     }
 
 
