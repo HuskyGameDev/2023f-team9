@@ -95,8 +95,6 @@ public class NewPiece : MonoBehaviour
             posX = posX - scaleX / 2;
             posY = posY - scaleY / 2;
 
-            posX = posX - (scaleX / 2);
-            posY = posY - ((scaleY + 1) / 2);
             if (scaleY / 2 > offSetY)
             {
                 offSetY = (float)scaleY / 2;
@@ -112,13 +110,6 @@ public class NewPiece : MonoBehaviour
                 bottom.Add(new Vector2Int((int) posX + j, (int)posY -1));
             }
 
-
-
-            for (int j = 0; j < scaleY + 1; j++)
-            {
-                left.Add(new Vector2Int((int)posX - 1, j + (int)posY));
-                right.Add(new Vector2Int((int)posX + 1, j + (int)posY));
-            }
 
 
             for (int j = 0; j < (scaleY + 1); j++)
