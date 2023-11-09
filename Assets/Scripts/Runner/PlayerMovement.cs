@@ -77,4 +77,10 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForFixedUpdate(); // prevents accidental double jump
         canJump = false;
     }
+
+    // method to apply the speed-up effect
+    public void ApplySpeedUp(float speedMultiplier)
+    {
+        movementSpeed *= speedMultiplier;
+    }
 }
