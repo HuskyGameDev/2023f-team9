@@ -86,12 +86,14 @@ public class NewPiece : MonoBehaviour
         {
             curChild = transform.GetChild(i);
 
-<<<<<<< Updated upstream
 
-            posY = (int)curChild.position.y;
-
+            posX = curChild.position.x;
+            posY = curChild.position.y;
             scaleX = (int)curChild.GetComponent<SpriteRenderer>().size.x;
             scaleY = (int)curChild.GetComponent<SpriteRenderer>().size.y;
+
+            posX = posX - scaleX / 2;
+            posY = posY - scaleY / 2;
 
             posX = posX - (scaleX / 2);
             posY = posY - ((scaleY + 1) / 2);
@@ -101,15 +103,8 @@ public class NewPiece : MonoBehaviour
             }
 
             //Debug.Log(posX + " " + posY);
-=======
-            posX = curChild.position.x;
-            posY = curChild.position.y;
-            scaleX = (int) curChild.GetComponent<SpriteRenderer>().size.x;
-            scaleY = (int) curChild.GetComponent<SpriteRenderer>().size.y;
+            
 
-            posX = posX - scaleX / 2;
-            posY = posY - scaleY / 2;
->>>>>>> Stashed changes
 
 
             for (int j = 0; j < scaleX; j++)
@@ -117,24 +112,22 @@ public class NewPiece : MonoBehaviour
                 bottom.Add(new Vector2Int((int) posX + j, (int)posY -1));
             }
 
-<<<<<<< Updated upstream
 
 
             for (int j = 0; j < scaleY + 1; j++)
             {
-                left.Add(new Vector2Int(posX - 1, j + posY));
-                right.Add(new Vector2Int(posX + 1, j + posY));
+                left.Add(new Vector2Int((int)posX - 1, j + (int)posY));
+                right.Add(new Vector2Int((int)posX + 1, j + (int)posY));
             }
 
 
-=======
             for (int j = 0; j < (scaleY + 1); j++)
             {
                 left.Add(new Vector2Int((int)posX - 1, (int) posY +j));
                 
                 right.Add(new Vector2Int((int)posX + 1, (int)posY + j));
             }
->>>>>>> Stashed changes
+
         }
     }
 
@@ -216,8 +209,7 @@ public class NewPiece : MonoBehaviour
                 rightTileDetected = true;
                 rightTileY = right[i].y;
 
-<<<<<<< Updated upstream
-=======
+
                 if (i < right.Count - 1)
                 {
 
@@ -241,7 +233,6 @@ public class NewPiece : MonoBehaviour
                     break;
                 }
 
->>>>>>> Stashed changes
                 break;
             }
             rightTileDetected = false;
@@ -250,10 +241,9 @@ public class NewPiece : MonoBehaviour
 
     private void checkLeft()
     {
-<<<<<<< Updated upstream
-=======
+
         leftShiftClear = false;
->>>>>>> Stashed changes
+
         //Debug.Log("------------------");
         for (int i = 0; i < left.Count; i++)
         {
@@ -264,10 +254,9 @@ public class NewPiece : MonoBehaviour
                 leftTileY = left[i].y;
                 leftTileDetected = true;
 
-<<<<<<< Updated upstream
                 break;
 
-=======
+
                 if (i < left.Count - 1)
                 {
 
@@ -292,7 +281,6 @@ public class NewPiece : MonoBehaviour
                     break;
                 }
                 
->>>>>>> Stashed changes
             }
             leftTileDetected = false;
 
@@ -395,11 +383,7 @@ public class NewPiece : MonoBehaviour
             // If can move left
             updateX(-1);
             checkAll();
-<<<<<<< Updated upstream
 
-            transform.position = new Vector3(transform.position.x - 1, transform.position.y, 0);
-            //Debug.Log("A PRESSED. POSX: " + transform.position.x + " xCount: " + xCount);    
-=======
             
             if (transform.position.x == nextX)
             {
@@ -409,7 +393,6 @@ public class NewPiece : MonoBehaviour
             //transform.position = new Vector3(transform.position.x - 1, transform.position.y, 0);
             //Debug.Log("A PRESSED. POSX: " + transform.position.x + " xCount: " + xCount);
             velocityX = -shiftSpeed;
->>>>>>> Stashed changes
         }
 
         else if (Input.GetKeyDown(KeyCode.D) && !rightTileDetected)
@@ -423,14 +406,10 @@ public class NewPiece : MonoBehaviour
             //transform.position = new Vector3(transform.position.x + 1, transform.position.y, 0);
             //velocityX = shiftSpeed;
             //Debug.Log("D PRESSED. POSX: " + transform.position.x + " xCount: " + xCount);
-<<<<<<< Updated upstream
-        }
 
-=======
             velocityX = shiftSpeed;
         }
         
->>>>>>> Stashed changes
     }
 
 
