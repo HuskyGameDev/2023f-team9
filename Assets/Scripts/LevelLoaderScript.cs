@@ -7,7 +7,12 @@ using UnityEngine.SceneManagement;
 public class LevelLoaderScript : MonoBehaviour
 {
     public Animator transition;
-    public float transitionTime;
+    public float transitionTime = 1.0f;
+
+    public void loadMainScreen()
+    {
+        StartCoroutine(LoadMainScreen());
+    }
     public void loadEndScreen()
     {
         StartCoroutine(LoadEndScreen());
@@ -15,8 +20,15 @@ public class LevelLoaderScript : MonoBehaviour
 
     IEnumerator LoadEndScreen()
     {
-        transition.SetTrigger("crossfade_end");
+        transition.SetTrigger("EndStage");
         yield return new WaitForSeconds(transitionTime);
         SceneManager.LoadScene("End Screen");
+    }
+
+    IEnumerator LoadMainScreen() 
+    {
+        transition.SetTrigger("EndStage");
+        yield return new WaitForSeconds(transitionTime);
+        SceneManager.LoadScene("Runner Test");
     }
 }
