@@ -642,8 +642,8 @@ Canvas:
   m_GameObject: {fileID: 377623526}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 2070064747}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -702,7 +702,7 @@ Transform:
   m_GameObject: {fileID: 472330911}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -125.56768, y: -13.883433, z: -1.0683618}
+  m_LocalPosition: {x: -125.56768, y: 45, z: -1.0683618}
   m_LocalScale: {x: 1.9076611, y: 1.9076611, z: 1.9076611}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -846,6 +846,78 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 635833611}
   m_CullTransparentMesh: 1
+--- !u!1001 &720000606
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2825280030404211601, guid: e9cb82d5746a537449b1179269bbece6, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 2070064747}
+    - target: {fileID: 4455851580420104718, guid: e9cb82d5746a537449b1179269bbece6, type: 3}
+      propertyPath: m_Name
+      value: LevelLoader
+      objectReference: {fileID: 0}
+    - target: {fileID: 6792300519613418904, guid: e9cb82d5746a537449b1179269bbece6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6792300519613418904, guid: e9cb82d5746a537449b1179269bbece6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6792300519613418904, guid: e9cb82d5746a537449b1179269bbece6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6792300519613418904, guid: e9cb82d5746a537449b1179269bbece6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6792300519613418904, guid: e9cb82d5746a537449b1179269bbece6, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6792300519613418904, guid: e9cb82d5746a537449b1179269bbece6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6792300519613418904, guid: e9cb82d5746a537449b1179269bbece6, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6792300519613418904, guid: e9cb82d5746a537449b1179269bbece6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6792300519613418904, guid: e9cb82d5746a537449b1179269bbece6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6792300519613418904, guid: e9cb82d5746a537449b1179269bbece6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e9cb82d5746a537449b1179269bbece6, type: 3}
+--- !u!114 &720000607 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5796148606498904992, guid: e9cb82d5746a537449b1179269bbece6, type: 3}
+  m_PrefabInstance: {fileID: 720000606}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c051aab0ee47834fa7a788b1a0a11e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &894061661
 GameObject:
   m_ObjectHideFlags: 0
@@ -1196,9 +1268,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2070064749}
-        m_TargetAssemblyTypeName: MainMenu, Scripts
-        m_MethodName: PlayGame
+      - m_Target: {fileID: 720000607}
+        m_TargetAssemblyTypeName: LevelLoaderScript, Scripts
+        m_MethodName: loadMainScreen
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1559,4 +1631,5 @@ SceneRoots:
   m_Roots:
   - {fileID: 2070064748}
   - {fileID: 377623530}
+  - {fileID: 720000606}
   - {fileID: 2109421099}

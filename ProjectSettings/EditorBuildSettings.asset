@@ -5,19 +5,22 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Tetris Test.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 7d300a526261dcd42b927874b12e5d01
+  - enabled: 1
+    path: Assets/Scenes/MainGame.unity
+    guid: dbf1376ad78c6854c8ed200c528f19ed
   - enabled: 1
     path: Assets/Scenes/End Screen.unity
     guid: 1e19d277855647542b34858af6df83ff
   - enabled: 1
-    path: Assets/Scenes/Runner Test.unity
-    guid: 1d29b652584504731b95a5a3b6c0ca9b
-  - enabled: 1
     path: Assets/Scenes/AutomatedTesting.unity
     guid: 90b977b36015d4770b36e2898a2f4732
-  - enabled: 1
-    path: Assets/Scenes/MainMenu.unity
-    guid: 7d300a526261dcd42b927874b12e5d01
+  - enabled: 0
+    path: Assets/Scenes/Runner Test.unity
+    guid: 1d29b652584504731b95a5a3b6c0ca9b
   m_configObjects: {}

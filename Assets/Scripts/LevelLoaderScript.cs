@@ -25,10 +25,10 @@ public class LevelLoaderScript : MonoBehaviour
         SceneManager.LoadScene("End Screen");
     }
 
-    IEnumerator LoadMainScreen() 
+    IEnumerator LoadMainScreen()
     {
         transition.SetTrigger("EndStage");
         yield return new WaitForSeconds(transitionTime);
-        SceneManager.LoadScene("Runner Test");
+        SceneManager.LoadScene("MainGame");
     }
 }
