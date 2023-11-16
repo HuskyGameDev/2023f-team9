@@ -14,6 +14,8 @@ public class GameManager
     // find if needed
     private PlayerTrapped playerTrappedScript = null;
     private NewBoard boardScript = null;
+    private GameObject camera = null;
+    private Timer timer = null;
 
     private GameManager()
     {
@@ -63,8 +65,26 @@ public class GameManager
     {
         if (boardScript == null)
             boardScript = UnityEngine.Object.FindFirstObjectByType<NewBoard>();
+        if (timer == null)
+            timer = UnityEngine.Object.FindFirstObjectByType<Timer>();
 
         boardScript.CanSpawnPieces = canSpawn;
-        if (canSpawn) boardScript.SpawnPiece();
+        if (canSpawn)
+        {
+            boardScript.SpawnPiece();
+            timer.timerOn = true;
+        }
+        else
+        {
+            timer.timerOn = false;
+        }
+    }
+
+    public void ResetCamera()
+    {
+        if (camera == null)
+            camera = GameObject.FindGameObjectWithTag("MainCamera");
+        camera.transform.SetPositionAndRotation(new Vector3(0, 0, -10), new Quaternion(0, 0, 0, 0));
+        camera.GetComponent<Camera>().orthographicSize = 10;
     }
 }
