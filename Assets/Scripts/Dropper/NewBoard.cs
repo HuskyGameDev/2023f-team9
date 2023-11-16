@@ -27,6 +27,8 @@ public class NewBoard : MonoBehaviour
     // and give the illusion of smoothness
     public float wiggleRoom = 0.3f;
 
+    public bool CanSpawnPieces = true;
+
 
 
     public RectInt Bounds
@@ -51,7 +53,7 @@ public class NewBoard : MonoBehaviour
 
     private void Start()
     {
-        
+
         SpawnPiece();
     }
 
@@ -59,7 +61,9 @@ public class NewBoard : MonoBehaviour
     // As of right now, only spawns a J block but does keep track of lost condition for dropper
     public void SpawnPiece()
     {
-        if (tilemap.HasTile(new Vector3Int( SpawnX, 9, 0)))
+        if (!CanSpawnPieces) return;
+        Debug.Log("spawned");
+        if (tilemap.HasTile(new Vector3Int(SpawnX, 9, 0)))
         {
             GameOver();
         }
@@ -67,11 +71,11 @@ public class NewBoard : MonoBehaviour
         {
             activePiece = Instantiate(J_Block, new Vector3(SpawnX + 0.5f, 12, 0), Quaternion.identity);
         }
-        
-        
+
+
     }
 
-    
+
 
     // This is called my the piece when the piece is ready to be "set down" or has collided with a tile, meaning its ready to be replaced with tiles
     // This is where we might tell the UI that a new piece is going to be queued up
@@ -90,10 +94,10 @@ public class NewBoard : MonoBehaviour
             }
             else
             {
-                x = (int)curChild.position.x -1;
+                x = (int)curChild.position.x - 1;
             }
 
-            if (Mathf.Round(curChild.position.y*10)/10 == -.5)
+            if (Mathf.Round(curChild.position.y * 10) / 10 == -.5)
             {
                 y = -1;
             }
@@ -101,13 +105,13 @@ public class NewBoard : MonoBehaviour
             {
                 y = (int)curChild.position.y - 1;
             }
-            
+
             else
             {
                 y = (int)curChild.position.y;
             }
 
-            int width = (int) curChild.GetComponent<SpriteRenderer>().size.x;
+            int width = (int)curChild.GetComponent<SpriteRenderer>().size.x;
             int height = (int)curChild.GetComponent<SpriteRenderer>().size.y;
 
             //Debug.Log("X: " + x + " Y: " + y);
@@ -127,11 +131,11 @@ public class NewBoard : MonoBehaviour
             amount = height / 2;
             for (int j = 1; j <= amount; j++)
             {
-                tilemap.SetTile(new Vector3Int(x, y+j, 0), tetrominoes[2].tile);
-                tilemap.SetTile(new Vector3Int(x, y-j, 0), tetrominoes[2].tile);
+                tilemap.SetTile(new Vector3Int(x, y + j, 0), tetrominoes[2].tile);
+                tilemap.SetTile(new Vector3Int(x, y - j, 0), tetrominoes[2].tile);
             }
-            
-            
+
+
         }
         Destroy(activePiece);
         SpawnPiece();

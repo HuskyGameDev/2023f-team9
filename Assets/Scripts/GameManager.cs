@@ -7,8 +7,13 @@ public class GameManager
 {
     private static GameManager instance;
 
+    // always exists
     public Controls inputActions;
     public float runnerWinHeight;
+
+    // find if needed
+    private PlayerCrush playerCrushScript = null;
+    private NewBoard boardScript = null;
 
     private GameManager()
     {
@@ -44,5 +49,22 @@ public class GameManager
             Debug.Log("Could not load end screen");
         }
 
+    }
+
+    public void BlockPlaced()
+    {
+        if (playerCrushScript == null)
+            playerCrushScript = UnityEngine.Object.FindFirstObjectByType<PlayerCrush>();
+
+        playerCrushScript.CheckPlayerTrapped();
+    }
+
+    public void SetAllowPieceSpawn(bool canSpawn)
+    {
+        if (boardScript == null)
+            boardScript = UnityEngine.Object.FindFirstObjectByType<NewBoard>();
+
+        boardScript.CanSpawnPieces = canSpawn;
+        if (canSpawn) boardScript.SpawnPiece();
     }
 }

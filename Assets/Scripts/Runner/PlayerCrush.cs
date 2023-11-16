@@ -36,4 +36,10 @@ public class PlayerCrush : MonoBehaviour
     {
         GameManager.Instance.GameOver(false);
     }
+
+    public void CheckPlayerTrapped()
+    {
+        Debug.Log("Checking trapped");
+
+    }
 }

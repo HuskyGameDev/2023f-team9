@@ -101,21 +101,21 @@ public class NewPiece : MonoBehaviour
             }
 
             //Debug.Log(posX + " " + posY);
-            
+
 
 
 
             for (int j = 0; j < scaleX; j++)
             {
-                bottom.Add(new Vector2Int((int) posX + j, (int)posY -1));
+                bottom.Add(new Vector2Int((int)posX + j, (int)posY - 1));
             }
 
 
 
             for (int j = 0; j < (scaleY + 1); j++)
             {
-                left.Add(new Vector2Int((int)posX - 1, (int) posY +j));
-                
+                left.Add(new Vector2Int((int)posX - 1, (int)posY + j));
+
                 right.Add(new Vector2Int((int)posX + 1, (int)posY + j));
             }
 
@@ -271,7 +271,7 @@ public class NewPiece : MonoBehaviour
                 {
                     break;
                 }
-                
+
             }
             leftTileDetected = false;
 
@@ -288,6 +288,8 @@ public class NewPiece : MonoBehaviour
                 //Debug.Log("DETECTED Position " + bottom[i] + " on the BOTTOM//// Parent PosY: " + transform.position.y + " (" + i + ")");
                 bottomTileDetected = true;
                 bottomTileY = bottom[i].y + 1;
+
+                GameManager.Instance.BlockPlaced();
 
                 break;
             }
@@ -312,12 +314,12 @@ public class NewPiece : MonoBehaviour
         {
             //Debug.Log(transform.position.y + " - " + offSetY + " = " + (transform.position.y -  offSetY) + " compared to " + (nextY-0.5f));
             updateY(-1);
-            
+
             if (bottomTileDetected)
             {
-                
+
                 newBoard.spawnTiles();
-                
+
             }
             checkAll();
             nextY--;
@@ -375,7 +377,7 @@ public class NewPiece : MonoBehaviour
             updateX(-1);
             checkAll();
 
-            
+
             if (transform.position.x == nextX)
             {
 
@@ -400,7 +402,7 @@ public class NewPiece : MonoBehaviour
 
             velocityX = shiftSpeed;
         }
-        
+
     }
 
 
