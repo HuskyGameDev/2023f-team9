@@ -15,7 +15,7 @@ public class GivePowerUp : MonoBehaviour
     public Sprite Empty;
     public string RunnerPowerUp;
     public string DropperPowerUp;
-    public GameObject Runner;
+    public PlayerMovement RunnerMovement;
 
 
     private void Update()
@@ -74,7 +74,10 @@ public class GivePowerUp : MonoBehaviour
     {
         if (powerUpName == "speedUp")
         {
-            
+            RunnerMovement.movementSpeed += 1;
+        } else if (powerUpName == "speedDown")
+        {
+            RunnerMovement.movementSpeed -= 1;
         }
         changePowerUp("");
     }

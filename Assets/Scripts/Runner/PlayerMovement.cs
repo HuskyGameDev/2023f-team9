@@ -6,7 +6,7 @@ using UnityEngine.Tilemaps;
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
-    [SerializeField] private float movementSpeed; // horizontal movement speed
+    [SerializeField] public float movementSpeed; // horizontal movement speed
     [SerializeField] public int jumpHeight; // number of blocks the player can jump
     private bool canJump = false; // checks if the user can jump or not
     private const float AIR_DRAG = 0.9f; // how much slower the player is while in the air (0.9 is 90% speed)

@@ -931,7 +931,7 @@ MonoBehaviour:
   Empty: {fileID: 0}
   RunnerPowerUp: 
   DropperPowerUp: 
-  Runner: {fileID: 0}
+  RunnerMovement: {fileID: 1754863808}
 --- !u!4 &1268129033
 Transform:
   m_ObjectHideFlags: 0
@@ -1051,6 +1051,17 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1754863808 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4626655167646048820, guid: 2c0a694278ca84ae893bcbe9feb5c03c, type: 3}
+  m_PrefabInstance: {fileID: 407943899}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3170664077854ba489d05b46d5ae0a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7684014988993394436
 PrefabInstance:
   m_ObjectHideFlags: 0
