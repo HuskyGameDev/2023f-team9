@@ -12,7 +12,7 @@ public class GameManager
     public float runnerWinHeight;
 
     // find if needed
-    private PlayerCrush playerCrushScript = null;
+    private PlayerTrapped playerTrappedScript = null;
     private NewBoard boardScript = null;
 
     private GameManager()
@@ -53,10 +53,10 @@ public class GameManager
 
     public void BlockPlaced()
     {
-        if (playerCrushScript == null)
-            playerCrushScript = UnityEngine.Object.FindFirstObjectByType<PlayerCrush>();
+        if (playerTrappedScript == null)
+            playerTrappedScript = UnityEngine.Object.FindFirstObjectByType<PlayerTrapped>();
 
-        playerCrushScript.CheckPlayerTrapped();
+        playerTrappedScript.CheckPlayerTrapped();
     }
 
     public void SetAllowPieceSpawn(bool canSpawn)
