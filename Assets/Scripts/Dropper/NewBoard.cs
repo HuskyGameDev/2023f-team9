@@ -11,7 +11,7 @@ public class NewBoard : MonoBehaviour
     // The x coordinate in which the piece will be spawned at
     public int SpawnX = 0;
     // The board size for easy reference
-    private Vector2Int boardSize = new Vector2Int(10, 20);
+    private static Vector2Int boardSize = new Vector2Int(10, 20);
 
     // How fast the piece will shift left and right
     public int shiftSpeed = 5;
@@ -31,12 +31,12 @@ public class NewBoard : MonoBehaviour
 
 
 
-    public RectInt Bounds
+    public static RectInt Bounds
     {
         get
         {
-            Vector2Int position = new Vector2Int(-this.boardSize.x / 2, -this.boardSize.y / 2);
-            return new RectInt(position, this.boardSize);
+            Vector2Int position = new Vector2Int(-boardSize.x / 2, -boardSize.y / 2);
+            return new RectInt(position, boardSize);
         }
     }
 
@@ -62,7 +62,6 @@ public class NewBoard : MonoBehaviour
     public void SpawnPiece()
     {
         if (!CanSpawnPieces) return;
-        Debug.Log("spawned");
         if (tilemap.HasTile(new Vector3Int(SpawnX, 9, 0)))
         {
             GameOver();
@@ -138,12 +137,15 @@ public class NewBoard : MonoBehaviour
 
         }
         Destroy(activePiece);
+
+        GameManager.Instance.BlockPlaced();
+
         SpawnPiece();
     }
 
     private bool IsLineFull(int row)
     {
-        RectInt bounds = this.Bounds;
+        RectInt bounds = Bounds;
 
         for (int col = bounds.xMin; col < bounds.xMax; col++)
         {
@@ -159,7 +161,7 @@ public class NewBoard : MonoBehaviour
 
     private void LineClear(int row)
     {
-        RectInt bounds = this.Bounds;
+        RectInt bounds = Bounds;
 
         for (int col = bounds.xMin; col < bounds.xMax; col++)
         {

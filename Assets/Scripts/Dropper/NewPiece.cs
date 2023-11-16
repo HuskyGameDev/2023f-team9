@@ -289,8 +289,6 @@ public class NewPiece : MonoBehaviour
                 bottomTileDetected = true;
                 bottomTileY = bottom[i].y + 1;
 
-                GameManager.Instance.BlockPlaced();
-
                 break;
             }
             bottomTileDetected = false;
