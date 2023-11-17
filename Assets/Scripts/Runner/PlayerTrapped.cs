@@ -85,6 +85,7 @@ public class PlayerTrapped : MonoBehaviour
         );
 
         CheckVerticalTrap(PlayerLocation);
+        CheckOneBlockTrap(PlayerLocation);
     }
 
     /* ========================= *
@@ -92,7 +93,6 @@ public class PlayerTrapped : MonoBehaviour
      * ========================= */
     private void CheckVerticalTrap(Vector3Int PlayerLocation)
     {
-        // returns 0 if not trapped, otherwise returns the width of the gap
         /* check for vertical trap:
          *      X   X
          *      X   X
@@ -128,6 +128,33 @@ public class PlayerTrapped : MonoBehaviour
             )
         );
     }
+    private void CheckOneBlockTrap(Vector3Int PlayerLocation)
+    {
+        /* check for one block trap:
+         *      X X X
+         *      X O X
+         *      X X X
+         */
+        if (
+            tilemap.HasTile(new Vector3Int(PlayerLocation.x - 1, PlayerLocation.y))
+            && tilemap.HasTile(new Vector3Int(PlayerLocation.x + 1, PlayerLocation.y))
+            && tilemap.HasTile(new Vector3Int(PlayerLocation.x, PlayerLocation.y + 1))
+            && tilemap.HasTile(new Vector3Int(PlayerLocation.x, PlayerLocation.y - 1))
+        )
+        {
+            Vector3Int nextFreeUp = new Vector3Int(PlayerLocation.x, NewBoard.Bounds.max.y);
+            for (int i = PlayerLocation.y + 2; i < NewBoard.Bounds.max.y; i++)
+            {
+                Vector3Int checkLocation = new Vector3Int(PlayerLocation.x, i);
+                if (!tilemap.HasTile(checkLocation))
+                {
+                    nextFreeUp = checkLocation;
+                    break;
+                }
+            }
+            StartCoroutine(OneBlockTrap(nextFreeUp.y));
+        }
+    }
 
     /* ========================= *
      *         ANIMATIONS        *
@@ -154,6 +181,30 @@ public class PlayerTrapped : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
     }
+    private IEnumerator ResetCamera()
+    {
+        while (
+            cameraComponent.orthographicSize < 10
+            || Mathf.Abs(cameraObject.transform.position.y) > 0.1
+            || Mathf.Abs(cameraObject.transform.position.x) > 0.1
+        )
+        {
+            if (cameraComponent.orthographicSize < 10)
+                cameraComponent.orthographicSize *= 1.01f;
+            if (cameraObject.transform.position.y < 0)
+                cameraObject.transform.position += new Vector3(0, 0.1f, 0);
+            else if (cameraObject.transform.position.y > 0)
+                cameraObject.transform.position -= new Vector3(0, 0.1f, 0);
+            if (cameraObject.transform.position.x < 0)
+                cameraObject.transform.position += new Vector3(0.1f, 0, 0);
+            else if (cameraObject.transform.position.x > 0)
+                cameraObject.transform.position -= new Vector3(0.1f, 0, 0);
+
+            yield return new WaitForEndOfFrame();
+        }
+        cameraComponent.orthographicSize = 10;
+        cameraComponent.transform.position = new Vector3(0, 0, -10);
+    }
 
     private IEnumerator VerticalTrap(int[] crushX)
     {
@@ -178,5 +229,27 @@ public class PlayerTrapped : MonoBehaviour
         spriteRenderer.size = new Vector2(blockWidth, 4);
         boxCollider.size = new Vector2(blockWidth - 0.1f, 4);
         crusherBlock.transform.position = new Vector3(blockWidth == 1 ? crushX[0] + 0.5f : crushX[^1], 0, 0);
+    }
+    private IEnumerator OneBlockTrap(int nextOpenY)
+    {
+        GameManager.Instance.SetAllowPieceSpawn(false);
+
+        yield return ZoomInOnPlayer();
+
+        yield return new WaitForSeconds(1);
+
+        playerTransform.position = new Vector3(playerTransform.position.x, nextOpenY);
+        cameraObject.transform.position = new Vector3(cameraObject.transform.position.x, nextOpenY, cameraObject.transform.position.z);
+
+        while (cameraObject.transform.position.y < nextOpenY)
+        {
+            cameraObject.transform.position += new Vector3(0, 0.1f, 0);
+            yield return new WaitForEndOfFrame();
+        }
+
+        yield return new WaitForSeconds(1);
+
+        yield return ResetCamera();
+        GameManager.Instance.SetAllowPieceSpawn(true);
     }
 }
