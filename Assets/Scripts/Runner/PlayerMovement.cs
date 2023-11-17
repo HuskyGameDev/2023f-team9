@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
     private TilemapCollider2D tilemapCollider; // the board's tilemap collider
     private new Rigidbody2D rigidbody;
     private EdgeCollider2D bottomEdgeCollider;
+    private SpriteRenderer spriteRenderer;
     private InputAction moveAction;
     private InputAction jumpAction;
 
@@ -23,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rigidbody = this.GetComponentInChildren<Rigidbody2D>();
         bottomEdgeCollider = this.GetComponentInChildren<EdgeCollider2D>();
+        spriteRenderer = this.GetComponentInChildren<SpriteRenderer>();
         moveAction = GameManager.Instance.inputActions.Runner.Move;
         jumpAction = GameManager.Instance.inputActions.Runner.Jump;
 
@@ -43,6 +45,7 @@ public class PlayerMovement : MonoBehaviour
         if (moveAction.inProgress)
         {
             float direction = moveAction.ReadValue<float>();
+            spriteRenderer.flipX = direction < 0;
             if (canJump)
             {
                 // speed on ground
