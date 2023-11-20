@@ -5,14 +5,18 @@ using UnityEngine.Tilemaps;
 
 public class PlayerCrush : MonoBehaviour
 {
-    // Components
+    [SerializeField] private AudioClip CrushSound;
     private TilemapCollider2D tilemapCollider; // the board's tilemap collider
     private CircleCollider2D crushCollider;
+    private AudioSource audioSource;
+    private new Rigidbody2D rigidbody;
 
     // Start is called before the first frame update
     void Start()
     {
         crushCollider = this.GetComponentInChildren<CircleCollider2D>();
+        audioSource = this.GetComponent<AudioSource>();
+        rigidbody = this.GetComponentInChildren<Rigidbody2D>();
         try
         {
             tilemapCollider = FindAnyObjectByType<TilemapCollider2D>();
@@ -34,6 +38,8 @@ public class PlayerCrush : MonoBehaviour
 
     private void Crush()
     {
+        rigidbody.simulated = false;
+        audioSource.PlayOneShot(CrushSound);
         GameManager.Instance.GameOver(false);
     }
 }
