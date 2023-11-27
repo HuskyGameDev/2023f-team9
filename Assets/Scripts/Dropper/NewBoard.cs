@@ -55,7 +55,7 @@ public class NewBoard : MonoBehaviour
     private List<GameObject> pieceChoice;
     private List<GameObject> queue;
     // The piece being controlled
-    private GameObject activePiece;
+    public GameObject activePiece;
     private GameObject chosenPiece;
     private List<GameObject> chosenRotations;
 
