@@ -19,9 +19,44 @@ public class NewBoard : MonoBehaviour
     public int velocityY = -5;
     // The prefab of the J_Block
     public GameObject J_Block;
+    public GameObject J_BlockLR;
+    public GameObject J_BlockRR;
+    public GameObject J_BlockUD;
+    private List<GameObject> J_Rotate;
 
+
+    public GameObject L_Block;
+    public GameObject L_BlockLR;
+    public GameObject L_BlockRR;
+    public GameObject L_BlockUD;
+    private List<GameObject> L_Rotate;
+
+    public GameObject I_Block;
+    public GameObject I_BlockLR;
+    private List<GameObject> I_Rotate;
+
+    public GameObject O_Block;
+
+    public GameObject S_Block;
+    public GameObject S_BlockLR;
+    private List<GameObject> S_Rotate;
+
+    public GameObject Z_Block;
+    public GameObject Z_BlockLR;
+    private List<GameObject> Z_Rotate;
+
+    public GameObject T_Block;
+    public GameObject T_BlockLR;
+    public GameObject T_BlockRR;
+    public GameObject T_BlockUD;
+    private List<GameObject> T_Rotate;
+
+
+    private List<GameObject> pieceChoice;
+    private List<GameObject> queue;
     // The piece being controlled
     private GameObject activePiece;
+    private GameObject chosenPiece;
 
     // The amount of space the piece is allowed to "clip" through in order to fit tinier places a little bit easier
     // and give the illusion of smoothness
@@ -43,7 +78,15 @@ public class NewBoard : MonoBehaviour
     private void Awake()
     {
         this.tilemap = GetComponentInChildren<Tilemap>();
+        pieceChoice = new List<GameObject>() { J_Block, L_Block, T_Block, Z_Block, S_Block, O_Block, I_Block };
+        J_Rotate = new List<GameObject>() { J_Block, J_BlockLR, J_BlockUD, J_BlockRR };
+        L_Rotate = new List<GameObject>() { L_Block, L_BlockLR, L_BlockUD, L_BlockRR };
+        I_Rotate = new List<GameObject>() { I_Block, I_BlockLR};
+        S_Rotate = new List<GameObject>() { S_Block, S_BlockLR};
+        Z_Rotate = new List<GameObject>() { Z_Block, Z_BlockLR};
+        T_Rotate = new List<GameObject>() { T_Block, T_BlockLR, T_BlockUD, T_BlockRR };
 
+        chosenPiece = S_Block;
 
         for (int i = 0; i < this.tetrominoes.Length; i++)
         {
@@ -68,7 +111,16 @@ public class NewBoard : MonoBehaviour
         }
         else
         {
-            activePiece = Instantiate(J_Block, new Vector3(SpawnX + 0.5f, 12, 0), Quaternion.identity);
+
+            if (chosenPiece == S_Block || chosenPiece == Z_Block)
+            {
+                activePiece = Instantiate(chosenPiece, new Vector3(SpawnX + 1, 12, 0), Quaternion.identity);
+            }
+            else
+            {
+                activePiece = Instantiate(chosenPiece, new Vector3(SpawnX + 0.5f, 12, 0), Quaternion.identity);
+            }
+
         }
 
 
@@ -80,7 +132,7 @@ public class NewBoard : MonoBehaviour
     // This is where we might tell the UI that a new piece is going to be queued up
     public void spawnTiles()
     {
-        Transform curChild;
+        /*Transform curChild;
         for (int i = 0; i < activePiece.transform.childCount; i++)
         {
             curChild = activePiece.transform.GetChild(i).transform;
@@ -136,8 +188,52 @@ public class NewBoard : MonoBehaviour
 
 
         }
-        Destroy(activePiece);
+        */
 
+        Transform curChild;
+        float scaleX;
+        float scaleY;
+        float posX;
+        float posY;
+
+        for (int i = 0; i < activePiece.transform.childCount; i++)
+        {
+            curChild = activePiece.transform.GetChild(i);
+
+
+            posX = curChild.position.x;
+            posY = curChild.position.y;
+            scaleX = (int)curChild.GetComponent<SpriteRenderer>().size.x;
+            scaleY = (int)curChild.GetComponent<SpriteRenderer>().size.y;
+
+            posX -= scaleX / 2;
+            posY -= scaleY / 2;
+            Destroy(activePiece);
+
+            for (int j = 0; j < scaleX; j++)
+            {
+                if (posY > 0)
+                {
+                    tilemap.SetTile(new Vector3Int((int)posX + j, (int)posY+1), tetrominoes[2].tile);
+                }
+                else
+                {
+                    tilemap.SetTile(new Vector3Int((int)posX + j, (int)posY), tetrominoes[2].tile);
+                }
+            }
+
+            for (int j = 0; j < scaleY; j++)
+            {
+                if (posY > 0)
+                {
+                    tilemap.SetTile(new Vector3Int((int)posX, (int)posY + j + 1), tetrominoes[2].tile);
+                }
+                else
+                {
+                    tilemap.SetTile(new Vector3Int((int)posX, (int)posY + j), tetrominoes[2].tile);
+                }
+            }
+        }
         GameManager.Instance.BlockPlaced();
 
         SpawnPiece();

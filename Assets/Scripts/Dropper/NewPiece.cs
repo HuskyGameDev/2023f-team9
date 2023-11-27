@@ -92,8 +92,8 @@ public class NewPiece : MonoBehaviour
             scaleX = (int)curChild.GetComponent<SpriteRenderer>().size.x;
             scaleY = (int)curChild.GetComponent<SpriteRenderer>().size.y;
 
-            posX = posX - scaleX / 2;
-            posY = posY - scaleY / 2;
+            posX -= scaleX / 2;
+            posY -= scaleY / 2;
 
             if (scaleY / 2 > offSetY)
             {
@@ -114,11 +114,17 @@ public class NewPiece : MonoBehaviour
 
             for (int j = 0; j < (scaleY + 1); j++)
             {
+                
                 left.Add(new Vector2Int((int)posX - 1, (int)posY + j));
+                
+                right.Add(new Vector2Int((int)posX + (int)scaleX, (int)posY + j));
 
-                right.Add(new Vector2Int((int)posX + 1, (int)posY + j));
             }
 
+        }
+        for (int j = 0; j < left.Count; j++)
+        {
+            Debug.Log("LEFT: " + left[j] + " RIGHT: " + right[j]);
         }
     }
 
@@ -199,7 +205,7 @@ public class NewPiece : MonoBehaviour
                 //Debug.Log("DETECTED: Position " + right[i] + " on the RIGHT has a tile (" + i + ")");
                 rightTileDetected = true;
                 rightTileY = right[i].y;
-
+                break;
 
                 if (i < right.Count - 1)
                 {
