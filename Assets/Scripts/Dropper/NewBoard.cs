@@ -57,6 +57,9 @@ public class NewBoard : MonoBehaviour
     // The piece being controlled
     private GameObject activePiece;
     private GameObject chosenPiece;
+    private List<GameObject> chosenRotations;
+
+    private int index = 0;
 
     // The amount of space the piece is allowed to "clip" through in order to fit tinier places a little bit easier
     // and give the illusion of smoothness
@@ -87,6 +90,7 @@ public class NewBoard : MonoBehaviour
         T_Rotate = new List<GameObject>() { T_Block, T_BlockLR, T_BlockUD, T_BlockRR };
 
         chosenPiece = S_Block;
+        chosenRotations = S_Rotate;
 
         for (int i = 0; i < this.tetrominoes.Length; i++)
         {
@@ -121,6 +125,7 @@ public class NewBoard : MonoBehaviour
                 activePiece = Instantiate(chosenPiece, new Vector3(SpawnX + 0.5f, 12, 0), Quaternion.identity);
             }
 
+            
         }
 
 
@@ -237,6 +242,39 @@ public class NewBoard : MonoBehaviour
         GameManager.Instance.BlockPlaced();
 
         SpawnPiece();
+    }
+
+    public void rotatePiece(int direction)
+    {
+        index -= direction;
+        if (index == -1)
+        {
+            index = chosenRotations.Count - 1;
+        }
+        else if (index == chosenRotations.Count) {
+            index = 0;
+        }
+        Vector3 positions = activePiece.transform.position;
+        Destroy(activePiece);
+        chosenPiece = chosenRotations[index];
+        if (chosenRotations == S_Rotate || chosenRotations == Z_Rotate)
+        {
+            Debug.Log("RAR");
+            if (chosenPiece == S_Block || chosenPiece == Z_Block)
+            {
+                activePiece = Instantiate(chosenPiece, new Vector3(positions.x - 0.5f, positions.y, 0), Quaternion.identity);
+            }
+            else if (chosenPiece == S_BlockLR || chosenPiece == Z_BlockLR)
+            {
+                activePiece = Instantiate(chosenPiece, new Vector3(positions.x + 0.5f, positions.y, 0), Quaternion.identity);
+            }
+        }
+        else
+        {
+            activePiece = Instantiate(chosenPiece, new Vector3(positions.x, positions.y, 0), Quaternion.identity);
+        }
+
+        activePiece.GetComponent<NewPiece>().setNextY((int)positions.y);
     }
 
     private bool IsLineFull(int row)

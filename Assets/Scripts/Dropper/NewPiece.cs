@@ -74,6 +74,10 @@ public class NewPiece : MonoBehaviour
         bottomTileDetected = false;
     }
 
+    public void setNextY(int i)
+    {
+        nextY = i - offSetY;
+    }
     public void getDimensions()
     {
         Transform curChild;
@@ -124,7 +128,7 @@ public class NewPiece : MonoBehaviour
         }
         for (int j = 0; j < left.Count; j++)
         {
-            Debug.Log("LEFT: " + left[j] + " RIGHT: " + right[j]);
+            //Debug.Log("LEFT: " + left[j] + " RIGHT: " + right[j]);
         }
     }
 
@@ -309,6 +313,16 @@ public class NewPiece : MonoBehaviour
     }
 
 
+    private void rotateRight()
+    {
+
+    }
+
+    private void rotateLeft()
+    {
+
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -407,7 +421,19 @@ public class NewPiece : MonoBehaviour
             velocityX = shiftSpeed;
         }
 
+        else if (Input.GetKeyDown(KeyCode.Q))
+        {
+            newBoard.rotatePiece(-1);
+        }
+
+        else if (Input.GetKeyDown(KeyCode.E))
+        {
+            newBoard.rotatePiece(1);
+        }
+
     }
+
+
 
 
 
