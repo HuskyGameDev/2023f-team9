@@ -29,9 +29,9 @@ public class Timer : MonoBehaviour
             } else
             {
                 Debug.Log("End");
-                levelLoader.loadEndScreen();
                 timeLeft = 0;
                 timerOn = false;
+                levelLoader.loadRunnerEndScreen();
             }
         }
     }

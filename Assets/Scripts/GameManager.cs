@@ -43,7 +43,14 @@ public class GameManager
         try
         {
             LevelLoaderScript levelLoaderScript = UnityEngine.Object.FindObjectOfType<LevelLoaderScript>();
-            levelLoaderScript.loadEndScreen();
+            if (runnerWon == true)
+            {
+                levelLoaderScript.loadRunnerEndScreen();
+            } else
+            {
+                levelLoaderScript.loadDropperEndScreen();
+            }
+            
         }
         catch
         {

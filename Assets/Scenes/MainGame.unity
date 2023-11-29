@@ -735,7 +735,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 980437736976903880, guid: e9cb82d5746a537449b1179269bbece6, type: 3}
       propertyPath: m_Alpha
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2825280030404211601, guid: e9cb82d5746a537449b1179269bbece6, type: 3}
       propertyPath: m_Camera
@@ -916,7 +916,7 @@ MonoBehaviour:
   Blue: {fileID: 7482667652216324306, guid: 87093210795e68f4aa27bcae93a4f19b, type: 3}
   Cyan: {fileID: 7482667652216324306, guid: b7fce09d15dce574e93c1311094ee286, type: 3}
   Orange: {fileID: 7482667652216324306, guid: dee43d428bc6ec648a4cb5ae473517b8, type: 3}
-  Empty: {fileID: 0}
+  Empty: {fileID: -2413806693520163455, guid: 2e8ea3c27871fa74f8a24f37e7138749, type: 3}
   RunnerPowerUp: 
   DropperPowerUp: 
   RunnerMovement: {fileID: 1754863808}
