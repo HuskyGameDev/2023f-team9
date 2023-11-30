@@ -79,7 +79,8 @@ public class NewBoard : MonoBehaviour
 
     public bool CanSpawnPieces = true;
 
-
+    // Power up object
+    public GameObject powerUpPrefab;
 
     public static RectInt Bounds
     {
@@ -182,14 +183,51 @@ public class NewBoard : MonoBehaviour
 
             }
 
-
+            // Randomly spawn power-up around the activePiece
+            //SpawnPowerUp(activePiece.transform.position);
 
         }
 
 
     }
+    // to display power up
+    private void SpawnPowerUp(Vector3 spawnPosition)
+    {
+        // Randomly determine the position around the activePiece
+        Vector2 randomOffset = new Vector2(Random.Range(-1.5f, 1.5f), Random.Range(-1.5f, 1.5f));
 
+        // Calculate the power-up spawn position
+        Vector3 powerUpSpawnPosition = spawnPosition + new Vector3(randomOffset.x, randomOffset.y, 0);
 
+        // Ensure the power-up doesn't intersect with the activePiece
+        while (IsIntersecting(powerUpSpawnPosition, activePiece))
+        {
+            randomOffset = new Vector2(Random.Range(-1.5f, 1.5f), Random.Range(-1.5f, 1.5f));
+            powerUpSpawnPosition = spawnPosition + new Vector3(randomOffset.x, randomOffset.y, 0);
+        }
+
+        // Instantiate the power-up prefab at the calculated position
+        GameObject powerUpObject = Instantiate(powerUpPrefab, powerUpSpawnPosition, Quaternion.identity);
+        // Set the tag for the power-up object
+        powerUpObject.tag = "PowerUp";
+        powerUpObject.transform.parent = activePiece.transform;
+    }
+    // check if intersect with active piece
+    private bool IsIntersecting(Vector3 position, GameObject activePiece)
+    {
+        Collider2D powerUpCollider = powerUpPrefab.GetComponent<Collider2D>(); // assuming powerUpPrefab has a collider
+        Collider2D[] activePieceColliders = activePiece.GetComponentsInChildren<Collider2D>();
+
+        foreach (Collider2D activePieceCollider in activePieceColliders)
+        {
+            if (activePieceCollider.OverlapPoint(position))
+            {
+                return true; // There's an intersection, retry with a new position
+            }
+        }
+
+        return false; // No intersection
+    }
 
     // This is called my the piece when the piece is ready to be "set down" or has collided with a tile, meaning its ready to be replaced with tiles
     // This is where we might tell the UI that a new piece is going to be queued up
@@ -203,11 +241,20 @@ public class NewBoard : MonoBehaviour
         float posX;
         float posY;
 
+        // Detach power-up object before destroying activePiece
+        GameObject powerUpObject = null;
 
         for (int i = 0; i < activePiece.transform.childCount; i++)
         {
             curChild = activePiece.transform.GetChild(i);
 
+            // Check if the current child is the power-up object
+            if (curChild.CompareTag("PowerUp")) // Adjust the tag based on your implementation
+            {
+                powerUpObject = curChild.gameObject;
+                // Detach power-up object
+                powerUpObject.transform.parent = null;
+            }
 
             posX = curChild.position.x;
             posY = curChild.position.y;

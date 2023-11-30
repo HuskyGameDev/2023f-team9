@@ -1778,6 +1778,10 @@ PrefabInstance:
       propertyPath: velocityY
       value: -5
       objectReference: {fileID: 0}
+    - target: {fileID: 7018330683628722624, guid: 4b30420f76fef4fcf97ca1ddfb33856f, type: 3}
+      propertyPath: powerUpPrefab
+      value: 
+      objectReference: {fileID: 2724686895934374665, guid: 4f9f9367790300049816e89da39e5764, type: 3}
     - target: {fileID: 9055800431144412161, guid: 4b30420f76fef4fcf97ca1ddfb33856f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

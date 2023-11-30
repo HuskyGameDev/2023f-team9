@@ -133,4 +133,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd79016deee4d424d96e9f6b4d65030f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  powerUpEffect: {fileID: 0}
+  powerUpEffect: {fileID: 11400000, guid: 69b29cc806d090d4e9109d2e8489d5ba, type: 2}
