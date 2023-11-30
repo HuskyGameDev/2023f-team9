@@ -55,7 +55,7 @@ public class NewBoard : MonoBehaviour
     private List<GameObject> pieceChoice;
     private List<GameObject> queue;
     // The piece being controlled
-    public GameObject activePiece;
+    public GameObject activePiece { get; private set; }
     private GameObject chosenPiece;
     private List<GameObject> chosenRotations;
 
@@ -89,8 +89,9 @@ public class NewBoard : MonoBehaviour
         Z_Rotate = new List<GameObject>() { Z_Block, Z_BlockLR};
         T_Rotate = new List<GameObject>() { T_Block, T_BlockLR, T_BlockUD, T_BlockRR };
 
-        chosenPiece = S_Block;
-        chosenRotations = S_Rotate;
+
+        chosenPiece = J_Block;
+        chosenRotations = J_Rotate;
 
         for (int i = 0; i < this.tetrominoes.Length; i++)
         {
@@ -100,32 +101,70 @@ public class NewBoard : MonoBehaviour
 
     private void Start()
     {
-
         SpawnPiece();
     }
 
-
-    // As of right now, only spawns a J block but does keep track of lost condition for dropper
     public void SpawnPiece()
     {
-        if (!CanSpawnPieces) return;
         if (tilemap.HasTile(new Vector3Int(SpawnX, 9, 0)))
         {
+            CanSpawnPieces = false;
             GameOver();
         }
         else
         {
+            CanSpawnPieces = true;
+        }
+        
+        if (CanSpawnPieces)
+        {
+            chosenPiece = pieceChoice[Random.Range(0, pieceChoice.Count)];
 
+            if (chosenPiece == J_Block)
+            {
+                chosenRotations = J_Rotate;
+            }
+            else if (chosenPiece == L_Block)
+            {
+                chosenRotations = L_Rotate;
+            }
+            else if (chosenPiece == I_Block)
+            {
+                chosenRotations = I_Rotate;
+            }
+            else if (chosenPiece == T_Block)
+            {
+                chosenRotations = T_Rotate;
+            }
+            else if (chosenPiece == S_Block)
+            {
+                chosenRotations = S_Rotate;
+            }
+            else if (chosenPiece == Z_Block)
+            {
+                chosenRotations = Z_Rotate;
+            }
+            else if (chosenPiece == O_Block)
+            {
+                //O_Block does not rotate
+            }
+
+            activePiece = chosenPiece;
             if (chosenPiece == S_Block || chosenPiece == Z_Block)
             {
+                
+                //activePiece.transform.position = new Vector3(SpawnX + 1, 12, 0);
                 activePiece = Instantiate(chosenPiece, new Vector3(SpawnX + 1, 12, 0), Quaternion.identity);
             }
             else
             {
+                //activePiece.transform.position = new Vector3(SpawnX + 0.5f, 12, 0);
                 activePiece = Instantiate(chosenPiece, new Vector3(SpawnX + 0.5f, 12, 0), Quaternion.identity);
+
             }
 
-            
+
+
         }
 
 
@@ -137,69 +176,14 @@ public class NewBoard : MonoBehaviour
     // This is where we might tell the UI that a new piece is going to be queued up
     public void spawnTiles()
     {
-        /*Transform curChild;
-        for (int i = 0; i < activePiece.transform.childCount; i++)
-        {
-            curChild = activePiece.transform.GetChild(i).transform;
-            //Debug.Log(curChild.name + ": \n POSITION: " + curChild.position + "\nSIZE: " + curChild.GetComponent<SpriteRenderer>().size);
-            int x;
-            int y;
-            if (curChild.position.x > 0)
-            {
-                x = (int)curChild.position.x;
-            }
-            else
-            {
-                x = (int)curChild.position.x - 1;
-            }
-
-            if (Mathf.Round(curChild.position.y * 10) / 10 == -.5)
-            {
-                y = -1;
-            }
-            else if (curChild.position.y < 0)
-            {
-                y = (int)curChild.position.y - 1;
-            }
-
-            else
-            {
-                y = (int)curChild.position.y;
-            }
-
-            int width = (int)curChild.GetComponent<SpriteRenderer>().size.x;
-            int height = (int)curChild.GetComponent<SpriteRenderer>().size.y;
-
-            //Debug.Log("X: " + x + " Y: " + y);
-
-            if (width % 2 != 0)
-            {
-                tilemap.SetTile(new Vector3Int(x, y, 0), tetrominoes[2].tile);
-            }
-            int amount = width / 2;
-
-            for (int j = 1; j <= amount; j++)
-            {
-                tilemap.SetTile(new Vector3Int(x + j, y, 0), tetrominoes[2].tile);
-                tilemap.SetTile(new Vector3Int(x - j, y, 0), tetrominoes[2].tile);
-            }
-
-            amount = height / 2;
-            for (int j = 1; j <= amount; j++)
-            {
-                tilemap.SetTile(new Vector3Int(x, y + j, 0), tetrominoes[2].tile);
-                tilemap.SetTile(new Vector3Int(x, y - j, 0), tetrominoes[2].tile);
-            }
-
-
-        }
-        */
+        
 
         Transform curChild;
         float scaleX;
         float scaleY;
         float posX;
         float posY;
+
 
         for (int i = 0; i < activePiece.transform.childCount; i++)
         {
@@ -240,12 +224,32 @@ public class NewBoard : MonoBehaviour
             }
         }
         GameManager.Instance.BlockPlaced();
+        RectInt bounds = Bounds;
+        int row = bounds.yMin;
 
+        while (row < bounds.yMax)
+        {
+            if (IsLineFull(row))
+            {
+                LineClear(row);
+            }
+            else
+            {
+                row++;
+            }
+        }
+
+        index = 0;
         SpawnPiece();
     }
 
     public void rotatePiece(int direction)
     {
+        if (activePiece.transform.name == "O-Block(Clone)")
+        {
+            return;
+        }
+        int previousIndex = index;
         index -= direction;
         if (index == -1)
         {
@@ -255,27 +259,106 @@ public class NewBoard : MonoBehaviour
             index = 0;
         }
         Vector3 positions = activePiece.transform.position;
-        Destroy(activePiece);
+        GameObject oldPiece = activePiece;
+
         chosenPiece = chosenRotations[index];
         if (chosenRotations == S_Rotate || chosenRotations == Z_Rotate)
         {
-            Debug.Log("RAR");
             if (chosenPiece == S_Block || chosenPiece == Z_Block)
             {
+                //activePiece.transform.position = new Vector3(positions.x - 0.5f, positions.y, 0);
                 activePiece = Instantiate(chosenPiece, new Vector3(positions.x - 0.5f, positions.y, 0), Quaternion.identity);
+
             }
             else if (chosenPiece == S_BlockLR || chosenPiece == Z_BlockLR)
             {
+                //activePiece.transform.position = new Vector3(positions.x + 0.5f, positions.y, 0);
                 activePiece = Instantiate(chosenPiece, new Vector3(positions.x + 0.5f, positions.y, 0), Quaternion.identity);
             }
         }
         else
         {
-            activePiece = Instantiate(chosenPiece, new Vector3(positions.x, positions.y, 0), Quaternion.identity);
+            activePiece = Instantiate(chosenPiece, positions, Quaternion.identity);
+            
+        }
+        NewPiece activeScript = activePiece.GetComponent<NewPiece>();
+        activeScript.getDimensions();
+        for (int i = 0; i < activePiece.GetComponent<NewPiece>().left.Count; i++)
+        {
+            if (tilemap.HasTile(new Vector3Int(activeScript.left[i].x + 1, activeScript.left[i].y, 0)))
+            {
+                index = previousIndex;
+                Destroy(activePiece);
+                activePiece = oldPiece;
+                return;
+            }
         }
 
-        activePiece.GetComponent<NewPiece>().setNextY((int)positions.y);
+        for (int i = 0; i < activePiece.GetComponent<NewPiece>().right.Count; i++)
+        {
+            if (tilemap.HasTile(new Vector3Int(activeScript.right[i].x - 1, activeScript.right[i].y, 0)))
+            {
+                index = previousIndex;
+                Destroy(activePiece);
+                activePiece = oldPiece;
+                return;
+            }
+        }
+
+        Transform curChild;
+
+        for (int i = 0; i < activePiece.transform.childCount; i++)
+        {
+            curChild = activePiece.transform.GetChild(i);
+
+            if (tilemap.HasTile(new Vector3Int((int)curChild.position.x, (int) curChild.position.y, 0)))
+            {
+                index = previousIndex;
+                Destroy(activePiece);
+                activePiece = oldPiece;
+                return;
+            }
+
+            int size = (int)curChild.GetComponent<SpriteRenderer>().size.x;
+            if (size % 2 == 2)
+            {
+                int posX = (int) curChild.position.x - size / 2;
+                //Check scaleX
+                for (int j = 0; j < size; j++)
+                {
+                    if (tilemap.HasTile(new Vector3Int((int) posX + j, (int) curChild.position.y, 0)))
+                    {
+                        index = previousIndex;
+                        Destroy(activePiece);
+                        activePiece = oldPiece;
+                        return;
+                    }
+                }
+            }
+
+            size = (int)curChild.GetComponent<SpriteRenderer>().size.y;
+            if (size % 2 == 2)
+            {
+                int posX = (int)curChild.position.y - size / 2;
+                //Check scaleY
+                for (int j = 0; j < size; j++)
+                {
+                    if (tilemap.HasTile(new Vector3Int((int)posX, (int)curChild.position.y + j, 0)))
+                    {
+                        index = previousIndex;
+                        Destroy(activePiece);
+                        activePiece = oldPiece;
+                        return;
+                    }
+                }
+            }
+        }
+
+        Destroy(oldPiece);
+        
+
     }
+
 
     private bool IsLineFull(int row)
     {
@@ -319,10 +402,12 @@ public class NewBoard : MonoBehaviour
 
     private void GameOver()
     {
+        /*
         for (int i = 0; i < 20; i++)
         {
             LineClear(-9);
         }
         SpawnPiece();
+        */
     }
 }
