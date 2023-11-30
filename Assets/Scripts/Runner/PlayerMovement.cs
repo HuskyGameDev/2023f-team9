@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
     private TilemapCollider2D tilemapCollider; // the board's tilemap collider
     private new Rigidbody2D rigidbody;
     private EdgeCollider2D bottomEdgeCollider;
+    private Animator animator;
     private SpriteRenderer spriteRenderer;
     private InputAction moveAction;
     private InputAction jumpAction;
@@ -25,9 +26,12 @@ public class PlayerMovement : MonoBehaviour
     {
         rigidbody = this.GetComponentInChildren<Rigidbody2D>();
         bottomEdgeCollider = this.GetComponentInChildren<EdgeCollider2D>();
+        animator = this.GetComponentInChildren<Animator>();
         spriteRenderer = this.GetComponentInChildren<SpriteRenderer>();
         moveAction = GameManager.Instance.inputActions.Runner.Move;
         jumpAction = GameManager.Instance.inputActions.Runner.Jump;
+
+        animator.SetBool("Falling", false);
 
         try
         {
@@ -67,10 +71,21 @@ public class PlayerMovement : MonoBehaviour
         if (tilemapCollider && bottomEdgeCollider.IsTouching(tilemapCollider))
         {
             canJump = true;
+            if (animator.GetBool("Falling"))
+            {
+                animator.SetBool("Falling", false);
+            }
         }
         if (canJump && jumpAction.triggered)
         {
+            animator.SetTrigger("Jump");
             StartCoroutine(Jump());
+        }
+
+        //Animations
+        if (!animator.GetBool("Falling") && rigidbody.velocity.y < 0)
+        {
+            animator.SetBool("Falling", true);
         }
     }
 
@@ -80,8 +95,6 @@ public class PlayerMovement : MonoBehaviour
         rigidbody.velocity = new Vector2(rigidbody.velocity.x, targetVelocity);
         yield return new WaitForFixedUpdate(); // prevents accidental double jump
         canJump = false;
-
-
     }
 
     // method to apply the speed-up effect
