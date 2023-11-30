@@ -8,21 +8,37 @@ public class LevelLoaderScript : MonoBehaviour
 {
     public Animator transition;
     public float transitionTime = 1.0f;
-
+    
+    public void loadStartScreen()
+    {
+        StartCoroutine(LoadStartScreen());
+    }
     public void loadMainScreen()
     {
         StartCoroutine(LoadMainScreen());
     }
-    public void loadEndScreen()
+    public void loadRunnerEndScreen()
     {
-        StartCoroutine(LoadEndScreen());
+        StartCoroutine(LoadRunnerEndScreen());
     }
 
-    IEnumerator LoadEndScreen()
+    public void loadDropperEndScreen()
+    {
+        StartCoroutine(LoadDropperEndScreen());
+    }
+
+    IEnumerator LoadRunnerEndScreen()
     {
         transition.SetTrigger("EndStage");
         yield return new WaitForSeconds(transitionTime);
-        SceneManager.LoadScene("End Screen");
+        SceneManager.LoadScene("RunnerEndScreen");
+    }
+
+    IEnumerator LoadDropperEndScreen()
+    {
+        transition.SetTrigger("EndStage");
+        yield return new WaitForSeconds(transitionTime);
+        SceneManager.LoadScene("DropperEndScreen");
     }
 
     IEnumerator LoadMainScreen()
@@ -30,5 +46,12 @@ public class LevelLoaderScript : MonoBehaviour
         transition.SetTrigger("EndStage");
         yield return new WaitForSeconds(transitionTime);
         SceneManager.LoadScene("MainGame");
+    }
+
+    IEnumerator LoadStartScreen()
+    {
+        transition.SetTrigger("EndStage");
+        yield return new WaitForSeconds(transitionTime);
+        SceneManager.LoadScene("MainMenu");
     }
 }

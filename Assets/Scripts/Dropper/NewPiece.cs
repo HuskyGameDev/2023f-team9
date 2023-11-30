@@ -13,19 +13,14 @@ public class NewPiece : MonoBehaviour
     private int velocityY;
     private int shiftSpeed;
 
-    private List<Vector2Int> right;
-    private List<Vector2Int> left;
-    private List<Vector2Int> bottom;
-    private List<Vector2Int> top;
-
-    private int leftTileY;
-    private int rightTileY;
-    private int bottomTileY;
+    public List<Vector2Int> right { get; private set; }
+    public List<Vector2Int> left { get; private set; }
+    public List<Vector2Int> bottom { get; private set; }
 
 
     private bool leftTileDetected;
     private bool rightTileDetected;
-    private bool bottomTileDetected;
+    public bool bottomTileDetected { get; private set; }
 
     private bool leftShiftClear;
     private bool rightShiftClear;
@@ -37,22 +32,22 @@ public class NewPiece : MonoBehaviour
     private float offSetY;
     private float bottomOfPiece;
 
+
+
+
+
     private Tilemap tilemap;
 
     private float wiggleRoom;
     public void Start()
     {
         newBoard = GameObject.Find("Board").GetComponent<NewBoard>();
-        velocityY = newBoard.velocityY;
+        
         shiftSpeed = newBoard.shiftSpeed;
         tilemap = newBoard.tilemap;
         wiggleRoom = newBoard.wiggleRoom;
-
+        velocityY = newBoard.velocityY;
         myRigidBody = GetComponent<Rigidbody2D>();
-
-        rightTileY = 99;
-        leftTileY = 99;
-        bottomTileY = -99;
 
 
     }
@@ -63,17 +58,23 @@ public class NewPiece : MonoBehaviour
         left = new List<Vector2Int>();
         bottom = new List<Vector2Int>();
 
-
-
         getDimensions();
         nextX = transform.position.x;
-        nextY = 12 - offSetY;
+        nextY = ((int) transform.position.y) - offSetY;
+
+
 
         leftTileDetected = false;
         rightTileDetected = false;
         bottomTileDetected = false;
+
     }
 
+
+    public void setNextY(int i)
+    {
+        nextY = i - offSetY;
+    }
     public void getDimensions()
     {
         Transform curChild;
@@ -82,18 +83,23 @@ public class NewPiece : MonoBehaviour
         float posX;
         float posY;
 
+        right = new List<Vector2Int>();
+        left = new List<Vector2Int>();
+        bottom = new List<Vector2Int>();
+
+
         for (int i = 0; i < transform.childCount; i++)
         {
             curChild = transform.GetChild(i);
-
+            
 
             posX = curChild.position.x;
             posY = curChild.position.y;
             scaleX = (int)curChild.GetComponent<SpriteRenderer>().size.x;
             scaleY = (int)curChild.GetComponent<SpriteRenderer>().size.y;
 
-            posX = posX - scaleX / 2;
-            posY = posY - scaleY / 2;
+            posX -= scaleX / 2;
+            posY -= scaleY / 2;
 
             if (scaleY / 2 > offSetY)
             {
@@ -104,25 +110,47 @@ public class NewPiece : MonoBehaviour
 
 
 
-
+            
             for (int j = 0; j < scaleX; j++)
             {
-                bottom.Add(new Vector2Int((int)posX + j, (int)posY - 1));
+                if (posY < 0)
+                {
+                    bottom.Add(new Vector2Int((int)posX + j, (int)posY - 2));
+                }
+                else
+                {
+                    bottom.Add(new Vector2Int((int)posX + j, (int)posY - 1));
+                }
             }
 
 
 
             for (int j = 0; j < (scaleY + 1); j++)
             {
-                left.Add(new Vector2Int((int)posX - 1, (int)posY + j));
+                if (posY < 0)
+                {
+                    left.Add(new Vector2Int((int)posX - 1, (int)posY + j-1));
 
-                right.Add(new Vector2Int((int)posX + 1, (int)posY + j));
+                    right.Add(new Vector2Int((int)posX + (int)scaleX, (int)posY + j-1));
+                }
+                else
+                {
+                    left.Add(new Vector2Int((int)posX - 1, (int)posY + j));
+
+                    right.Add(new Vector2Int((int)posX + (int)scaleX, (int)posY + j));
+                }
+
             }
 
         }
+        for (int j = 0; j < left.Count; j++)
+        {
+            //Debug.Log("LEFT: " + left[j] + " RIGHT: " + right[j]);
+        }
+
     }
 
-    private void updateX(int x)
+    public void updateX(int x)
     {
         for (int i = 0; i < 8; i++)
         {
@@ -154,7 +182,7 @@ public class NewPiece : MonoBehaviour
         }
     }
 
-    private void updateY(int y)
+    public void updateY(int y)
     {
         for (int i = 0; i < 8; i++)
         {
@@ -198,8 +226,8 @@ public class NewPiece : MonoBehaviour
             {
                 //Debug.Log("DETECTED: Position " + right[i] + " on the RIGHT has a tile (" + i + ")");
                 rightTileDetected = true;
-                rightTileY = right[i].y;
-
+                //rightTileY = right[i].y;
+                
 
                 if (i < right.Count - 1)
                 {
@@ -242,10 +270,10 @@ public class NewPiece : MonoBehaviour
             if (tilemap.HasTile((Vector3Int)left[i]))
             {
                 //Debug.Log("DETECTED: Position " + left[i] + " on the LEFT has a tile (" + i + ")");
-                leftTileY = left[i].y;
+                //leftTileY = left[i].y;
                 leftTileDetected = true;
 
-                break;
+                
 
 
                 if (i < left.Count - 1)
@@ -287,7 +315,6 @@ public class NewPiece : MonoBehaviour
             {
                 //Debug.Log("DETECTED Position " + bottom[i] + " on the BOTTOM//// Parent PosY: " + transform.position.y + " (" + i + ")");
                 bottomTileDetected = true;
-                bottomTileY = bottom[i].y + 1;
 
                 break;
             }
@@ -306,13 +333,14 @@ public class NewPiece : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         bottomOfPiece = transform.position.y - offSetY;
 
         if (bottomOfPiece <= nextY - 0.5f)
         {
+
             //Debug.Log(transform.position.y + " - " + offSetY + " = " + (transform.position.y -  offSetY) + " compared to " + (nextY-0.5f));
             updateY(-1);
-
             if (bottomTileDetected)
             {
 
@@ -323,7 +351,6 @@ public class NewPiece : MonoBehaviour
             nextY--;
 
         }
-
 
 
 
@@ -401,7 +428,22 @@ public class NewPiece : MonoBehaviour
             velocityX = shiftSpeed;
         }
 
+        else if (Input.GetKeyDown(KeyCode.Q))
+        {
+            newBoard.rotatePiece(-1);
+
+        }
+
+        else if (Input.GetKeyDown(KeyCode.E))
+        {
+            newBoard.rotatePiece(1);
+
+        }
+
     }
+
+
+
 
 
 

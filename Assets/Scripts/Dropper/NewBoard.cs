@@ -19,9 +19,59 @@ public class NewBoard : MonoBehaviour
     public int velocityY = -5;
     // The prefab of the J_Block
     public GameObject J_Block;
+    public GameObject J_BlockLR;
+    public GameObject J_BlockRR;
+    public GameObject J_BlockUD;
+    private List<GameObject> J_Rotate;
 
+
+    public GameObject L_Block;
+    public GameObject L_BlockLR;
+    public GameObject L_BlockRR;
+    public GameObject L_BlockUD;
+    private List<GameObject> L_Rotate;
+
+    public GameObject I_Block;
+    public GameObject I_BlockLR;
+    private List<GameObject> I_Rotate;
+
+    public GameObject O_Block;
+
+    public GameObject S_Block;
+    public GameObject S_BlockLR;
+    private List<GameObject> S_Rotate;
+
+    public GameObject Z_Block;
+    public GameObject Z_BlockLR;
+    private List<GameObject> Z_Rotate;
+
+    public GameObject T_Block;
+    public GameObject T_BlockLR;
+    public GameObject T_BlockRR;
+    public GameObject T_BlockUD;
+    private List<GameObject> T_Rotate;
+
+
+    private List<GameObject> pieceChoice;
+
+    public Tile blue;
+    public Tile cyan;
+    public Tile green;
+    public Tile orange;
+    public Tile purple;
+    public Tile red;
+    public Tile yellow;
+
+    private Tile curTile;
+    //private List<GameObject> queue;
     // The piece being controlled
-    private GameObject activePiece;
+    public GameObject activePiece { get; private set; }
+    private GameObject chosenPiece;
+    private List<GameObject> chosenRotations;
+    
+    private bool rotateBuffer;
+
+    private int index = 0;
 
     // The amount of space the piece is allowed to "clip" through in order to fit tinier places a little bit easier
     // and give the illusion of smoothness
@@ -29,7 +79,8 @@ public class NewBoard : MonoBehaviour
 
     public bool CanSpawnPieces = true;
 
-
+    // Power up object
+    public GameObject powerUpPrefab;
 
     public static RectInt Bounds
     {
@@ -43,7 +94,15 @@ public class NewBoard : MonoBehaviour
     private void Awake()
     {
         this.tilemap = GetComponentInChildren<Tilemap>();
+        pieceChoice = new List<GameObject>() { J_Block, L_Block, T_Block, Z_Block, S_Block, O_Block, I_Block };
+        J_Rotate = new List<GameObject>() { J_Block, J_BlockLR, J_BlockUD, J_BlockRR };
+        L_Rotate = new List<GameObject>() { L_Block, L_BlockLR, L_BlockUD, L_BlockRR };
+        I_Rotate = new List<GameObject>() { I_Block, I_BlockLR};
+        S_Rotate = new List<GameObject>() { S_Block, S_BlockLR};
+        Z_Rotate = new List<GameObject>() { Z_Block, Z_BlockLR};
+        T_Rotate = new List<GameObject>() { T_Block, T_BlockLR, T_BlockUD, T_BlockRR };
 
+        rotateBuffer = false;
 
         for (int i = 0; i < this.tetrominoes.Length; i++)
         {
@@ -53,96 +112,313 @@ public class NewBoard : MonoBehaviour
 
     private void Start()
     {
-
         SpawnPiece();
     }
 
-
-    // As of right now, only spawns a J block but does keep track of lost condition for dropper
     public void SpawnPiece()
     {
-        if (!CanSpawnPieces) return;
         if (tilemap.HasTile(new Vector3Int(SpawnX, 9, 0)))
         {
+            CanSpawnPieces = false;
             GameOver();
         }
         else
         {
-            activePiece = Instantiate(J_Block, new Vector3(SpawnX + 0.5f, 12, 0), Quaternion.identity);
+            CanSpawnPieces = true;
+        }
+        
+        if (CanSpawnPieces)
+        {
+            //Choose random block
+            chosenPiece = pieceChoice[Random.Range(0, pieceChoice.Count)];
+            //chosenPiece = L_Block;
+
+            if (chosenPiece == J_Block)
+            {
+                chosenRotations = J_Rotate;
+                curTile = blue;
+            }
+            else if (chosenPiece == L_Block)
+            {
+                chosenRotations = L_Rotate;
+                curTile = orange;
+            }
+            else if (chosenPiece == I_Block)
+            {
+                chosenRotations = I_Rotate;
+                curTile = cyan;
+            }
+            else if (chosenPiece == T_Block)
+            {
+                chosenRotations = T_Rotate;
+                curTile = purple;
+            }
+            else if (chosenPiece == S_Block)
+            {
+                chosenRotations = S_Rotate;
+                curTile = green;
+            }
+            else if (chosenPiece == Z_Block)
+            {
+                chosenRotations = Z_Rotate;
+                curTile = red;
+            }
+            else if (chosenPiece == O_Block)
+            {
+                //O_Block does not rotate
+                curTile = yellow;
+            }
+
+            activePiece = chosenPiece;
+            if (chosenPiece == S_Block || chosenPiece == Z_Block)
+            {
+                
+                //activePiece.transform.position = new Vector3(SpawnX + 1, 12, 0);
+                activePiece = Instantiate(chosenPiece, new Vector3(SpawnX + 1, 12, 0), Quaternion.identity);
+            }
+            else
+            {
+                //activePiece.transform.position = new Vector3(SpawnX + 0.5f, 12, 0);
+                activePiece = Instantiate(chosenPiece, new Vector3(SpawnX + 0.5f, 12, 0), Quaternion.identity);
+
+            }
+
+            // Randomly spawn power-up around the activePiece
+            //SpawnPowerUp(activePiece.transform.position);
+
         }
 
 
     }
+    // to display power up
+    private void SpawnPowerUp(Vector3 spawnPosition)
+    {
+        // Randomly determine the position around the activePiece
+        Vector2 randomOffset = new Vector2(Random.Range(-1.5f, 1.5f), Random.Range(-1.5f, 1.5f));
 
+        // Calculate the power-up spawn position
+        Vector3 powerUpSpawnPosition = spawnPosition + new Vector3(randomOffset.x, randomOffset.y, 0);
 
+        // Ensure the power-up doesn't intersect with the activePiece
+        while (IsIntersecting(powerUpSpawnPosition, activePiece))
+        {
+            randomOffset = new Vector2(Random.Range(-1.5f, 1.5f), Random.Range(-1.5f, 1.5f));
+            powerUpSpawnPosition = spawnPosition + new Vector3(randomOffset.x, randomOffset.y, 0);
+        }
+
+        // Instantiate the power-up prefab at the calculated position
+        GameObject powerUpObject = Instantiate(powerUpPrefab, powerUpSpawnPosition, Quaternion.identity);
+        // Set the tag for the power-up object
+        powerUpObject.tag = "PowerUp";
+        powerUpObject.transform.parent = activePiece.transform;
+    }
+    // check if intersect with active piece
+    private bool IsIntersecting(Vector3 position, GameObject activePiece)
+    {
+        Collider2D powerUpCollider = powerUpPrefab.GetComponent<Collider2D>(); // assuming powerUpPrefab has a collider
+        Collider2D[] activePieceColliders = activePiece.GetComponentsInChildren<Collider2D>();
+
+        foreach (Collider2D activePieceCollider in activePieceColliders)
+        {
+            if (activePieceCollider.OverlapPoint(position))
+            {
+                return true; // There's an intersection, retry with a new position
+            }
+        }
+
+        return false; // No intersection
+    }
 
     // This is called my the piece when the piece is ready to be "set down" or has collided with a tile, meaning its ready to be replaced with tiles
     // This is where we might tell the UI that a new piece is going to be queued up
     public void spawnTiles()
     {
+        
+
         Transform curChild;
+        float scaleX;
+        float scaleY;
+        float posX;
+        float posY;
+
+        // Detach power-up object before destroying activePiece
+        GameObject powerUpObject = null;
+
         for (int i = 0; i < activePiece.transform.childCount; i++)
         {
-            curChild = activePiece.transform.GetChild(i).transform;
-            //Debug.Log(curChild.name + ": \n POSITION: " + curChild.position + "\nSIZE: " + curChild.GetComponent<SpriteRenderer>().size);
-            int x;
-            int y;
-            if (curChild.position.x > 0)
+            curChild = activePiece.transform.GetChild(i);
+
+            // Check if the current child is the power-up object
+            if (curChild.CompareTag("PowerUp")) // Adjust the tag based on your implementation
             {
-                x = (int)curChild.position.x;
-            }
-            else
-            {
-                x = (int)curChild.position.x - 1;
+                powerUpObject = curChild.gameObject;
+                // Detach power-up object
+                powerUpObject.transform.parent = null;
             }
 
-            if (Mathf.Round(curChild.position.y * 10) / 10 == -.5)
-            {
-                y = -1;
-            }
-            else if (curChild.position.y < 0)
-            {
-                y = (int)curChild.position.y - 1;
-            }
+            posX = curChild.position.x;
+            posY = curChild.position.y;
+            scaleX = (int)curChild.GetComponent<SpriteRenderer>().size.x;
+            scaleY = (int)curChild.GetComponent<SpriteRenderer>().size.y;
 
-            else
+            posX -= scaleX / 2;
+            posY -= scaleY / 2;
+            Destroy(activePiece);
+
+            for (int j = 0; j < scaleX; j++)
             {
-                y = (int)curChild.position.y;
-            }
-
-            int width = (int)curChild.GetComponent<SpriteRenderer>().size.x;
-            int height = (int)curChild.GetComponent<SpriteRenderer>().size.y;
-
-            //Debug.Log("X: " + x + " Y: " + y);
-
-            if (width % 2 != 0)
-            {
-                tilemap.SetTile(new Vector3Int(x, y, 0), tetrominoes[2].tile);
-            }
-            int amount = width / 2;
-
-            for (int j = 1; j <= amount; j++)
-            {
-                tilemap.SetTile(new Vector3Int(x + j, y, 0), tetrominoes[2].tile);
-                tilemap.SetTile(new Vector3Int(x - j, y, 0), tetrominoes[2].tile);
+                if (posY > 0)
+                {
+                    tilemap.SetTile(new Vector3Int((int)posX + j, (int)posY+1), curTile);
+                }
+                else
+                {
+                    tilemap.SetTile(new Vector3Int((int)posX + j, (int)posY), curTile);
+                }
             }
 
-            amount = height / 2;
-            for (int j = 1; j <= amount; j++)
+            for (int j = 0; j < scaleY; j++)
             {
-                tilemap.SetTile(new Vector3Int(x, y + j, 0), tetrominoes[2].tile);
-                tilemap.SetTile(new Vector3Int(x, y - j, 0), tetrominoes[2].tile);
+                if (posY > 0)
+                {
+                    tilemap.SetTile(new Vector3Int((int)posX, (int)posY + j + 1), curTile);
+                }
+                else
+                {
+                    tilemap.SetTile(new Vector3Int((int)posX, (int)posY + j), curTile);
+                }
             }
-
-
         }
-        Destroy(activePiece);
-
         GameManager.Instance.BlockPlaced();
+        RectInt bounds = Bounds;
+        int row = bounds.yMin;
 
+        while (row < bounds.yMax)
+        {
+            if (IsLineFull(row))
+            {
+                LineClear(row);
+            }
+            else
+            {
+                row++;
+            }
+        }
+
+        index = 0;
         SpawnPiece();
     }
 
+    public void rotatePiece(int direction)
+    {
+        if (activePiece.transform.name == "O-Block(Clone)")
+        {
+            return;
+        }
+        if (activePiece.GetComponent<NewPiece>().bottomTileDetected)
+        {
+            return;
+        }
+        while (rotateBuffer)
+        {
+
+        }
+        int previousIndex = index;
+        index -= direction;
+        if (index == -1)
+        {
+            index = chosenRotations.Count - 1;
+        }
+        else if (index == chosenRotations.Count) {
+            index = 0;
+        }
+        //Vector3 positions = activePiece.transform.position;
+        Vector3 positions = new Vector3(activePiece.transform.position.x, (int) activePiece.transform.position.y, 0);
+
+        GameObject oldPiece = activePiece;
+
+        chosenPiece = chosenRotations[index];
+        if (chosenRotations == S_Rotate || chosenRotations == Z_Rotate)
+        {
+            if (chosenPiece == S_Block || chosenPiece == Z_Block)
+            {
+                //activePiece.transform.position = new Vector3(positions.x - 0.5f, positions.y, 0);
+                activePiece = Instantiate(chosenPiece, new Vector3(positions.x - 0.5f, positions.y, 0), Quaternion.identity);
+
+            }
+            else if (chosenPiece == S_BlockLR || chosenPiece == Z_BlockLR)
+            {
+                //activePiece.transform.position = new Vector3(positions.x + 0.5f, positions.y, 0);
+                activePiece = Instantiate(chosenPiece, new Vector3(positions.x + 0.5f, positions.y, 0), Quaternion.identity);
+            }
+        }
+        else
+        {
+            activePiece = Instantiate(chosenPiece, positions, Quaternion.identity);
+            
+        }
+        NewPiece activeScript = activePiece.GetComponent<NewPiece>();
+        //activeScript.getDimensions();
+
+        Transform curChild;
+
+        for (int i = 0; i < activePiece.transform.childCount; i++)
+        {
+            curChild = activePiece.transform.GetChild(i);
+
+
+            int size = (int)curChild.GetComponent<SpriteRenderer>().size.x;
+            
+            int posX = (int) curChild.position.x - size / 2;
+            if (posX < 0)
+            {
+                posX--;
+            }
+            //Check scaleX
+            for (int j = 0; j < size; j++)
+            {
+                Debug.Log(curChild.name + ": " + posX + " " + curChild.transform.position.x);
+                if (tilemap.HasTile(new Vector3Int((int) posX + j, (int) curChild.position.y, 0)) || tilemap.HasTile(new Vector3Int((int)posX + j, (int)curChild.position.y+1, 0)) 
+                    || tilemap.HasTile(new Vector3Int((int)posX + j, (int)curChild.position.y-1, 0)))
+                {
+                    index = previousIndex;
+                    Destroy(activePiece);
+                    activePiece = oldPiece;
+                    return;
+                }
+            }
+            
+
+            size = (int)curChild.GetComponent<SpriteRenderer>().size.y;
+            
+            posX = (int)curChild.position.y - size / 2;
+            //Check scaleY
+            for (int j = 0; j < size; j++)
+            {
+                if (tilemap.HasTile(new Vector3Int((int)posX, (int)curChild.position.y + j, 0)) || tilemap.HasTile(new Vector3Int((int)posX, (int)curChild.position.y + j+ 1, 0))
+                    || tilemap.HasTile(new Vector3Int((int)posX, (int)curChild.position.y + j - 1, 0)))
+                {
+                    index = previousIndex;
+                    Destroy(activePiece);
+                    activePiece = oldPiece;
+                    return;
+                }
+            }
+            
+        }
+
+        Destroy(oldPiece);
+        //rotateBuffer = true;
+
+    }
+
+    private void Update()
+    {
+        if (rotateBuffer)
+        {
+            //WaitForSeconds(.1);
+        }
+    }
     private bool IsLineFull(int row)
     {
         RectInt bounds = Bounds;
@@ -185,10 +461,12 @@ public class NewBoard : MonoBehaviour
 
     private void GameOver()
     {
+        /*
         for (int i = 0; i < 20; i++)
         {
             LineClear(-9);
         }
         SpawnPiece();
+        */
     }
 }
