@@ -92,8 +92,6 @@ public class NewBoard : MonoBehaviour
         T_Rotate = new List<GameObject>() { T_Block, T_BlockLR, T_BlockUD, T_BlockRR };
 
         rotateBuffer = false;
-        chosenPiece = J_Block;
-        chosenRotations = J_Rotate;
 
         for (int i = 0; i < this.tetrominoes.Length; i++)
         {
@@ -120,8 +118,9 @@ public class NewBoard : MonoBehaviour
         
         if (CanSpawnPieces)
         {
+            //Choose random block
             chosenPiece = pieceChoice[Random.Range(0, pieceChoice.Count)];
-            //chosenPiece = I_Block;
+            //chosenPiece = L_Block;
 
             if (chosenPiece == J_Block)
             {
@@ -307,10 +306,16 @@ public class NewBoard : MonoBehaviour
             int size = (int)curChild.GetComponent<SpriteRenderer>().size.x;
             
             int posX = (int) curChild.position.x - size / 2;
+            if (posX < 0)
+            {
+                posX--;
+            }
             //Check scaleX
             for (int j = 0; j < size; j++)
             {
-                if (tilemap.HasTile(new Vector3Int((int) posX + j, (int) curChild.position.y, 0)))
+                Debug.Log(curChild.name + ": " + posX + " " + curChild.transform.position.x);
+                if (tilemap.HasTile(new Vector3Int((int) posX + j, (int) curChild.position.y, 0)) || tilemap.HasTile(new Vector3Int((int)posX + j, (int)curChild.position.y+1, 0)) 
+                    || tilemap.HasTile(new Vector3Int((int)posX + j, (int)curChild.position.y-1, 0)))
                 {
                     index = previousIndex;
                     Destroy(activePiece);
@@ -326,7 +331,8 @@ public class NewBoard : MonoBehaviour
             //Check scaleY
             for (int j = 0; j < size; j++)
             {
-                if (tilemap.HasTile(new Vector3Int((int)posX, (int)curChild.position.y + j, 0)))
+                if (tilemap.HasTile(new Vector3Int((int)posX, (int)curChild.position.y + j, 0)) || tilemap.HasTile(new Vector3Int((int)posX, (int)curChild.position.y + j+ 1, 0))
+                    || tilemap.HasTile(new Vector3Int((int)posX, (int)curChild.position.y + j - 1, 0)))
                 {
                     index = previousIndex;
                     Destroy(activePiece);

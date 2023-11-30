@@ -35,6 +35,7 @@ public class NewPiece : MonoBehaviour
 
 
 
+
     private Tilemap tilemap;
 
     private float wiggleRoom;
@@ -146,6 +147,7 @@ public class NewPiece : MonoBehaviour
         {
             //Debug.Log("LEFT: " + left[j] + " RIGHT: " + right[j]);
         }
+
     }
 
     public void updateX(int x)
@@ -225,7 +227,7 @@ public class NewPiece : MonoBehaviour
                 //Debug.Log("DETECTED: Position " + right[i] + " on the RIGHT has a tile (" + i + ")");
                 rightTileDetected = true;
                 //rightTileY = right[i].y;
-                break;
+                
 
                 if (i < right.Count - 1)
                 {
@@ -271,7 +273,7 @@ public class NewPiece : MonoBehaviour
                 //leftTileY = left[i].y;
                 leftTileDetected = true;
 
-                break;
+                
 
 
                 if (i < left.Count - 1)
