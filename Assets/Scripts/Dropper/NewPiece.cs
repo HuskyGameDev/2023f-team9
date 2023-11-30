@@ -49,7 +49,7 @@ public class NewPiece : MonoBehaviour
         velocityY = newBoard.velocityY;
         myRigidBody = GetComponent<Rigidbody2D>();
 
-
+        myRigidBody.freezeRotation = true;
     }
 
     private void Awake()
