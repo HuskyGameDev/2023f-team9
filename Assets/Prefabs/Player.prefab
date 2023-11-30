@@ -288,6 +288,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d221af1b279f49a5af5e47053880396, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CrushSound: {fileID: 8300000, guid: f03aed253559f446d8b1f3eb7acdba3b, type: 3}
 --- !u!114 &7024448303141072248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313,10 +314,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockSprites:
-  - {fileID: 7482667652216324306, guid: b389f3ff7fcacb5479293ea6ef8ac613, type: 3}
-  - {fileID: 7482667652216324306, guid: dee43d428bc6ec648a4cb5ae473517b8, type: 3}
-  - {fileID: 7482667652216324306, guid: 6e91efd63eb0f6c47bcdc065114f585d, type: 3}
-  - {fileID: 7482667652216324306, guid: 48073561183559c4697efe9b5b157201, type: 3}
-  - {fileID: 7482667652216324306, guid: 87093210795e68f4aa27bcae93a4f19b, type: 3}
-  - {fileID: 7482667652216324306, guid: 35c382e4c9f19c448bb45fd73e86b2f5, type: 3}
-  - {fileID: 7482667652216324306, guid: b7fce09d15dce574e93c1311094ee286, type: 3}
+  - {fileID: -1469418863, guid: 19b92854f61729946985045d07381baa, type: 3}
+  - {fileID: -416805485, guid: 19b92854f61729946985045d07381baa, type: 3}
+  - {fileID: -1515153654, guid: 19b92854f61729946985045d07381baa, type: 3}
+  - {fileID: -1437980991, guid: 19b92854f61729946985045d07381baa, type: 3}
+  - {fileID: 1736735671, guid: 19b92854f61729946985045d07381baa, type: 3}
+  - {fileID: 2056840184, guid: 19b92854f61729946985045d07381baa, type: 3}
+  - {fileID: -1641971171, guid: 19b92854f61729946985045d07381baa, type: 3}
