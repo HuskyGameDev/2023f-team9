@@ -47,8 +47,13 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!moveAction.inProgress)
+        {
+            animator.SetBool("Running", false);
+        }
         if (moveAction.inProgress)
         {
+            animator.SetBool("Running", true);
             float direction = moveAction.ReadValue<float>();
             spriteRenderer.flipX = direction < 0;
             if (canJump)
