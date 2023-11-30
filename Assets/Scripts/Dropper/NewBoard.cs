@@ -131,7 +131,7 @@ public class NewBoard : MonoBehaviour
         {
             //Choose random block
             chosenPiece = pieceChoice[Random.Range(0, pieceChoice.Count)];
-            //chosenPiece = L_Block;
+            //chosenPiece = Z_Block;
 
             if (chosenPiece == J_Block)
             {
@@ -412,13 +412,7 @@ public class NewBoard : MonoBehaviour
 
     }
 
-    private void Update()
-    {
-        if (rotateBuffer)
-        {
-            //WaitForSeconds(.1);
-        }
-    }
+ 
     private bool IsLineFull(int row)
     {
         RectInt bounds = Bounds;
@@ -461,12 +455,6 @@ public class NewBoard : MonoBehaviour
 
     private void GameOver()
     {
-        /*
-        for (int i = 0; i < 20; i++)
-        {
-            LineClear(-9);
-        }
-        SpawnPiece();
-        */
+        GameManager.Instance.GameOver(true);
     }
 }
