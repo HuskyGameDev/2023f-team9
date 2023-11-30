@@ -19,6 +19,7 @@ public class PlayerMovement : MonoBehaviour
     private InputAction moveAction;
     private InputAction jumpAction;
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -79,6 +80,8 @@ public class PlayerMovement : MonoBehaviour
         rigidbody.velocity = new Vector2(rigidbody.velocity.x, targetVelocity);
         yield return new WaitForFixedUpdate(); // prevents accidental double jump
         canJump = false;
+
+
     }
 
     // method to apply the speed-up effect
