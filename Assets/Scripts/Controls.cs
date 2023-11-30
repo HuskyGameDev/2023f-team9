@@ -114,15 +114,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Down"",
-                    ""type"": ""Button"",
-                    ""id"": ""0effcbae-5c97-4a89-a538-f90e954c3ac6"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -191,17 +182,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""action"": ""Rotate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""20642c9a-ef4c-4f23-8838-b437ee781ed8"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""Down"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -233,7 +213,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_Dropper = asset.FindActionMap("Dropper", throwIfNotFound: true);
         m_Dropper_Move = m_Dropper.FindAction("Move", throwIfNotFound: true);
         m_Dropper_Rotate = m_Dropper.FindAction("Rotate", throwIfNotFound: true);
-        m_Dropper_Down = m_Dropper.FindAction("Down", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -351,14 +330,12 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private List<IDropperActions> m_DropperActionsCallbackInterfaces = new List<IDropperActions>();
     private readonly InputAction m_Dropper_Move;
     private readonly InputAction m_Dropper_Rotate;
-    private readonly InputAction m_Dropper_Down;
     public struct DropperActions
     {
         private @Controls m_Wrapper;
         public DropperActions(@Controls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Dropper_Move;
         public InputAction @Rotate => m_Wrapper.m_Dropper_Rotate;
-        public InputAction @Down => m_Wrapper.m_Dropper_Down;
         public InputActionMap Get() { return m_Wrapper.m_Dropper; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -374,9 +351,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Rotate.started += instance.OnRotate;
             @Rotate.performed += instance.OnRotate;
             @Rotate.canceled += instance.OnRotate;
-            @Down.started += instance.OnDown;
-            @Down.performed += instance.OnDown;
-            @Down.canceled += instance.OnDown;
         }
 
         private void UnregisterCallbacks(IDropperActions instance)
@@ -387,9 +361,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Rotate.started -= instance.OnRotate;
             @Rotate.performed -= instance.OnRotate;
             @Rotate.canceled -= instance.OnRotate;
-            @Down.started -= instance.OnDown;
-            @Down.performed -= instance.OnDown;
-            @Down.canceled -= instance.OnDown;
         }
 
         public void RemoveCallbacks(IDropperActions instance)
@@ -425,6 +396,5 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     {
         void OnMove(InputAction.CallbackContext context);
         void OnRotate(InputAction.CallbackContext context);
-        void OnDown(InputAction.CallbackContext context);
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
 
 public class NewPiece : MonoBehaviour
@@ -32,9 +33,8 @@ public class NewPiece : MonoBehaviour
     private float offSetY;
     private float bottomOfPiece;
 
-
-
-
+    private InputAction moveAction;
+    private InputAction rotateAction;
 
     private Tilemap tilemap;
 
@@ -42,7 +42,7 @@ public class NewPiece : MonoBehaviour
     public void Start()
     {
         newBoard = GameObject.Find("Board").GetComponent<NewBoard>();
-        
+
         shiftSpeed = newBoard.shiftSpeed;
         tilemap = newBoard.tilemap;
         wiggleRoom = newBoard.wiggleRoom;
@@ -50,6 +50,9 @@ public class NewPiece : MonoBehaviour
         myRigidBody = GetComponent<Rigidbody2D>();
 
         myRigidBody.freezeRotation = true;
+
+        moveAction = GameManager.Instance.inputActions.Dropper.Move;
+        rotateAction = GameManager.Instance.inputActions.Dropper.Rotate;
     }
 
     private void Awake()
@@ -60,7 +63,7 @@ public class NewPiece : MonoBehaviour
 
         getDimensions();
         nextX = transform.position.x;
-        nextY = ((int) transform.position.y) - offSetY;
+        nextY = ((int)transform.position.y) - offSetY;
 
 
 
@@ -91,7 +94,7 @@ public class NewPiece : MonoBehaviour
         for (int i = 0; i < transform.childCount; i++)
         {
             curChild = transform.GetChild(i);
-            
+
 
             posX = curChild.position.x;
             posY = curChild.position.y;
@@ -110,7 +113,7 @@ public class NewPiece : MonoBehaviour
 
 
 
-            
+
             for (int j = 0; j < scaleX; j++)
             {
                 if (posY < 0)
@@ -129,9 +132,9 @@ public class NewPiece : MonoBehaviour
             {
                 if (posY < 0)
                 {
-                    left.Add(new Vector2Int((int)posX - 1, (int)posY + j-1));
+                    left.Add(new Vector2Int((int)posX - 1, (int)posY + j - 1));
 
-                    right.Add(new Vector2Int((int)posX + (int)scaleX, (int)posY + j-1));
+                    right.Add(new Vector2Int((int)posX + (int)scaleX, (int)posY + j - 1));
                 }
                 else
                 {
@@ -227,7 +230,7 @@ public class NewPiece : MonoBehaviour
                 //Debug.Log("DETECTED: Position " + right[i] + " on the RIGHT has a tile (" + i + ")");
                 rightTileDetected = true;
                 //rightTileY = right[i].y;
-                
+
 
                 if (i < right.Count - 1)
                 {
@@ -273,7 +276,7 @@ public class NewPiece : MonoBehaviour
                 //leftTileY = left[i].y;
                 leftTileDetected = true;
 
-                
+
 
 
                 if (i < left.Count - 1)
@@ -333,7 +336,7 @@ public class NewPiece : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
         bottomOfPiece = transform.position.y - offSetY;
 
         if (bottomOfPiece <= nextY - 0.5f)
@@ -395,49 +398,55 @@ public class NewPiece : MonoBehaviour
 
         // Controls for left and right
         // Also note that xCount is for keeping track of where the piece is
-        // This is a temporary solution to keeping at least the J_Block in bounds    
-        if (Input.GetKeyDown(KeyCode.A) && !leftTileDetected)
+        // This is a temporary solution to keeping at least the J_Block in bounds
+        if (moveAction.triggered)
         {
-            // If can move left
-            updateX(-1);
-            checkAll();
-
-
-            if (transform.position.x == nextX)
+            float moveDirection = moveAction.ReadValue<float>();
+            if (moveDirection < 0 && !leftTileDetected)
             {
+                // If can move left
+                updateX(-1);
+                checkAll();
 
-                nextX--;
+
+                if (transform.position.x == nextX)
+                {
+
+                    nextX--;
+                }
+                //transform.position = new Vector3(transform.position.x - 1, transform.position.y, 0);
+                //Debug.Log("A PRESSED. POSX: " + transform.position.x + " xCount: " + xCount);
+                velocityX = -shiftSpeed;
             }
-            //transform.position = new Vector3(transform.position.x - 1, transform.position.y, 0);
-            //Debug.Log("A PRESSED. POSX: " + transform.position.x + " xCount: " + xCount);
-            velocityX = -shiftSpeed;
-        }
 
-        else if (Input.GetKeyDown(KeyCode.D) && !rightTileDetected)
-        {
-            updateX(1);
-            checkAll();
-            if (transform.position.x == nextX)
+            else if (moveDirection > 0 && !rightTileDetected)
             {
-                nextX++;
+                updateX(1);
+                checkAll();
+                if (transform.position.x == nextX)
+                {
+                    nextX++;
+                }
+                //transform.position = new Vector3(transform.position.x + 1, transform.position.y, 0);
+                //velocityX = shiftSpeed;
+                //Debug.Log("D PRESSED. POSX: " + transform.position.x + " xCount: " + xCount);
+
+                velocityX = shiftSpeed;
             }
-            //transform.position = new Vector3(transform.position.x + 1, transform.position.y, 0);
-            //velocityX = shiftSpeed;
-            //Debug.Log("D PRESSED. POSX: " + transform.position.x + " xCount: " + xCount);
-
-            velocityX = shiftSpeed;
         }
-
-        else if (Input.GetKeyDown(KeyCode.Q))
+        else if (rotateAction.triggered)
         {
-            newBoard.rotatePiece(-1);
+            float rotateDirection = rotateAction.ReadValue<float>();
+            if (rotateDirection < 0)
+            {
+                newBoard.rotatePiece(-1);
 
-        }
+            }
+            else if (rotateDirection > 0)
+            {
+                newBoard.rotatePiece(1);
 
-        else if (Input.GetKeyDown(KeyCode.E))
-        {
-            newBoard.rotatePiece(1);
-
+            }
         }
 
     }
