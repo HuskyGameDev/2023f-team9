@@ -53,7 +53,17 @@ public class NewBoard : MonoBehaviour
 
 
     private List<GameObject> pieceChoice;
-    private List<GameObject> queue;
+
+    public Tile blue;
+    public Tile cyan;
+    public Tile green;
+    public Tile orange;
+    public Tile purple;
+    public Tile red;
+    public Tile yellow;
+
+    private Tile curTile;
+    //private List<GameObject> queue;
     // The piece being controlled
     public GameObject activePiece { get; private set; }
     private GameObject chosenPiece;
@@ -125,30 +135,37 @@ public class NewBoard : MonoBehaviour
             if (chosenPiece == J_Block)
             {
                 chosenRotations = J_Rotate;
+                curTile = blue;
             }
             else if (chosenPiece == L_Block)
             {
                 chosenRotations = L_Rotate;
+                curTile = orange;
             }
             else if (chosenPiece == I_Block)
             {
                 chosenRotations = I_Rotate;
+                curTile = cyan;
             }
             else if (chosenPiece == T_Block)
             {
                 chosenRotations = T_Rotate;
+                curTile = purple;
             }
             else if (chosenPiece == S_Block)
             {
                 chosenRotations = S_Rotate;
+                curTile = green;
             }
             else if (chosenPiece == Z_Block)
             {
                 chosenRotations = Z_Rotate;
+                curTile = red;
             }
             else if (chosenPiece == O_Block)
             {
                 //O_Block does not rotate
+                curTile = yellow;
             }
 
             activePiece = chosenPiece;
@@ -205,11 +222,11 @@ public class NewBoard : MonoBehaviour
             {
                 if (posY > 0)
                 {
-                    tilemap.SetTile(new Vector3Int((int)posX + j, (int)posY+1), tetrominoes[2].tile);
+                    tilemap.SetTile(new Vector3Int((int)posX + j, (int)posY+1), curTile);
                 }
                 else
                 {
-                    tilemap.SetTile(new Vector3Int((int)posX + j, (int)posY), tetrominoes[2].tile);
+                    tilemap.SetTile(new Vector3Int((int)posX + j, (int)posY), curTile);
                 }
             }
 
@@ -217,11 +234,11 @@ public class NewBoard : MonoBehaviour
             {
                 if (posY > 0)
                 {
-                    tilemap.SetTile(new Vector3Int((int)posX, (int)posY + j + 1), tetrominoes[2].tile);
+                    tilemap.SetTile(new Vector3Int((int)posX, (int)posY + j + 1), curTile);
                 }
                 else
                 {
-                    tilemap.SetTile(new Vector3Int((int)posX, (int)posY + j), tetrominoes[2].tile);
+                    tilemap.SetTile(new Vector3Int((int)posX, (int)posY + j), curTile);
                 }
             }
         }
