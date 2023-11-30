@@ -1663,6 +1663,34 @@ PrefabInstance:
       value: Board
       objectReference: {fileID: 0}
     - target: {fileID: 7018330683628722624, guid: 4b30420f76fef4fcf97ca1ddfb33856f, type: 3}
+      propertyPath: red
+      value: 
+      objectReference: {fileID: 11400000, guid: 50c02258950378d4dbb96a3b207ef1a4, type: 2}
+    - target: {fileID: 7018330683628722624, guid: 4b30420f76fef4fcf97ca1ddfb33856f, type: 3}
+      propertyPath: blue
+      value: 
+      objectReference: {fileID: 11400000, guid: cce8df1aae260ce49b5344a33d409757, type: 2}
+    - target: {fileID: 7018330683628722624, guid: 4b30420f76fef4fcf97ca1ddfb33856f, type: 3}
+      propertyPath: cyan
+      value: 
+      objectReference: {fileID: 11400000, guid: ffb233cab0fb6114b92b30b670cb0373, type: 2}
+    - target: {fileID: 7018330683628722624, guid: 4b30420f76fef4fcf97ca1ddfb33856f, type: 3}
+      propertyPath: green
+      value: 
+      objectReference: {fileID: 11400000, guid: 2e21662a00ec308449a660d4192a9a62, type: 2}
+    - target: {fileID: 7018330683628722624, guid: 4b30420f76fef4fcf97ca1ddfb33856f, type: 3}
+      propertyPath: orange
+      value: 
+      objectReference: {fileID: 11400000, guid: 3e9a61ac843729745a44e69be8fc1544, type: 2}
+    - target: {fileID: 7018330683628722624, guid: 4b30420f76fef4fcf97ca1ddfb33856f, type: 3}
+      propertyPath: purple
+      value: 
+      objectReference: {fileID: 11400000, guid: 95eb04c86d6f2064a87e44a1d3156c59, type: 2}
+    - target: {fileID: 7018330683628722624, guid: 4b30420f76fef4fcf97ca1ddfb33856f, type: 3}
+      propertyPath: yellow
+      value: 
+      objectReference: {fileID: 11400000, guid: b2305bc6251c48a439c63184febbcd34, type: 2}
+    - target: {fileID: 7018330683628722624, guid: 4b30420f76fef4fcf97ca1ddfb33856f, type: 3}
       propertyPath: I_Block
       value: 
       objectReference: {fileID: 1521811016844006125, guid: a9822413ccc806943b2295bf6455e523, type: 3}
