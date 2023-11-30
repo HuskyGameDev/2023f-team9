@@ -58,6 +58,8 @@ public class NewBoard : MonoBehaviour
     public GameObject activePiece { get; private set; }
     private GameObject chosenPiece;
     private List<GameObject> chosenRotations;
+    
+    private bool rotateBuffer;
 
     private int index = 0;
 
@@ -89,7 +91,7 @@ public class NewBoard : MonoBehaviour
         Z_Rotate = new List<GameObject>() { Z_Block, Z_BlockLR};
         T_Rotate = new List<GameObject>() { T_Block, T_BlockLR, T_BlockUD, T_BlockRR };
 
-
+        rotateBuffer = false;
         chosenPiece = J_Block;
         chosenRotations = J_Rotate;
 
@@ -119,6 +121,7 @@ public class NewBoard : MonoBehaviour
         if (CanSpawnPieces)
         {
             chosenPiece = pieceChoice[Random.Range(0, pieceChoice.Count)];
+            //chosenPiece = I_Block;
 
             if (chosenPiece == J_Block)
             {
@@ -249,6 +252,14 @@ public class NewBoard : MonoBehaviour
         {
             return;
         }
+        if (activePiece.GetComponent<NewPiece>().bottomTileDetected)
+        {
+            return;
+        }
+        while (rotateBuffer)
+        {
+
+        }
         int previousIndex = index;
         index -= direction;
         if (index == -1)
@@ -258,7 +269,9 @@ public class NewBoard : MonoBehaviour
         else if (index == chosenRotations.Count) {
             index = 0;
         }
-        Vector3 positions = activePiece.transform.position;
+        //Vector3 positions = activePiece.transform.position;
+        Vector3 positions = new Vector3(activePiece.transform.position.x, (int) activePiece.transform.position.y, 0);
+
         GameObject oldPiece = activePiece;
 
         chosenPiece = chosenRotations[index];
@@ -282,28 +295,7 @@ public class NewBoard : MonoBehaviour
             
         }
         NewPiece activeScript = activePiece.GetComponent<NewPiece>();
-        activeScript.getDimensions();
-        for (int i = 0; i < activePiece.GetComponent<NewPiece>().left.Count; i++)
-        {
-            if (tilemap.HasTile(new Vector3Int(activeScript.left[i].x + 1, activeScript.left[i].y, 0)))
-            {
-                index = previousIndex;
-                Destroy(activePiece);
-                activePiece = oldPiece;
-                return;
-            }
-        }
-
-        for (int i = 0; i < activePiece.GetComponent<NewPiece>().right.Count; i++)
-        {
-            if (tilemap.HasTile(new Vector3Int(activeScript.right[i].x - 1, activeScript.right[i].y, 0)))
-            {
-                index = previousIndex;
-                Destroy(activePiece);
-                activePiece = oldPiece;
-                return;
-            }
-        }
+        //activeScript.getDimensions();
 
         Transform curChild;
 
@@ -311,55 +303,52 @@ public class NewBoard : MonoBehaviour
         {
             curChild = activePiece.transform.GetChild(i);
 
-            if (tilemap.HasTile(new Vector3Int((int)curChild.position.x, (int) curChild.position.y, 0)))
-            {
-                index = previousIndex;
-                Destroy(activePiece);
-                activePiece = oldPiece;
-                return;
-            }
 
             int size = (int)curChild.GetComponent<SpriteRenderer>().size.x;
-            if (size % 2 == 2)
+            
+            int posX = (int) curChild.position.x - size / 2;
+            //Check scaleX
+            for (int j = 0; j < size; j++)
             {
-                int posX = (int) curChild.position.x - size / 2;
-                //Check scaleX
-                for (int j = 0; j < size; j++)
+                if (tilemap.HasTile(new Vector3Int((int) posX + j, (int) curChild.position.y, 0)))
                 {
-                    if (tilemap.HasTile(new Vector3Int((int) posX + j, (int) curChild.position.y, 0)))
-                    {
-                        index = previousIndex;
-                        Destroy(activePiece);
-                        activePiece = oldPiece;
-                        return;
-                    }
+                    index = previousIndex;
+                    Destroy(activePiece);
+                    activePiece = oldPiece;
+                    return;
                 }
             }
+            
 
             size = (int)curChild.GetComponent<SpriteRenderer>().size.y;
-            if (size % 2 == 2)
+            
+            posX = (int)curChild.position.y - size / 2;
+            //Check scaleY
+            for (int j = 0; j < size; j++)
             {
-                int posX = (int)curChild.position.y - size / 2;
-                //Check scaleY
-                for (int j = 0; j < size; j++)
+                if (tilemap.HasTile(new Vector3Int((int)posX, (int)curChild.position.y + j, 0)))
                 {
-                    if (tilemap.HasTile(new Vector3Int((int)posX, (int)curChild.position.y + j, 0)))
-                    {
-                        index = previousIndex;
-                        Destroy(activePiece);
-                        activePiece = oldPiece;
-                        return;
-                    }
+                    index = previousIndex;
+                    Destroy(activePiece);
+                    activePiece = oldPiece;
+                    return;
                 }
             }
+            
         }
 
         Destroy(oldPiece);
-        
+        //rotateBuffer = true;
 
     }
 
-
+    private void Update()
+    {
+        if (rotateBuffer)
+        {
+            //WaitForSeconds(.1);
+        }
+    }
     private bool IsLineFull(int row)
     {
         RectInt bounds = Bounds;

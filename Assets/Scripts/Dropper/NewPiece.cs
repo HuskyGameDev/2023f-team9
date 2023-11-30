@@ -20,7 +20,7 @@ public class NewPiece : MonoBehaviour
 
     private bool leftTileDetected;
     private bool rightTileDetected;
-    private bool bottomTileDetected;
+    public bool bottomTileDetected { get; private set; }
 
     private bool leftShiftClear;
     private bool rightShiftClear;
@@ -105,24 +105,39 @@ public class NewPiece : MonoBehaviour
                 offSetY = (float)scaleY / 2;
             }
 
-            Debug.Log(posX + " " + posY);
+            //Debug.Log(posX + " " + posY);
 
 
 
             
             for (int j = 0; j < scaleX; j++)
             {
-                bottom.Add(new Vector2Int((int)posX + j, (int)posY - 1));
+                if (posY < 0)
+                {
+                    bottom.Add(new Vector2Int((int)posX + j, (int)posY - 2));
+                }
+                else
+                {
+                    bottom.Add(new Vector2Int((int)posX + j, (int)posY - 1));
+                }
             }
 
 
 
             for (int j = 0; j < (scaleY + 1); j++)
             {
-                
-                left.Add(new Vector2Int((int)posX - 1, (int)posY + j));
-                
-                right.Add(new Vector2Int((int)posX + (int)scaleX, (int)posY + j));
+                if (posY < 0)
+                {
+                    left.Add(new Vector2Int((int)posX - 1, (int)posY + j-1));
+
+                    right.Add(new Vector2Int((int)posX + (int)scaleX, (int)posY + j-1));
+                }
+                else
+                {
+                    left.Add(new Vector2Int((int)posX - 1, (int)posY + j));
+
+                    right.Add(new Vector2Int((int)posX + (int)scaleX, (int)posY + j));
+                }
 
             }
 
