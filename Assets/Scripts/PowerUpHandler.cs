@@ -8,26 +8,15 @@ using System;
 public class GivePowerUp : MonoBehaviour
 {
     public TextMeshProUGUI runnerPowText;
-    public Image runnerPowImage;
     public TextMeshProUGUI dropperPowText;
-    public Image dropperPowImage;
-    public Sprite Blue;
-    public Sprite Cyan;
-    public Sprite Orange;
-    public Sprite Empty;
     public string RunnerPowerUp;
     public string DropperPowerUp;
     public PlayerMovement RunnerMovement;
+    public NewBoard DropperMovement;
 
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.K))
-        {
-            givePowerUp(true);
-            givePowerUp(false);
-        }
-
         if(Input.GetKeyDown(KeyCode.Space))
         {
             usePowerUp(RunnerPowerUp, true);
@@ -39,122 +28,88 @@ public class GivePowerUp : MonoBehaviour
         }
     }
 
-    public void givePowerUp(Boolean runnerPowerUp)
+    public void dropperPowerUpRandomizer()
     {
-        int powerUpNumber = UnityEngine.Random.Range(1, 4);
-        if (runnerPowerUp) {
-            if (powerUpNumber == 1)
-            {
-                changePowerUp("speedUp", true);
-                RunnerPowerUp = "speedUp";
-            }
-            else if (powerUpNumber == 2)
-            {
-                changePowerUp("speedDown", true);
-                RunnerPowerUp = "speedDown";
-            }
-            else if (powerUpNumber == 3)
-            {
-                changePowerUp("jumpHeightUp", true);
-                RunnerPowerUp = "jumpHeightUp";
-            }
-        } else
-        {
-            if (powerUpNumber == 1)
-            {
-                changePowerUp("speedUp", false);
-                DropperPowerUp = "speedUp";
-            }
-            else if (powerUpNumber == 2)
-            {
-                changePowerUp("speedDown", false);
-                DropperPowerUp = "speedDown";
-            }
-            else if (powerUpNumber == 3)
-            {
-                changePowerUp("jumpHeightUp", false);
-                DropperPowerUp = "jumpHeightUp";
-            }
+        int random = UnityEngine.Random.Range(1, 7);
+        if (random == 1) {
+            givePowerUp(false);
         }
-        
-    }
-    public void changePowerUp(string powerUpName, Boolean runner)
-    {
-        if (runner)
-        {
-            if (powerUpName == "speedUp")
-            {
-                RunnerPowerUp = "Speed Up 1";
-                runnerPowImage.sprite = Blue;
-            }
-            else if (powerUpName == "speedDown")
-            {
-                RunnerPowerUp = "Speed Down 2";
-                runnerPowImage.sprite = Cyan;
-            }
-            else if (powerUpName == "jumpHeightUp")
-            {
-                RunnerPowerUp = "Jump Height Up 3";
-                runnerPowImage.sprite = Orange;
-            }
-            else
-            {
-                RunnerPowerUp = "";
-                runnerPowImage.sprite = Empty;
-            }
-            runnerPowText.text = "Runner Power Up: " + RunnerPowerUp;
-        } else
-        {
-            if (powerUpName == "speedUp")
-            {
-                DropperPowerUp = "Speed Up 1";
-                dropperPowImage.sprite = Blue;
-            }
-            else if (powerUpName == "speedDown")
-            {
-                DropperPowerUp = "Speed Down 2";
-                dropperPowImage.sprite = Cyan;
-            }
-            else if (powerUpName == "jumpHeightUp")
-            {
-                DropperPowerUp = "Jump Height Up 3";
-                dropperPowImage.sprite = Orange;
-            }
-            else
-            {
-                DropperPowerUp = "";
-                dropperPowImage.sprite = Empty;
-            }
-            dropperPowText.text = "Dropper Power Up: " + DropperPowerUp;
-        }
-        
     }
 
+    public void givePowerUp(Boolean runner)
+    {
+        int powerUpNumber = UnityEngine.Random.Range(1, 4);
+        if (runner) {
+            if (powerUpNumber == 1)
+            {
+                RunnerPowerUp = "speedUp";
+                runnerPowText.text = "Runner Power Up: Speed Up";
+            }
+            else if (powerUpNumber == 2)
+            {
+                RunnerPowerUp = "speedDown";
+                runnerPowText.text = "Runner Power Up: Speed Down";
+            }
+            else if (powerUpNumber == 3)
+            {
+                RunnerPowerUp = "jumpHeightUp";
+                runnerPowText.text = "Runner Power Up: Jump Height Up";
+            }
+        } else
+        {
+            if (powerUpNumber == 1)
+            {
+                DropperPowerUp = "speedUp";
+                dropperPowText.text = "Dropper Power Up: Speed Up";
+            }
+            else if (powerUpNumber == 2)
+            {
+                DropperPowerUp = "speedDown";
+                dropperPowText.text = "Dropper Power Up: Speed Down";
+            }
+            else if (powerUpNumber == 3)
+            {
+                DropperPowerUp = "jumpHeightDown";
+                dropperPowText.text = "Dropper Power Up: Jump Height Down";
+            }
+        }
+        
+    }
+    
     public void usePowerUp(string powerUpName, Boolean runner)
     {
         if (runner)
         {
-            if (powerUpName == "speedUp")
+            if (RunnerPowerUp == "speedUp")
             {
                 RunnerMovement.movementSpeed += 1;
             }
             else if (powerUpName == "speedDown")
             {
-                RunnerMovement.movementSpeed -= 1;
+                DropperMovement.velocityY += 1;
+            } else if (RunnerPowerUp == "jumpHeightUp")
+            {
+                RunnerMovement.jumpHeight += 1;
             }
-            changePowerUp("", true);
+            RunnerPowerUp = "None";
+            runnerPowText.text = "Runner Power Up: None";
         }
         else
         {
-            if (powerUpName == "speedUp")
+            if (DropperPowerUp == "speedUp")
             {
-                RunnerMovement.movementSpeed += 1;
+                DropperMovement.velocityY -= 1;
             }
-            else if (powerUpName == "speedDown")
+            else if (DropperPowerUp == "speedDown")
             {
                 RunnerMovement.movementSpeed -= 1;
             }
-            changePowerUp("", false);
+            else if (DropperPowerUp == "jumpHeightDown")
+            {
+                RunnerMovement.jumpHeight -= 1;
+            }
+            DropperPowerUp = "None";
+            dropperPowText.text = "Dropper Power Up: None";
         }
         
     }

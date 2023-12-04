@@ -82,6 +82,8 @@ public class NewBoard : MonoBehaviour
     // Power up object
     public GameObject powerUpPrefab;
 
+    public GivePowerUp powerUpCreator;
+
     public static RectInt Bounds
     {
         get
@@ -431,6 +433,7 @@ public class NewBoard : MonoBehaviour
 
     private void LineClear(int row)
     {
+        powerUpCreator.dropperPowerUpRandomizer();
         RectInt bounds = Bounds;
 
         for (int col = bounds.xMin; col < bounds.xMax; col++)
