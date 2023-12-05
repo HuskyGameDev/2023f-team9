@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class GameManager
 {
     private static GameManager instance;
+    public static bool ARCADE_CABINET = false;
 
     // always exists
     public Controls inputActions;
@@ -20,6 +21,13 @@ public class GameManager
     {
         // Do not reference GameObjects here because this is created before the objects
         inputActions = new Controls();
+        if (ARCADE_CABINET)
+        {
+            var rotateLeftIndex = inputActions.Dropper.Rotate.GetBindingIndexForControl(Keyboard.current.qKey);
+            var rotateRightIndex = inputActions.Dropper.Rotate.GetBindingIndexForControl(Keyboard.current.eKey);
+            inputActions.Dropper.Rotate.ApplyBindingOverride(rotateLeftIndex, "<Keyboard>/u");
+            inputActions.Dropper.Rotate.ApplyBindingOverride(rotateRightIndex, "<Keyboard>/i");
+        }
         inputActions.Runner.Enable();
         inputActions.Dropper.Enable();
 
@@ -46,11 +54,12 @@ public class GameManager
             if (runnerWon == true)
             {
                 levelLoaderScript.loadRunnerEndScreen();
-            } else
+            }
+            else
             {
                 levelLoaderScript.loadDropperEndScreen();
             }
-            
+
         }
         catch
         {
