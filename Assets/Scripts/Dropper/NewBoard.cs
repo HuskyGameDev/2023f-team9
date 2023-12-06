@@ -85,6 +85,7 @@ public class NewBoard : MonoBehaviour
     public GameObject powerUpPrefab;
 
     public GivePowerUp powerUpCreator;
+    public BlockQueue queueUpdater;
 
     public static RectInt Bounds
     {
@@ -114,7 +115,7 @@ public class NewBoard : MonoBehaviour
         {
             pieceQueue.Enqueue(pieceChoice[Random.Range(0, pieceChoice.Count)]);
         }
-
+        queueUpdater.updateQueue();
     }
 
     private void Start()
@@ -140,6 +141,8 @@ public class NewBoard : MonoBehaviour
             //Choose random block
             chosenPiece = pieceQueue.Dequeue();
             pieceQueue.Enqueue(pieceChoice[Random.Range(0, pieceChoice.Count)]);
+            queueUpdater.updateQueue();
+
             //chosenPiece = Z_Block;
 
             if (chosenPiece == J_Block)

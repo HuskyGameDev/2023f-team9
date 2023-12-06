@@ -946,6 +946,7 @@ GameObject:
   - component: {fileID: 1268129033}
   - component: {fileID: 1268129032}
   - component: {fileID: 1268129031}
+  - component: {fileID: 1268129035}
   - component: {fileID: 1268129034}
   m_Layer: 0
   m_Name: GameController
@@ -1099,6 +1100,29 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1268129035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1268129030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 055c81fa8501518488ea067fe5b62ca4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  firstBlock: {fileID: 731007749}
+  secondBlock: {fileID: 1952521151}
+  thirdBlock: {fileID: 748887682}
+  queue: {fileID: 880673375}
+  JBlock: {fileID: 21300000, guid: c8b23ed06cc08e742b7655412ff90345, type: 3}
+  IBlock: {fileID: 21300000, guid: 51c720aad2f3bf246b4f754d91c4f7b1, type: 3}
+  OBlock: {fileID: 21300000, guid: 44ad618d56e2c2e4e856fdb23c2c3f57, type: 3}
+  LBlock: {fileID: 21300000, guid: 2e2d086b3e5c64440ac142562a57fc96, type: 3}
+  SBlock: {fileID: 21300000, guid: 9131694422a1f774d94782267d6c8d6e, type: 3}
+  TBlock: {fileID: 21300000, guid: c895cb20c436d044da52f29a40eb714e, type: 3}
+  ZBlock: {fileID: 21300000, guid: 9e5a404a11369c14186c510ec04c1e34, type: 3}
 --- !u!1 &1478592896
 GameObject:
   m_ObjectHideFlags: 0
@@ -1659,6 +1683,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Board
       objectReference: {fileID: 0}
+    - target: {fileID: 7018330683628722624, guid: 4b30420f76fef4fcf97ca1ddfb33856f, type: 3}
+      propertyPath: queueUpdater
+      value: 
+      objectReference: {fileID: 1268129035}
     - target: {fileID: 7018330683628722624, guid: 4b30420f76fef4fcf97ca1ddfb33856f, type: 3}
       propertyPath: powerUpCreator
       value: 
