@@ -12,6 +12,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: PowerUp falling
       objectReference: {fileID: 0}
+    - target: {fileID: 2724686895934374665, guid: 4f9f9367790300049816e89da39e5764, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2724686895934374665, guid: 4f9f9367790300049816e89da39e5764, type: 3}
+      propertyPath: m_TagString
+      value: PowerUpFalling
+      objectReference: {fileID: 0}
     - target: {fileID: 3761271030212123168, guid: 4f9f9367790300049816e89da39e5764, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -90,5 +98,5 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
+  m_CollisionDetection: 1
+  m_Constraints: 4

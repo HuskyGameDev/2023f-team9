@@ -67,6 +67,8 @@ public class NewBoard : MonoBehaviour
     // The piece being controlled
     public GameObject activePiece { get; private set; }
     private GameObject chosenPiece;
+    public Queue<GameObject> pieceQueue { get; private set; }
+
     private List<GameObject> chosenRotations;
     
     private bool rotateBuffer;
@@ -81,6 +83,9 @@ public class NewBoard : MonoBehaviour
 
     // Power up object
     public GameObject powerUpPrefab;
+
+    public GivePowerUp powerUpCreator;
+    public BlockQueue queueUpdater;
 
     public static RectInt Bounds
     {
@@ -104,14 +109,18 @@ public class NewBoard : MonoBehaviour
 
         rotateBuffer = false;
 
-        for (int i = 0; i < this.tetrominoes.Length; i++)
+        pieceQueue = new Queue<GameObject>();
+
+        for (int i = 0; i < 3; i++)
         {
-            this.tetrominoes[i].Initialize();
+            pieceQueue.Enqueue(pieceChoice[Random.Range(0, pieceChoice.Count)]);
         }
+        queueUpdater.updateQueue();
     }
 
     private void Start()
     {
+        
         SpawnPiece();
     }
 
@@ -130,7 +139,10 @@ public class NewBoard : MonoBehaviour
         if (CanSpawnPieces)
         {
             //Choose random block
-            chosenPiece = pieceChoice[Random.Range(0, pieceChoice.Count)];
+            chosenPiece = pieceQueue.Dequeue();
+            pieceQueue.Enqueue(pieceChoice[Random.Range(0, pieceChoice.Count)]);
+            queueUpdater.updateQueue();
+
             //chosenPiece = Z_Block;
 
             if (chosenPiece == J_Block)
@@ -431,6 +443,7 @@ public class NewBoard : MonoBehaviour
 
     private void LineClear(int row)
     {
+        powerUpCreator.dropperPowerUpRandomizer();
         RectInt bounds = Bounds;
 
         for (int col = bounds.xMin; col < bounds.xMax; col++)

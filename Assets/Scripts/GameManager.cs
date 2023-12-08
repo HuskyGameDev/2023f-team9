@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class GameManager
 {
     private static GameManager instance;
+    public static bool ARCADE_CABINET = false;
 
     // always exists
     public Controls inputActions;
@@ -16,15 +17,35 @@ public class GameManager
     private NewBoard boardScript = null;
     private Timer timer = null;
 
+    // Access to PlayerMovement
+    private PlayerMovement playerMovement = null;
+
     private GameManager()
     {
         // Do not reference GameObjects here because this is created before the objects
         inputActions = new Controls();
+        if (ARCADE_CABINET)
+        {
+            var rotateLeftIndex = inputActions.Dropper.Rotate.GetBindingIndexForControl(Keyboard.current.qKey);
+            var rotateRightIndex = inputActions.Dropper.Rotate.GetBindingIndexForControl(Keyboard.current.eKey);
+            inputActions.Dropper.Rotate.ApplyBindingOverride(rotateLeftIndex, "<Keyboard>/u");
+            inputActions.Dropper.Rotate.ApplyBindingOverride(rotateRightIndex, "<Keyboard>/i");
+        }
         inputActions.Runner.Enable();
         inputActions.Dropper.Enable();
 
         runnerWinHeight = 8f;
+
+        // Access PlayerMovement
+        playerMovement = UnityEngine.Object.FindObjectOfType<PlayerMovement>();
+        if (playerMovement == null)
+        {
+            Debug.LogError("PlayerMovement not found in the scene.");
+        }
     }
+
+    // Accessor for PlayerMovement
+    public PlayerMovement PlayerMovement => playerMovement;
 
     public static GameManager Instance
     {
@@ -46,11 +67,12 @@ public class GameManager
             if (runnerWon == true)
             {
                 levelLoaderScript.loadRunnerEndScreen();
-            } else
+            }
+            else
             {
                 levelLoaderScript.loadDropperEndScreen();
             }
-            
+
         }
         catch
         {

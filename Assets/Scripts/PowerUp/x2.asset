@@ -10,6 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c8899b4f36c1cd745af21f47d7dd4c9a, type: 3}
-  m_Name: x3
+  m_Name: x2
   m_EditorClassIdentifier: 
-  speedMultiplier: 3
+  speedMultiplier: 2
+  duration: 5
