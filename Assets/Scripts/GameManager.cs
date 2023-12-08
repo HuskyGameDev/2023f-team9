@@ -17,6 +17,9 @@ public class GameManager
     private NewBoard boardScript = null;
     private Timer timer = null;
 
+    // Access to PlayerMovement
+    private PlayerMovement playerMovement = null;
+
     private GameManager()
     {
         // Do not reference GameObjects here because this is created before the objects
@@ -32,7 +35,17 @@ public class GameManager
         inputActions.Dropper.Enable();
 
         runnerWinHeight = 8f;
+
+        // Access PlayerMovement
+        playerMovement = UnityEngine.Object.FindObjectOfType<PlayerMovement>();
+        if (playerMovement == null)
+        {
+            Debug.LogError("PlayerMovement not found in the scene.");
+        }
     }
+
+    // Accessor for PlayerMovement
+    public PlayerMovement PlayerMovement => playerMovement;
 
     public static GameManager Instance
     {

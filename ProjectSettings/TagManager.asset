@@ -8,6 +8,7 @@ TagManager:
   - Tilemap
   - Piece
   - PowerUp
+  - PowerUpFalling
   layers:
   - Default
   - TransparentFX

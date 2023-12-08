@@ -20,6 +20,13 @@ public class PlayerMovement : MonoBehaviour
     private InputAction moveAction;
     private InputAction jumpAction;
 
+    //power up
+    private bool isSpeedUpActive = false;
+    private float originalMovementSpeed;
+    private float speedUpTimer = 0.0f;
+    private bool isJumpUpActive = false;
+    private int originalJumpHeight;
+    private float jumpUpTimer = 0.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -42,6 +49,9 @@ public class PlayerMovement : MonoBehaviour
             // do nothing, it doesn't matter if there is no tilemap for now
             Debug.LogError("PlayerMovement could not find board tilemap");
         }
+
+        originalMovementSpeed = movementSpeed;
+        originalJumpHeight = jumpHeight;
     }
 
     // Update is called once per frame
@@ -92,6 +102,33 @@ public class PlayerMovement : MonoBehaviour
         {
             animator.SetBool("Falling", true);
         }
+
+        //power up
+        if (isSpeedUpActive)
+        {
+            
+            speedUpTimer -= Time.deltaTime;
+
+            //Debug.Log("Speed Up Timer: " + speedUpTimer);
+
+            if (speedUpTimer <= 0.0f)
+            {
+                // Speed-up duration has expired, reset the speed
+                isSpeedUpActive = false;
+                movementSpeed = originalMovementSpeed; // Reset the speed
+                //Debug.Log("Speed Up Expired");
+            }
+        }
+        if (isJumpUpActive)
+        {
+            jumpUpTimer -= Time.deltaTime;
+
+            if (jumpUpTimer <= 0f)
+            {
+                isJumpUpActive = false;
+                jumpHeight = originalJumpHeight;
+            }
+        }
     }
 
     private IEnumerator Jump()
@@ -103,8 +140,17 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // method to apply the speed-up effect
-    public void ApplySpeedUp(float speedMultiplier)
+    public void ApplySpeedUp(float speedMultiplier, float duration)
     {
-        movementSpeed *= speedMultiplier;
+        movementSpeed += speedMultiplier;
+        isSpeedUpActive = true;
+        speedUpTimer = duration;
+    }
+
+    public void ApplyJumpUp(int jumpAdder, float duration)
+    {
+        jumpHeight += jumpAdder;
+        isJumpUpActive = true;
+        jumpUpTimer = duration;
     }
 }
