@@ -5,7 +5,7 @@ using UnityEngine;
 public class FinishLine : MonoBehaviour
 {
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         this.gameObject.transform.position = new Vector3(0, GameManager.Instance.runnerWinHeight);
     }

@@ -23,6 +23,13 @@ public class GameManager
     private GameManager()
     {
         // Do not reference GameObjects here because this is created before the objects
+        if (Debug.isDebugBuild)
+        {
+            Debug.developerConsoleEnabled = true;
+            Debug.developerConsoleVisible = true;
+            Debug.LogError("Debugging Enabled (not a real error)");
+        }
+
         inputActions = new Controls();
         if (ARCADE_CABINET)
         {

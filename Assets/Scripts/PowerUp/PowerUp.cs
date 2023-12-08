@@ -10,7 +10,7 @@ public class PowerUp : MonoBehaviour
     public float fallSpeed = 5.0f;
     public float destroyDelay = 20.0f;
 
-    void Start()
+    void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         if (rb == null)
@@ -21,15 +21,18 @@ public class PowerUp : MonoBehaviour
         // Set gravity scale to simulate constant falling velocity
         rb.gravityScale = 0.0f;  // Adjust this value to control the falling speed
         rb.velocity = new Vector2(0, -fallSpeed);
+    }
 
+    void Start()
+    {
         Invoke("DestroyPowerUp", destroyDelay);
     }
 
-    
+
     // trigger power up on collision
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        
+
         //Debug.Log("trigger with " + collision.gameObject.name);
         if (collision.gameObject.name == "Sprite")
         {
@@ -37,7 +40,7 @@ public class PowerUp : MonoBehaviour
             Destroy(gameObject);
             powerUpEffect.Apply(collision.gameObject);
         }
-        
+
 
     }
     private void DestroyPowerUp()

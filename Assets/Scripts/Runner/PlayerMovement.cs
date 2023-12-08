@@ -28,18 +28,22 @@ public class PlayerMovement : MonoBehaviour
     private int originalJumpHeight;
     private float jumpUpTimer = 0.0f;
 
-    // Start is called before the first frame update
+    void Awake()
+    {
+        moveAction = GameManager.Instance.inputActions.Runner.Move;
+        jumpAction = GameManager.Instance.inputActions.Runner.Jump;
+
+        originalMovementSpeed = movementSpeed;
+        originalJumpHeight = jumpHeight;
+    }
+
     void Start()
     {
         rigidbody = this.GetComponentInChildren<Rigidbody2D>();
         bottomEdgeCollider = this.GetComponentInChildren<EdgeCollider2D>();
         animator = this.GetComponentInChildren<Animator>();
         spriteRenderer = this.GetComponentInChildren<SpriteRenderer>();
-        moveAction = GameManager.Instance.inputActions.Runner.Move;
-        jumpAction = GameManager.Instance.inputActions.Runner.Jump;
-
         animator.SetBool("Falling", false);
-
         try
         {
             tilemapCollider = FindAnyObjectByType<TilemapCollider2D>();
@@ -47,11 +51,7 @@ public class PlayerMovement : MonoBehaviour
         catch
         {
             // do nothing, it doesn't matter if there is no tilemap for now
-            Debug.LogError("PlayerMovement could not find board tilemap");
         }
-
-        originalMovementSpeed = movementSpeed;
-        originalJumpHeight = jumpHeight;
     }
 
     // Update is called once per frame
@@ -106,7 +106,7 @@ public class PlayerMovement : MonoBehaviour
         //power up
         if (isSpeedUpActive)
         {
-            
+
             speedUpTimer -= Time.deltaTime;
 
             //Debug.Log("Speed Up Timer: " + speedUpTimer);

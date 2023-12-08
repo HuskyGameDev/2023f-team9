@@ -6,9 +6,8 @@ public class PowerUpFalling : MonoBehaviour
 {
     float wait;
     public GameObject powerUpObject;
-    
-    // Start is called before the first frame update
-    void Start()
+
+    void Awake()
     {
         wait = Random.Range(3.0f, 10.0f);
         InvokeRepeating("Fall", wait, wait);

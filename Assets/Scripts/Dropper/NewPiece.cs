@@ -50,9 +50,6 @@ public class NewPiece : MonoBehaviour
         myRigidBody = GetComponent<Rigidbody2D>();
 
         myRigidBody.freezeRotation = true;
-
-        moveAction = GameManager.Instance.inputActions.Dropper.Move;
-        rotateAction = GameManager.Instance.inputActions.Dropper.Rotate;
     }
 
     private void Awake()
@@ -65,12 +62,12 @@ public class NewPiece : MonoBehaviour
         nextX = transform.position.x;
         nextY = ((int)transform.position.y) - offSetY;
 
-
-
         leftTileDetected = false;
         rightTileDetected = false;
         bottomTileDetected = false;
 
+        moveAction = GameManager.Instance.inputActions.Dropper.Move;
+        rotateAction = GameManager.Instance.inputActions.Dropper.Rotate;
     }
 
 

@@ -11,8 +11,7 @@ public class Timer : MonoBehaviour
     public TextMeshProUGUI timerText;
     public LevelLoaderScript levelLoader;
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         timerOn = true;
     }
@@ -26,7 +25,8 @@ public class Timer : MonoBehaviour
             {
                 timeLeft -= Time.deltaTime;
                 updateTimer(timeLeft);
-            } else
+            }
+            else
             {
                 Debug.Log("End");
                 timeLeft = 0;
