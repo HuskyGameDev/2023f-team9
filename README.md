@@ -12,3 +12,16 @@ Runner - Left & Right arrow keys - Move left and right
 How to install:
   Install instructions
 Download and unzip the entire folder. Launch application or executable in folder.
+
+
+Created by Team-9
+Brendan Griffith
+Allen Wadeen
+Han Yang
+Hayden Baus
+Ben Kornas
+Emmilie Rummer
+
+Sound Members:
+Nate Lyons
+Zach Brouckman
